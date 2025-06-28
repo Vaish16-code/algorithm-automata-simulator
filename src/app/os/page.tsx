@@ -1,285 +1,458 @@
 "use client";
 
 import Link from "next/link";
-import { Header, Footer } from "../../components";
+import { Cpu, HardDrive, Shield, Clock, MemoryStick, Users, Play, Star, CheckCircle2, Award, BookOpen } from "lucide-react";
 
 export default function OperatingSystemsPage() {
-  const osAlgorithms = [
-    {
-      title: "Page Replacement Algorithms",
-      description: "Simulate FIFO, LRU, LFU, and Optimal page replacement strategies",
-      path: "/os/page-replacement",
-      complexity: "O(n) to O(n²)",
-      examImportance: "Very High",
-      topics: ["FIFO", "LRU", "LFU", "Optimal", "Working Set"]
-    },
-    {
-      title: "Disk Scheduling Algorithms", 
-      description: "Optimize disk head movement with FCFS, SCAN, C-SCAN, LOOK algorithms",
-      path: "/os/disk",
-      complexity: "O(n log n)",
-      examImportance: "High",
-      topics: ["FCFS", "SSTF", "SCAN", "C-SCAN", "LOOK", "C-LOOK"]
-    },
-  ];
-
-  const educationalContent = {
-    overview: "Operating Systems algorithms are crucial for managing system resources efficiently. These algorithms handle memory management, process scheduling, disk I/O optimization, and ensure optimal system performance.",
-    keyCharacteristics: [
-      "Resource allocation and optimization",
-      "Memory and storage management",
-      "Process synchronization and scheduling",
-      "Hardware abstraction and control",
-      "Performance metrics optimization"
-    ],
-    applications: [
-      "Virtual memory management systems",
-      "Database buffer management",
-      "Web server caching strategies",
-      "Storage system optimization",
-      "Cloud resource management"
-    ],
-    examTips: [
-      "Understand trade-offs between different algorithms",
-      "Practice calculating performance metrics",
-      "Learn hardware implications of each algorithm",
-      "Study real-world implementation details",
-      "Master algorithm selection criteria"
-    ]
+  const getTopicIcon = (iconName: string) => {
+    const iconMap: { [key: string]: React.ComponentType<any> } = {
+      Cpu,
+      Memory: MemoryStick,
+      HardDrive,
+      Clock,
+      Shield
+    };
+    return iconMap[iconName];
   };
 
-  const examPrep = {
-    questionTypes: [
-      "Simulate algorithm execution with given input",
-      "Calculate hit ratios and performance metrics",
-      "Compare algorithm efficiency and trade-offs",
-      "Design optimal strategies for specific scenarios",
-      "Analyze worst-case and average-case performance"
-    ],
-    practiceProblems: [
-      "Page replacement with different reference strings",
-      "Disk scheduling with various request patterns",
-      "Memory allocation and deallocation scenarios",
-      "Performance comparison of different algorithms",
-      "Real-world optimization problems"
-    ],
-    examPattern: "Mumbai University OS exams typically include 2-3 questions (15-20 marks total) on memory management and disk scheduling algorithms."
+  const topics = [
+    {
+      title: "Process Management",
+      description: "CPU Scheduling algorithms and process synchronization",
+      icon: "Cpu",
+      color: "from-blue-500 to-cyan-500",
+      difficulty: "Beginner",
+      examWeight: "High",
+      categories: [
+        {
+          name: "CPU Scheduling",
+          href: "/os/cpu-scheduling",
+          description: "FCFS, SJF, SRTF, Priority, Round Robin scheduling",
+          examTips: "Focus on Gantt charts and calculating average waiting/turnaround time"
+        },
+        {
+          name: "Process Synchronization", 
+          href: "/os/synchronization",
+          description: "Producer-Consumer, Readers-Writers, Dining Philosophers",
+          examTips: "Understand semaphores, mutexes, and critical section problems"
+        },
+        {
+          name: "Deadlock Handling",
+          href: "/os/deadlock",
+          description: "Deadlock detection, prevention, and recovery algorithms",
+          examTips: "Master Banker's algorithm and resource allocation graphs"
+        }
+      ],
+      applications: [
+        "Multi-tasking Operating Systems",
+        "Real-time Systems",
+        "Server Load Balancing"
+      ],
+      examInfo: {
+        marks: "20-25",
+        topics: ["Scheduling Algorithms", "Process States", "Inter-process Communication"],
+        questions: "Calculate turnaround time, Solve deadlock scenarios, Design synchronization solutions"
+      }
+    },
+    {
+      title: "Memory Management",
+      description: "Virtual memory and page replacement strategies",
+      icon: "Memory",
+      color: "from-purple-500 to-pink-500",
+      difficulty: "Intermediate",
+      examWeight: "High",
+      categories: [
+        {
+          name: "Page Replacement",
+          href: "/os/page-replacement",
+          description: "FIFO, LRU, LFU, Optimal page replacement algorithms",
+          examTips: "Practice page fault calculations and hit ratio analysis"
+        },
+        {
+          name: "Memory Allocation",
+          href: "/os/memory-allocation",
+          description: "First Fit, Best Fit, Worst Fit allocation strategies",
+          examTips: "Understand fragmentation concepts and memory utilization"
+        },
+        {
+          name: "Virtual Memory",
+          href: "/os/virtual-memory",
+          description: "Paging, segmentation, and address translation",
+          examTips: "Focus on page table structures and address mapping"
+        }
+      ],
+      applications: [
+        "Virtual Memory Systems",
+        "Garbage Collection",
+        "Memory-mapped Files"
+      ],
+      examInfo: {
+        marks: "15-20",
+        topics: ["Paging", "Segmentation", "Memory Allocation", "Page Replacement"],
+        questions: "Solve page replacement problems, Calculate memory utilization, Design page tables"
+      }
+    },
+    {
+      title: "Storage Management",
+      description: "Disk scheduling and file system algorithms",
+      icon: "HardDrive",
+      color: "from-green-500 to-emerald-500",
+      difficulty: "Intermediate",
+      examWeight: "Medium",
+      categories: [
+        {
+          name: "Disk Scheduling",
+          href: "/os/disk",
+          description: "FCFS, SSTF, SCAN, C-SCAN, LOOK, C-LOOK algorithms",
+          examTips: "Master seek time calculations and draw disk head movement diagrams"
+        },
+        {
+          name: "File Allocation",
+          href: "/os/file-allocation",
+          description: "Contiguous, linked, and indexed allocation methods",
+          examTips: "Compare allocation methods and understand directory structures"
+        },
+        {
+          name: "Directory Management",
+          href: "/os/directory",
+          description: "Single-level, two-level, tree-structured directories",
+          examTips: "Design directory structures and understand path resolution"
+        }
+      ],
+      applications: [
+        "Database Storage",
+        "File System Design",
+        "Disk Performance Optimization"
+      ],
+      examInfo: {
+        marks: "10-15",
+        topics: ["Disk Scheduling", "File Systems", "Directory Structures"],
+        questions: "Calculate seek time, Design file allocation tables, Compare scheduling algorithms"
+      }
+    },
+    {
+      title: "I/O Management",
+      description: "Input/Output scheduling and device management",
+      icon: "Clock",
+      color: "from-orange-500 to-red-500",
+      difficulty: "Advanced",
+      examWeight: "Medium",
+      categories: [
+        {
+          name: "I/O Scheduling",
+          href: "/os/io-scheduling",
+          description: "FCFS, SSTF, SCAN I/O request scheduling",
+          examTips: "Understand device drivers and interrupt handling"
+        },
+        {
+          name: "Buffer Management",
+          href: "/os/buffer-management",
+          description: "Single, double, and circular buffering strategies",
+          examTips: "Master buffering concepts and data transfer mechanisms"
+        },
+        {
+          name: "Device Management",
+          href: "/os/device-management",
+          description: "Device drivers, interrupt handling, DMA",
+          examTips: "Focus on hardware-software interface and I/O optimization"
+        }
+      ],
+      applications: [
+        "Device Driver Development",
+        "Real-time I/O Systems",
+        "Network Interface Management"
+      ],
+      examInfo: {
+        marks: "8-12",
+        topics: ["I/O Systems", "Device Management", "Interrupt Handling"],
+        questions: "Design I/O systems, Explain device management, Compare I/O methods"
+      }
+    },
+    {
+      title: "Security & Protection",
+      description: "Access control and security mechanisms",
+      icon: "Shield",
+      color: "from-red-500 to-pink-500",
+      difficulty: "Advanced",
+      examWeight: "Low",
+      categories: [
+        {
+          name: "Access Control",
+          href: "/os/access-control",
+          description: "Access control matrix, capability lists, ACLs",
+          examTips: "Understand protection domains and access rights"
+        },
+        {
+          name: "Authentication",
+          href: "/os/authentication",
+          description: "Password systems, biometric authentication",
+          examTips: "Focus on authentication methods and security policies"
+        },
+        {
+          name: "Cryptography",
+          href: "/os/cryptography",
+          description: "Encryption, digital signatures, key management",
+          examTips: "Understand basic cryptographic concepts and their OS applications"
+        }
+      ],
+      applications: [
+        "System Security",
+        "Network Security",
+        "Access Control Systems"
+      ],
+      examInfo: {
+        marks: "5-10",
+        topics: ["Security Models", "Access Control", "Authentication"],
+        questions: "Design security systems, Explain authentication methods, Analyze security threats"
+      }
+    }
+  ];
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch(difficulty) {
+      case "Beginner": return "bg-green-100 text-green-800";
+      case "Intermediate": return "bg-yellow-100 text-yellow-800";
+      case "Advanced": return "bg-orange-100 text-orange-800";
+      case "Expert": return "bg-red-100 text-red-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getExamWeightColor = (weight: string) => {
+    switch(weight) {
+      case "High": return "bg-red-100 text-red-800";
+      case "Medium": return "bg-yellow-100 text-yellow-800";
+      case "Low": return "bg-green-100 text-green-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Operating Systems Algorithms
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Master OS algorithms for memory management and disk optimization with interactive simulators
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-cyan-300 text-sm font-medium mb-6">
+              <Cpu className="h-4 w-4 mr-2" />
+              Systems Programming
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Operating Systems
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                Simulator
+              </span>
+            </h1>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+              Master OS concepts with interactive simulations covering process management, memory management, 
+              storage systems, and more - designed for Mumbai University examinations.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <CheckCircle2 className="h-4 w-4 text-green-400" />
+                <span className="text-sm">Step-by-Step Solutions</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Star className="h-4 w-4 text-yellow-400" />
+                <span className="text-sm">Mumbai University Aligned</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Users className="h-4 w-4 text-purple-400" />
+                <span className="text-sm">Interactive Visualizations</span>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* Algorithms Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {osAlgorithms.map((algorithm, index) => (
-            <Link
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Topics Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          {topics.map((topic, index) => (
+            <div 
               key={index}
-              href={algorithm.path}
-              className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-200 overflow-hidden"
+              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden border border-gray-100"
             >
-              <div className="p-8">
+              {/* Card Header */}
+              <div className={`bg-gradient-to-r ${topic.color} p-6 text-white`}>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
-                    {algorithm.title}
-                  </h3>
-                  <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
-                    {algorithm.examImportance}
+                  <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+                    {(() => {
+                      const IconComponent = getTopicIcon(topic.icon);
+                      return IconComponent ? <IconComponent className="h-8 w-8" /> : null;
+                    })()}
+                  </div>
+                  <div className="flex space-x-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(topic.difficulty)}`}>
+                      {topic.difficulty}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getExamWeightColor(topic.examWeight)}`}>
+                      {topic.examWeight} Weight
+                    </span>
                   </div>
                 </div>
-                
-                <p className="text-gray-600 mb-4">
-                  {algorithm.description}
-                </p>
-                
+                <h2 className="text-2xl font-bold mb-2">{topic.title}</h2>
+                <p className="text-white/90">{topic.description}</p>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                {/* Categories */}
+                <div className="space-y-3 mb-6">
+                  {topic.categories.map((category, catIndex) => (
+                    <Link
+                      key={catIndex}
+                      href={category.href}
+                      className="block p-4 rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 group/item"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-800 group-hover/item:text-blue-700">
+                            {category.name}
+                          </h3>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {category.description}
+                          </p>
+                          <p className="text-xs text-blue-600 mt-1 font-medium">
+                            💡 {category.examTips}
+                          </p>
+                        </div>
+                        <Play className="h-5 w-5 text-blue-400 group-hover/item:text-blue-600 ml-4" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Exam Information */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-4">
+                  <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
+                    <Award className="h-4 w-4 mr-2 text-purple-600" />
+                    Mumbai University Exam Info
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <span className="font-medium text-gray-700">Expected Marks:</span>
+                      <span className="text-purple-700 ml-1">{topic.examInfo.marks}</span>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-700">Key Topics:</span>
+                      <div className="text-gray-600 text-xs mt-1">
+                        {topic.examInfo.topics.join(", ")}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <span className="font-medium text-gray-700 text-sm">Common Questions:</span>
+                    <p className="text-gray-600 text-xs mt-1">{topic.examInfo.questions}</p>
+                  </div>
+                </div>
+
+                {/* Applications */}
                 <div className="mb-4">
+                  <h4 className="font-semibold text-gray-800 mb-2 text-sm">Real-World Applications:</h4>
                   <div className="flex flex-wrap gap-2">
-                    {algorithm.topics.map((topic, topicIndex) => (
-                      <span 
-                        key={topicIndex}
-                        className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-medium"
-                      >
-                        {topic}
+                    {topic.applications.map((app, appIndex) => (
+                      <span key={appIndex} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
+                        {app}
                       </span>
                     ))}
                   </div>
                 </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">
-                    Complexity: <code className="bg-gray-100 px-2 py-1 rounded text-purple-600 font-mono">{algorithm.complexity}</code>
-                  </span>
-                  <svg className="w-5 h-5 text-purple-500 group-hover:text-purple-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
+
+                {/* Explore Button */}
+                <Link
+                  href={topic.categories[0].href}
+                  className={`w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r ${topic.color} hover:opacity-90 text-white font-semibold rounded-xl transition-all duration-200 group`}
+                >
+                  <Play className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform duration-200" />
+                  Start Learning
+                </Link>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 
-        {/* Educational Content */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Understanding Operating Systems Algorithms</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Overview</h3>
-              <p className="text-gray-600 mb-6">{educationalContent.overview}</p>
-              
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Characteristics</h3>
-              <ul className="space-y-2 text-gray-600">
-                {educationalContent.keyCharacteristics.map((char, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-purple-500 mt-1">•</span>
-                    {char}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Applications</h3>
-              <ul className="space-y-2 text-gray-600 mb-6">
-                {educationalContent.applications.map((app, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-blue-500 mt-1">•</span>
-                    {app}
-                  </li>
-                ))}
-              </ul>
-              
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Exam Tips</h3>
-              <ul className="space-y-2 text-gray-600">
-                {educationalContent.examTips.map((tip, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">•</span>
-                    {tip}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Exam Preparation */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>
-              <ul className="space-y-2 text-gray-600 mb-6">
-                {examPrep.questionTypes.map((type, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-blue-500 mt-1">•</span>
-                    {type}
-                  </li>
-                ))}
-              </ul>
-              
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Practice Problems</h3>
-              <ul className="space-y-2 text-gray-600">
-                {examPrep.practiceProblems.map((problem, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">•</span>
-                    {problem}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Exam Pattern</h3>
-              <p className="text-gray-600 mb-6">{examPrep.examPattern}</p>
-              
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Tips</h3>
-              <ul className="space-y-2 text-gray-600">
-                {[
-                  "Focus on algorithm simulation and step-by-step execution",
-                  "Practice calculating hit ratios and performance metrics",
-                  "Understand hardware implications of each algorithm",
-                  "Learn to choose optimal algorithms for different scenarios"
-                ].map((tip, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-purple-500 mt-1">•</span>
-                    {tip}
-                  </li>
-                ))}
-              </ul>
+        {/* Mumbai University Focus Section */}
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white mb-16">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-4">Mumbai University Focused</h2>
+            <p className="text-purple-100 mb-6 max-w-3xl mx-auto">
+              All OS simulations include detailed step-by-step solutions formatted for Mumbai University 
+              examination answers, with proper algorithmic steps and performance calculations.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="bg-white/20 p-3 rounded-xl w-fit mx-auto mb-3">
+                  <BookOpen className="h-6 w-6" />
+                </div>
+                <h3 className="font-semibold mb-2">Exam Format</h3>
+                <p className="text-sm text-purple-100">Solutions formatted for university answer sheets</p>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/20 p-3 rounded-xl w-fit mx-auto mb-3">
+                  <Clock className="h-6 w-6" />
+                </div>
+                <h3 className="font-semibold mb-2">Algorithm Analysis</h3>
+                <p className="text-sm text-purple-100">Time complexity and performance calculations</p>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/20 p-3 rounded-xl w-fit mx-auto mb-3">
+                  <Star className="h-6 w-6" />
+                </div>
+                <h3 className="font-semibold mb-2">Syllabus Aligned</h3>
+                <p className="text-sm text-purple-100">Covers complete MU OS curriculum</p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Quick Reference */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Quick Algorithm Comparison</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Page Replacement</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">FIFO</span>
-                  <span className="text-sm text-gray-600">Simple, but Belady&apos;s anomaly</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">LRU</span>
-                  <span className="text-sm text-gray-600">Good performance, complex</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">Optimal</span>
-                  <span className="text-sm text-gray-600">Best possible, impractical</span>
-                </div>
+        <div className="bg-white rounded-2xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Operating Systems Quick Reference</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="bg-blue-100 p-4 rounded-xl mb-3">
+                <h3 className="font-semibold text-blue-800">Process Management</h3>
               </div>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• CPU Scheduling</li>
+                <li>• Process Synchronization</li>
+                <li>• Deadlock Management</li>
+              </ul>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Disk Scheduling</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">FCFS</span>
-                  <span className="text-sm text-gray-600">Fair, but high seek time</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">SCAN</span>
-                  <span className="text-sm text-gray-600">Elevator algorithm, predictable</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">C-SCAN</span>
-                  <span className="text-sm text-gray-600">Circular, more uniform</span>
-                </div>
+            <div className="text-center">
+              <div className="bg-purple-100 p-4 rounded-xl mb-3">
+                <h3 className="font-semibold text-purple-800">Memory Management</h3>
               </div>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Virtual Memory</li>
+                <li>• Page Replacement</li>
+                <li>• Memory Allocation</li>
+              </ul>
+            </div>
+            <div className="text-center">
+              <div className="bg-green-100 p-4 rounded-xl mb-3">
+                <h3 className="font-semibold text-green-800">Storage Systems</h3>
+              </div>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Disk Scheduling</li>
+                <li>• File Systems</li>
+                <li>• Directory Structures</li>
+              </ul>
+            </div>
+            <div className="text-center">
+              <div className="bg-orange-100 p-4 rounded-xl mb-3">
+                <h3 className="font-semibold text-orange-800">System Security</h3>
+              </div>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Access Control</li>
+                <li>• Authentication</li>
+                <li>• Security Models</li>
+              </ul>
             </div>
           </div>
         </div>
-
-        {/* Performance Metrics */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Key Performance Metrics</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-purple-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600 mb-2">Hit Ratio</div>
-              <p className="text-gray-600">Percentage of successful memory accesses</p>
-            </div>
-            <div className="text-center p-6 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600 mb-2">Seek Time</div>
-              <p className="text-gray-600">Time to position disk head on track</p>
-            </div>
-            <div className="text-center p-6 bg-green-50 rounded-lg">
-              <div className="text-2xl font-bold text-green-600 mb-2">Throughput</div>
-              <p className="text-gray-600">Number of processes completed per unit time</p>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <Footer />
+      </div>
     </div>
   );
 }
