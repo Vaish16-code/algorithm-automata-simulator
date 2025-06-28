@@ -1,0 +1,426 @@
+// utils/automataTheory.ts
+
+// Finite Automata Types
+export interface State {
+  name: string;
+  isStart: boolean;
+  isAccept: boolean;
+}
+
+export interface Transition {
+  from: string;
+  to: string;
+  symbol: string;
+}
+
+export interface FiniteAutomaton {
+  states: State[];
+  alphabet: string[];
+  transitions: Transition[];
+  startState: string;
+  acceptStates: string[];
+}
+
+export interface FASimulationStep {
+  currentState: string;
+  remainingInput: string;
+  consumedInput: string;
+  transition?: Transition;
+  accepted?: boolean;
+}
+
+export interface FAResult {
+  accepted: boolean;
+  steps: FASimulationStep[];
+  finalState: string;
+}
+
+// DFA Simulation
+export function simulateDFA(fa: FiniteAutomaton, input: string): FAResult {
+  const steps: FASimulationStep[] = [];
+  let currentState = fa.startState;
+  let consumedInput = "";
+  
+  // Initial step
+  steps.push({
+    currentState,
+    remainingInput: input,
+    consumedInput: ""
+  });
+
+  for (let i = 0; i < input.length; i++) {
+    const symbol = input[i];
+    const transition = fa.transitions.find(t => 
+      t.from === currentState && t.symbol === symbol
+    );
+
+    if (!transition) {
+      // No transition found - reject
+      steps.push({
+        currentState,
+        remainingInput: input.substring(i),
+        consumedInput: consumedInput,
+        accepted: false
+      });
+      return {
+        accepted: false,
+        steps,
+        finalState: currentState
+      };
+    }
+
+    currentState = transition.to;
+    consumedInput += symbol;
+
+    steps.push({
+      currentState,
+      remainingInput: input.substring(i + 1),
+      consumedInput,
+      transition
+    });
+  }
+
+  const accepted = fa.acceptStates.includes(currentState);
+  steps[steps.length - 1].accepted = accepted;
+
+  return {
+    accepted,
+    steps,
+    finalState: currentState
+  };
+}
+
+// NFA Simulation
+export function simulateNFA(fa: FiniteAutomaton, input: string): FAResult {
+  const steps: FASimulationStep[] = [];
+  
+  // For NFA, we need to track multiple possible states
+  let currentStates = new Set([fa.startState]);
+  let consumedInput = "";
+
+  steps.push({
+    currentState: Array.from(currentStates).join(','),
+    remainingInput: input,
+    consumedInput: ""
+  });
+
+  for (let i = 0; i < input.length; i++) {
+    const symbol = input[i];
+    const nextStates = new Set<string>();
+
+    // Find all possible transitions
+    for (const state of currentStates) {
+      const transitions = fa.transitions.filter(t => 
+        t.from === state && t.symbol === symbol
+      );
+      
+      transitions.forEach(t => nextStates.add(t.to));
+    }
+
+    if (nextStates.size === 0) {
+      // No transitions possible - reject
+      steps.push({
+        currentState: Array.from(currentStates).join(','),
+        remainingInput: input.substring(i),
+        consumedInput,
+        accepted: false
+      });
+      return {
+        accepted: false,
+        steps,
+        finalState: Array.from(currentStates).join(',')
+      };
+    }
+
+    currentStates = nextStates;
+    consumedInput += symbol;
+
+    steps.push({
+      currentState: Array.from(currentStates).join(','),
+      remainingInput: input.substring(i + 1),
+      consumedInput
+    });
+  }
+
+  // Check if any final state is an accept state
+  const accepted = Array.from(currentStates).some(state => 
+    fa.acceptStates.includes(state)
+  );
+  
+  steps[steps.length - 1].accepted = accepted;
+
+  return {
+    accepted,
+    steps,
+    finalState: Array.from(currentStates).join(',')
+  };
+}
+
+// Regular Expression Types
+export interface RegexResult {
+  matches: boolean;
+  pattern: string;
+  input: string;
+  steps: string[];
+}
+
+export function simulateRegex(pattern: string, input: string): RegexResult {
+  const steps: string[] = [];
+  steps.push(`Pattern: ${pattern}`);
+  steps.push(`Input: ${input}`);
+  
+  try {
+    const regex = new RegExp(`^${pattern}$`);
+    const matches = regex.test(input);
+    
+    steps.push(`Testing pattern against input...`);
+    steps.push(`Result: ${matches ? 'MATCH' : 'NO MATCH'}`);
+    
+    return {
+      matches,
+      pattern,
+      input,
+      steps
+    };
+  } catch (error) {
+    steps.push(`Error: Invalid regular expression`);
+    return {
+      matches: false,
+      pattern,
+      input,
+      steps
+    };
+  }
+}
+
+// Turing Machine Types
+export interface TMTransition {
+  currentState: string;
+  readSymbol: string;
+  writeSymbol: string;
+  moveDirection: 'L' | 'R';
+  nextState: string;
+}
+
+export interface TuringMachine {
+  states: string[];
+  alphabet: string[];
+  tapeAlphabet: string[];
+  transitions: TMTransition[];
+  startState: string;
+  acceptState: string;
+  rejectState: string;
+  blankSymbol: string;
+}
+
+export interface TMStep {
+  step: number;
+  state: string;
+  tape: string[];
+  headPosition: number;
+  transition?: TMTransition;
+  accepted?: boolean;
+  rejected?: boolean;
+}
+
+export interface TMResult {
+  accepted: boolean;
+  rejected: boolean;
+  steps: TMStep[];
+  finalTape: string[];
+}
+
+export function simulateTuringMachine(tm: TuringMachine, input: string): TMResult {
+  const steps: TMStep[] = [];
+  let currentState = tm.startState;
+  let headPosition = 0;
+  let tape = input.split('');
+  
+  // Ensure tape has blank symbols on both sides
+  while (tape.length < 20) tape.push(tm.blankSymbol);
+  while (headPosition > 0) {
+    tape.unshift(tm.blankSymbol);
+    headPosition++;
+  }
+  
+  let stepCount = 0;
+  const maxSteps = 1000; // Prevent infinite loops
+
+  // Initial step
+  steps.push({
+    step: stepCount,
+    state: currentState,
+    tape: [...tape],
+    headPosition
+  });
+
+  while (stepCount < maxSteps) {
+    if (currentState === tm.acceptState) {
+      steps[steps.length - 1].accepted = true;
+      return {
+        accepted: true,
+        rejected: false,
+        steps,
+        finalTape: tape
+      };
+    }
+
+    if (currentState === tm.rejectState) {
+      steps[steps.length - 1].rejected = true;
+      return {
+        accepted: false,
+        rejected: true,
+        steps,
+        finalTape: tape
+      };
+    }
+
+    const currentSymbol = tape[headPosition] || tm.blankSymbol;
+    const transition = tm.transitions.find(t => 
+      t.currentState === currentState && t.readSymbol === currentSymbol
+    );
+
+    if (!transition) {
+      // No transition found - implicit reject
+      steps.push({
+        step: ++stepCount,
+        state: tm.rejectState,
+        tape: [...tape],
+        headPosition,
+        rejected: true
+      });
+      return {
+        accepted: false,
+        rejected: true,
+        steps,
+        finalTape: tape
+      };
+    }
+
+    // Apply transition
+    tape[headPosition] = transition.writeSymbol;
+    currentState = transition.nextState;
+    
+    if (transition.moveDirection === 'L') {
+      headPosition--;
+      if (headPosition < 0) {
+        tape.unshift(tm.blankSymbol);
+        headPosition = 0;
+      }
+    } else {
+      headPosition++;
+      if (headPosition >= tape.length) {
+        tape.push(tm.blankSymbol);
+      }
+    }
+
+    steps.push({
+      step: ++stepCount,
+      state: currentState,
+      tape: [...tape],
+      headPosition,
+      transition
+    });
+  }
+
+  // Max steps reached - assume rejection
+  return {
+    accepted: false,
+    rejected: true,
+    steps,
+    finalTape: tape
+  };
+}
+
+// Context-Free Grammar Types
+export interface CFGProduction {
+  left: string;
+  right: string[];
+}
+
+export interface ContextFreeGrammar {
+  terminals: string[];
+  nonTerminals: string[];
+  productions: CFGProduction[];
+  startSymbol: string;
+}
+
+export interface CFGDerivationStep {
+  step: number;
+  sententialForm: string[];
+  productionUsed?: CFGProduction;
+  appliedAt?: number;
+}
+
+export interface CFGResult {
+  canDerive: boolean;
+  derivation: CFGDerivationStep[];
+}
+
+export function simulateCFG(cfg: ContextFreeGrammar, target: string): CFGResult {
+  const steps: CFGDerivationStep[] = [];
+  const targetSymbols = target.split('');
+  
+  // Start with the start symbol
+  let current = [cfg.startSymbol];
+  steps.push({
+    step: 0,
+    sententialForm: [...current]
+  });
+
+  const maxSteps = 50;
+  let stepCount = 0;
+
+  while (stepCount < maxSteps) {
+    // Check if we've reached the target
+    if (current.join('') === target) {
+      return {
+        canDerive: true,
+        derivation: steps
+      };
+    }
+
+    // Find first non-terminal
+    const nonTerminalIndex = current.findIndex(symbol => 
+      cfg.nonTerminals.includes(symbol)
+    );
+
+    if (nonTerminalIndex === -1) {
+      // No more non-terminals but haven't reached target
+      break;
+    }
+
+    const nonTerminal = current[nonTerminalIndex];
+    
+    // Find applicable productions
+    const productions = cfg.productions.filter(p => p.left === nonTerminal);
+    
+    if (productions.length === 0) {
+      break;
+    }
+
+    // For simplicity, use the first applicable production
+    const production = productions[0];
+    
+    // Apply production
+    const newSententialForm = [
+      ...current.slice(0, nonTerminalIndex),
+      ...production.right,
+      ...current.slice(nonTerminalIndex + 1)
+    ];
+
+    current = newSententialForm;
+    
+    steps.push({
+      step: ++stepCount,
+      sententialForm: [...current],
+      productionUsed: production,
+      appliedAt: nonTerminalIndex
+    });
+  }
+
+  return {
+    canDerive: false,
+    derivation: steps
+  };
+}

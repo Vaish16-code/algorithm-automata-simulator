@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Algorithm & Automata Theory Simulator
 
-## Getting Started
+A comprehensive educational platform for visualizing and simulating algorithms and automata theory concepts.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Data Structures & Algorithms (DAA)
+- **Greedy Algorithms**: Fractional Knapsack, Job Sequencing, Prim's MST, Kruskal's MST
+- **Dynamic Programming**: 0/1 Knapsack with DP table visualization
+- **Divide & Conquer**: Merge Sort with step-by-step visualization
+- **Backtracking**: N-Queens with interactive chessboard
+
+### Automata Theory
+- **Finite Automata**: DFA and NFA simulators with state transition visualization
+- **Regular Expressions**: Pattern matching and regex testing
+- **Context-Free Grammars**: Parser and derivation tree generator
+- **Turing Machines**: Step-by-step execution simulator
+
+### Operating Systems
+- **Disk Scheduling**: Various disk scheduling algorithms
+- **Page Replacement**: LRU, FIFO, and other page replacement algorithms
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15 with TypeScript
+- **Styling**: Tailwind CSS
+- **Charts**: Custom SVG-based visualizations
+- **State Management**: React Hooks
+
+## 📁 Project Structure
+
+```
+src/
+├── app/
+│   ├── daa/                    # Design & Analysis of Algorithms
+│   │   ├── greedy/            # Greedy algorithms
+│   │   ├── dynamic/           # Dynamic programming
+│   │   ├── divide-conquer/    # Divide and conquer
+│   │   └── backtracking/      # Backtracking algorithms
+│   ├── auto/                   # Automata Theory
+│   │   ├── finite-automata/   # FA simulations
+│   │   ├── regular-expressions/ # Regex tools
+│   │   ├── context-free-grammar/ # CFG parsers
+│   │   └── turing-machines/   # TM simulators
+│   ├── os/                     # Operating Systems
+│   ├── components/             # Reusable React components
+│   └── utils/                  # Algorithm implementations
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
+- Node.js 18 or later
+- npm or yarn
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Installation
 
-## Learn More
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd algo-simulator
+```
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
+```bash
+npm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Deploy on Vercel
+## 👥 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This is a collaborative group project. To contribute:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Create a new branch** for your feature:
+```bash
+git checkout -b feature/algorithm-name
+```
+
+2. **Make your changes** and commit:
+```bash
+git add .
+git commit -m "Add: Algorithm name implementation"
+```
+
+3. **Push to your branch**:
+```bash
+git push origin feature/algorithm-name
+```
+
+4. **Create a Pull Request** on GitHub
+
+### Contribution Guidelines
+
+- Follow consistent naming conventions
+- Add proper TypeScript types
+- Include step-by-step algorithm visualization
+- Update this README if adding new features
+- Test your implementations before submitting
+
+## 📋 TODO / Roadmap
+
+### Algorithms to Implement
+- [ ] String Matching Algorithms (KMP, Rabin-Karp)
+- [ ] Branch & Bound Algorithms (TSP, 0/1 Knapsack)
+- [ ] Graph Algorithms (Dijkstra, Floyd-Warshall)
+- [ ] Sorting Algorithms (Quick Sort, Heap Sort)
+
+### Automata Theory Enhancements
+- [ ] NFA to DFA Conversion
+- [ ] Pushdown Automata Simulator
+- [ ] Multi-tape Turing Machines
+- [ ] Regular Expression to FA Conversion
+
+### Features
+- [ ] Save/Load automata configurations
+- [ ] Export visualizations as images
+- [ ] Step-by-step animation controls
+- [ ] Mobile-responsive design
+
+## 🤝 Team Members
+
+- **[Your Name]** - Project Lead & Core Development
+- **[Friend 1]** - Algorithm Implementation
+- **[Friend 2]** - UI/UX Design
+- **[Friend 3]** - Testing & Documentation
+
+## 📝 License
+
+This project is created for educational purposes.
+
+## 🎯 Learning Objectives
+
+Students using this simulator will be able to:
+- Understand algorithm complexity and visualization
+- Trace through algorithm execution step-by-step
+- Visualize data structures and state transitions
+- Compare different algorithmic approaches
+- Gain hands-on experience with theoretical concepts
+
+---
+
+**Note**: This is an educational project designed to help students understand complex algorithms and automata theory through interactive visualization.
