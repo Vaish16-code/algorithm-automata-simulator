@@ -1,89 +1,81 @@
 "use client";
 
 import Link from "next/link";
-import { Header, Footer } from "../../components";
+import { Header, Footer } from "../../../components";
 
-export default function OperatingSystemsPage() {
-  const osAlgorithms = [
+export default function BacktrackingAlgorithmsPage() {
+  const backtrackingAlgorithms = [
     {
-      title: "Page Replacement Algorithms",
-      description: "Simulate FIFO, LRU, LFU, and Optimal page replacement strategies",
-      path: "/os/page-replacement",
-      complexity: "O(n) to O(n²)",
+      title: "N-Queens Problem",
+      description: "Place N queens on an N×N chessboard so that no two queens attack each other",
+      path: "/daa/backtracking/n-queens",
+      complexity: "O(N!)",
       examImportance: "Very High",
-      topics: ["FIFO", "LRU", "LFU", "Optimal", "Working Set"]
-    },
-    {
-      title: "Disk Scheduling Algorithms", 
-      description: "Optimize disk head movement with FCFS, SCAN, C-SCAN, LOOK algorithms",
-      path: "/os/disk",
-      complexity: "O(n log n)",
-      examImportance: "High",
-      topics: ["FCFS", "SSTF", "SCAN", "C-SCAN", "LOOK", "C-LOOK"]
+      topics: ["Constraint Satisfaction", "Backtracking", "Pruning", "State Space Tree"]
     },
   ];
 
   const educationalContent = {
-    overview: "Operating Systems algorithms are crucial for managing system resources efficiently. These algorithms handle memory management, process scheduling, disk I/O optimization, and ensure optimal system performance.",
+    overview: "Backtracking is a systematic method for solving problems by exploring all possible solutions incrementally and abandoning (backtracking) partial solutions that cannot lead to a valid complete solution.",
     keyCharacteristics: [
-      "Resource allocation and optimization",
-      "Memory and storage management",
-      "Process synchronization and scheduling",
-      "Hardware abstraction and control",
-      "Performance metrics optimization"
+      "Systematic enumeration of all possible solutions",
+      "Incremental construction of solutions",
+      "Early pruning of invalid partial solutions",
+      "Recursive exploration with state rollback",
+      "Depth-first search approach"
     ],
     applications: [
-      "Virtual memory management systems",
-      "Database buffer management",
-      "Web server caching strategies",
-      "Storage system optimization",
-      "Cloud resource management"
+      "Constraint satisfaction problems",
+      "Combinatorial optimization",
+      "Puzzle solving (Sudoku, N-Queens)",
+      "Path finding in mazes",
+      "Game tree exploration"
     ],
     examTips: [
-      "Understand trade-offs between different algorithms",
-      "Practice calculating performance metrics",
-      "Learn hardware implications of each algorithm",
-      "Study real-world implementation details",
-      "Master algorithm selection criteria"
+      "Understand the recursive structure",
+      "Practice identifying base cases and recursive cases",
+      "Learn pruning techniques for optimization",
+      "Study state space tree representations",
+      "Master complexity analysis for backtracking"
     ]
   };
 
   const examPrep = {
     questionTypes: [
-      "Simulate algorithm execution with given input",
-      "Calculate hit ratios and performance metrics",
-      "Compare algorithm efficiency and trade-offs",
-      "Design optimal strategies for specific scenarios",
-      "Analyze worst-case and average-case performance"
+      "Trace backtracking algorithm execution",
+      "Design backtracking solution for given problem",
+      "Analyze time and space complexity",
+      "Optimize with pruning techniques",
+      "Compare with other algorithmic paradigms"
     ],
     practiceProblems: [
-      "Page replacement with different reference strings",
-      "Disk scheduling with various request patterns",
-      "Memory allocation and deallocation scenarios",
-      "Performance comparison of different algorithms",
-      "Real-world optimization problems"
+      "N-Queens problem variants",
+      "Graph coloring problem",
+      "Subset sum with backtracking",
+      "Hamiltonian path problem",
+      "Knight's tour problem"
     ],
-    examPattern: "Mumbai University OS exams typically include 2-3 questions (15-20 marks total) on memory management and disk scheduling algorithms."
+    examPattern: "Mumbai University typically asks 1-2 questions on backtracking (10-15 marks), focusing on N-Queens problem and algorithm design."
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       <Header />
       
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Operating Systems Algorithms
+            Backtracking Algorithms
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Master OS algorithms for memory management and disk optimization with interactive simulators
+            Master systematic exploration and constraint satisfaction with interactive backtracking simulators
           </p>
         </div>
 
         {/* Algorithms Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {osAlgorithms.map((algorithm, index) => (
+          {backtrackingAlgorithms.map((algorithm, index) => (
             <Link
               key={index}
               href={algorithm.path}
@@ -131,7 +123,7 @@ export default function OperatingSystemsPage() {
 
         {/* Educational Content */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Understanding Operating Systems Algorithms</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Understanding Backtracking Algorithms</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Overview</h3>
@@ -152,7 +144,7 @@ export default function OperatingSystemsPage() {
               <ul className="space-y-2 text-gray-600 mb-6">
                 {educationalContent.applications.map((app, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-blue-500 mt-1">•</span>
+                    <span className="text-pink-500 mt-1">•</span>
                     {app}
                   </li>
                 ))}
@@ -162,7 +154,7 @@ export default function OperatingSystemsPage() {
               <ul className="space-y-2 text-gray-600">
                 {educationalContent.examTips.map((tip, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">•</span>
+                    <span className="text-blue-500 mt-1">•</span>
                     {tip}
                   </li>
                 ))}
@@ -200,17 +192,17 @@ export default function OperatingSystemsPage() {
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Exam Pattern</h3>
               <p className="text-gray-600 mb-6">{examPrep.examPattern}</p>
               
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Tips</h3>
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Focus Areas</h3>
               <ul className="space-y-2 text-gray-600">
                 {[
-                  "Focus on algorithm simulation and step-by-step execution",
-                  "Practice calculating hit ratios and performance metrics",
-                  "Understand hardware implications of each algorithm",
-                  "Learn to choose optimal algorithms for different scenarios"
-                ].map((tip, index) => (
+                  "N-Queens problem solution and optimization",
+                  "State space tree construction and traversal",
+                  "Pruning techniques and efficiency analysis",
+                  "Recursive algorithm design and implementation"
+                ].map((area, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <span className="text-purple-500 mt-1">•</span>
-                    {tip}
+                    {area}
                   </li>
                 ))}
               </ul>
@@ -218,62 +210,84 @@ export default function OperatingSystemsPage() {
           </div>
         </div>
 
-        {/* Quick Reference */}
+        {/* Algorithm Pattern */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Quick Algorithm Comparison</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Backtracking Algorithm Pattern</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Page Replacement</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">FIFO</span>
-                  <span className="text-sm text-gray-600">Simple, but Belady&apos;s anomaly</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">LRU</span>
-                  <span className="text-sm text-gray-600">Good performance, complex</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">Optimal</span>
-                  <span className="text-sm text-gray-600">Best possible, impractical</span>
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">General Structure</h3>
+              <div className="bg-gray-50 rounded-lg p-4 font-mono text-sm">
+                <div className="text-blue-600">function</div> backtrack(solution):
+                <div className="ml-4">
+                  <div className="text-green-600">if</div> isComplete(solution):
+                  <div className="ml-4">return solution</div>
+                  <div className="text-green-600">for</div> each choice in choices:
+                  <div className="ml-4">
+                    <div className="text-green-600">if</div> isValid(choice):
+                    <div className="ml-4">
+                      makeChoice(choice)
+                      <div className="text-green-600">if</div> backtrack(solution):
+                      <div className="ml-4">return true</div>
+                      unmakeChoice(choice)
+                    </div>
+                  </div>
+                  <div className="text-green-600">return</div> false
                 </div>
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Disk Scheduling</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">FCFS</span>
-                  <span className="text-sm text-gray-600">Fair, but high seek time</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">SCAN</span>
-                  <span className="text-sm text-gray-600">Elevator algorithm, predictable</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium">C-SCAN</span>
-                  <span className="text-sm text-gray-600">Circular, more uniform</span>
-                </div>
-              </div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Steps</h3>
+              <ol className="space-y-3 text-gray-600">
+                <li className="flex gap-3">
+                  <span className="bg-purple-100 text-purple-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">1</span>
+                  <div>
+                    <strong>Choose:</strong> Select next option to try
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="bg-purple-100 text-purple-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">2</span>
+                  <div>
+                    <strong>Constraint Check:</strong> Verify if choice is valid
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="bg-purple-100 text-purple-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">3</span>
+                  <div>
+                    <strong>Goal Check:</strong> Test if solution is complete
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="bg-purple-100 text-purple-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">4</span>
+                  <div>
+                    <strong>Recurse:</strong> Continue with updated state
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="bg-purple-100 text-purple-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">5</span>
+                  <div>
+                    <strong>Backtrack:</strong> Undo choice if no solution found
+                  </div>
+                </li>
+              </ol>
             </div>
           </div>
         </div>
 
-        {/* Performance Metrics */}
+        {/* Performance Analysis */}
         <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Key Performance Metrics</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Performance Analysis</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-6 bg-purple-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600 mb-2">Hit Ratio</div>
-              <p className="text-gray-600">Percentage of successful memory accesses</p>
+              <div className="text-2xl font-bold text-purple-600 mb-2">Time Complexity</div>
+              <p className="text-gray-600">Generally exponential, varies by problem and pruning efficiency</p>
+            </div>
+            <div className="text-center p-6 bg-pink-50 rounded-lg">
+              <div className="text-2xl font-bold text-pink-600 mb-2">Space Complexity</div>
+              <p className="text-gray-600">O(depth) for recursion stack plus solution storage</p>
             </div>
             <div className="text-center p-6 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600 mb-2">Seek Time</div>
-              <p className="text-gray-600">Time to position disk head on track</p>
-            </div>
-            <div className="text-center p-6 bg-green-50 rounded-lg">
-              <div className="text-2xl font-bold text-green-600 mb-2">Throughput</div>
-              <p className="text-gray-600">Number of processes completed per unit time</p>
+              <div className="text-2xl font-bold text-blue-600 mb-2">Optimization</div>
+              <p className="text-gray-600">Constraint propagation and intelligent pruning techniques</p>
             </div>
           </div>
         </div>

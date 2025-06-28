@@ -1,5 +1,5 @@
 import React from 'react';
-import { KnapsackDPResult, KnapsackItem } from '../utils/dynamicProgramming';
+import { KnapsackDPResult } from '../utils/dynamicProgramming';
 
 interface KnapsackDPChartProps {
   data: KnapsackDPResult;

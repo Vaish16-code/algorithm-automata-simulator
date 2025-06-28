@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { TMChart } from "../../../components/TMChart";
-import { simulateTuringMachine, TuringMachine, TMTransition, TMResult } from "../../../utils/automataTheory";
+import { simulateTuringMachine, TuringMachine, TMTransition, TMResult, TMStep } from "../../../utils/automataTheory";
+import { EducationalInfo, ExamResult } from "../../../../components";
 
 export default function TuringMachineSimulatorPage() {
   const [states, setStates] = useState(["q0", "qaccept", "qreject"]);
-  const [alphabet, setAlphabet] = useState(["0", "1"]);
+  const [alphabet] = useState(["0", "1"]);
   const [tapeAlphabet, setTapeAlphabet] = useState(["0", "1", "_"]);
   const [transitions, setTransitions] = useState<TMTransition[]>([
     { currentState: "q0", readSymbol: "0", writeSymbol: "1", moveDirection: "R", nextState: "q0" },
@@ -63,7 +64,7 @@ export default function TuringMachineSimulatorPage() {
     setTransitions(transitions.filter((_, i) => i !== index));
   };
 
-  const updateTransition = (index: number, field: keyof TMTransition, value: any) => {
+  const updateTransition = (index: number, field: keyof TMTransition, value: string) => {
     const newTransitions = [...transitions];
     newTransitions[index] = { ...newTransitions[index], [field]: value };
     setTransitions(newTransitions);
@@ -84,11 +85,72 @@ export default function TuringMachineSimulatorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
-          Turing Machine Simulator
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            Turing Machine <span className="text-emerald-600">Simulator</span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Design and simulate Turing machines to understand the fundamentals of computation theory
+          </p>
+        </div>
+
+        <EducationalInfo
+          topic="Turing Machine"
+          description="Turing machines are abstract computational models that define the theoretical limits of computation. They consist of an infinite tape, a read/write head, and a finite state control."
+          theory={{
+            definition: "A Turing Machine is a 7-tuple M = (Q, Σ, Γ, δ, q₀, qaccept, qreject) where Q is finite set of states, Σ is input alphabet, Γ is tape alphabet, δ is transition function, q₀ is start state, qaccept is accept state, and qreject is reject state.",
+            keyPoints: [
+              "Infinite tape divided into cells, each containing a symbol",
+              "Read/write head can move left or right on the tape",
+              "Transition function determines next state, symbol to write, and head movement",
+              "Fundamental model for understanding computability and complexity"
+            ],
+            applications: [
+              "Theoretical foundation for modern computer science",
+              "Computability theory and decidable problems",
+              "Complexity theory and algorithm analysis",
+              "Understanding limits of computation"
+            ]
+          }}
+          mumbaiUniversity={{
+            syllabus: [
+              "Turing Machine definition and components",
+              "Transition function and configurations",
+              "Acceptance and rejection conditions",
+              "Church-Turing thesis",
+              "Decidable and undecidable problems"
+            ],
+            marks: "12-15 marks",
+            commonQuestions: [
+              "Design TM for simple string operations",
+              "Trace execution of TM on given input",
+              "Prove decidability/undecidability of problems",
+              "Compare computational models"
+            ],
+            examTips: [
+              "Practice designing TMs for simple string operations",
+              "Understand the Church-Turing thesis",
+              "Know the difference between deterministic and non-deterministic TMs",
+              "Remember that TMs can simulate any algorithm"
+            ]
+          }}
+          algorithm={{
+            steps: [
+              "Initialize tape with input string",
+              "Set head to leftmost position and state to start state",
+              "Read symbol under head and apply transition function",
+              "Write new symbol, move head, and change state",
+              "Repeat until accept, reject, or infinite loop",
+              "Return result based on final state"
+            ],
+            complexity: {
+              time: "Depends on specific TM design",
+              space: "O(s(n)) where s(n) is space complexity function"
+            }
+          }}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Section */}
@@ -257,90 +319,140 @@ export default function TuringMachineSimulatorPage() {
           {/* Visualization Section */}
           <div className="space-y-6">
             {result && (
-              <>
-                <div className="bg-white rounded-lg shadow-md p-6">
-                  <h2 className="text-xl font-semibold mb-4 text-gray-700">Simulation Result</h2>
-                  
-                  <div className={`p-4 rounded-lg mb-4 ${
-                    result.accepted 
-                      ? 'bg-green-100 border border-green-400 text-green-700'
-                      : 'bg-red-100 border border-red-400 text-red-700'
-                  }`}>
-                    <div className="flex items-center">
-                      <span className="text-2xl mr-2">
-                        {result.accepted ? '✅' : '❌'}
-                      </span>
-                      <div>
-                        <p className="font-bold text-lg">
-                          {result.accepted ? 'ACCEPTED' : 'REJECTED'}
-                        </p>
-                        <p className="text-sm">
-                          Steps: {result.steps.length - 1}
-                        </p>
-                      </div>
+              <ExamResult
+                title="Turing Machine Simulation"
+                input={inputString}
+                result={result.accepted}
+                steps={result.steps.map((step: TMStep, index: number) => ({
+                  stepNumber: index,
+                  description: step.transition 
+                    ? `δ(${step.transition.currentState}, ${step.transition.readSymbol}) = (${step.transition.writeSymbol}, ${step.transition.moveDirection}, ${step.transition.nextState})`
+                    : "Initial configuration",
+                  currentState: `State: ${step.state}, Head: ${step.headPosition}`,
+                  explanation: step.transition
+                    ? "Transition function applied to change state and tape"
+                    : "Starting configuration of the Turing machine"
+                }))}
+                finalAnswer={result.accepted ? `String "${inputString}" is ACCEPTED` : `String "${inputString}" is REJECTED`}
+                examFormat={{
+                  question: `Design and simulate a Turing Machine for the input string "${inputString}". Show the step-by-step execution.`,
+                  solution: [
+                    `Given TM M = (Q, Σ, Γ, δ, q₀, qaccept, qreject) where:`,
+                    `Q = {${states.join(', ')}} (states)`,
+                    `Γ = {${tapeAlphabet.join(', ')}} (tape alphabet)`,
+                    `q₀ = q0 (start state)`,
+                    `Transition function δ:`,
+                    ...transitions.map(t => `  δ(${t.currentState}, ${t.readSymbol}) = (${t.writeSymbol}, ${t.moveDirection}, ${t.nextState})`),
+                    `Execution trace:`,
+                    ...result.steps.slice(0, 8).map((step: TMStep, index: number) => 
+                      `  Step ${index}: ${step.state} | ${step.tape.map((s: string, i: number) => 
+                        i === step.headPosition ? `[${s}]` : s
+                      ).join('')}`
+                    )
+                  ],
+                  conclusion: result.accepted 
+                    ? `The Turing Machine accepts the string "${inputString}" by reaching the accept state.`
+                    : `The Turing Machine rejects the string "${inputString}" by reaching the reject state.`,
+                  marks: 15
+                }}
+              />
+            )}
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Machine Configuration</h3>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-700">States:</span>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {states.map(state => (
+                        <span key={state} className={`px-2 py-1 rounded text-xs font-mono ${
+                          state === 'q0' ? 'bg-blue-100 text-blue-800' :
+                          state === 'qaccept' ? 'bg-green-100 text-green-800' :
+                          state === 'qreject' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {state}
+                        </span>
+                      ))}
                     </div>
                   </div>
-
-                  <TMChart result={result} />
+                  <div>
+                    <span className="font-medium text-gray-700">Tape Alphabet:</span>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {tapeAlphabet.map(symbol => (
+                        <span key={symbol} className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs font-mono">
+                          {symbol}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+                
+                <div>
+                  <span className="font-medium text-gray-700">Transition Function:</span>
+                  <div className="mt-2 space-y-1 max-h-48 overflow-y-auto">
+                    {transitions.map((trans, index) => (
+                      <div key={index} className="text-sm font-mono bg-gray-50 p-2 rounded border">
+                        <span className="text-blue-600">δ({trans.currentState}, {trans.readSymbol})</span> 
+                        <span className="mx-2">=</span> 
+                        <span className="text-green-600">({trans.writeSymbol}, {trans.moveDirection}, {trans.nextState})</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                <div className="bg-white rounded-lg shadow-md p-6">
-                  <h3 className="font-semibold mb-2">Execution Steps:</h3>
-                  <div className="max-h-80 overflow-y-auto space-y-2">
-                    {result.steps.map((step: any, index: number) => (
+            {result && (
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h3 className="text-lg font-semibold mb-4 text-gray-800">Tape Visualization</h3>
+                <TMChart result={result} />
+                
+                <div className="mt-4">
+                  <h4 className="font-medium text-gray-700 mb-2">Step-by-Step Execution:</h4>
+                  <div className="max-h-64 overflow-y-auto space-y-2">
+                    {result.steps.slice(0, 10).map((step: TMStep, index: number) => (
                       <div key={index} className="p-3 bg-gray-50 rounded text-sm">
                         <div className="flex justify-between items-center mb-2">
-                          <span className="font-medium">Step {step.step}:</span>
-                          <span className="text-blue-600 font-mono">{step.state}</span>
+                          <span className="font-medium">Step {index}:</span>
+                          <span className={`px-2 py-1 rounded text-xs font-mono ${
+                            step.state === 'qaccept' ? 'bg-green-100 text-green-800' :
+                            step.state === 'qreject' ? 'bg-red-100 text-red-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>
+                            {step.state}
+                          </span>
                         </div>
-                        <div className="font-mono text-xs bg-white p-2 rounded">
+                        <div className="font-mono text-xs bg-white p-2 rounded border">
                           {step.tape.map((symbol: string, i: number) => (
                             <span 
                               key={i} 
-                              className={i === step.headPosition ? 'bg-yellow-200 px-1' : 'px-1'}
+                              className={`px-1 border-r border-gray-200 ${
+                                i === step.headPosition ? 'bg-yellow-200 font-bold' : ''
+                              }`}
                             >
                               {symbol}
                             </span>
                           ))}
                         </div>
                         {step.transition && (
-                          <div className="text-purple-600 mt-1">
+                          <div className="text-purple-600 mt-1 text-xs">
                             δ({step.transition.currentState}, {step.transition.readSymbol}) = 
                             ({step.transition.writeSymbol}, {step.transition.moveDirection}, {step.transition.nextState})
                           </div>
                         )}
                       </div>
                     ))}
+                    {result.steps.length > 10 && (
+                      <div className="text-center text-gray-500 text-sm">
+                        ... and {result.steps.length - 10} more steps
+                      </div>
+                    )}
                   </div>
                 </div>
-              </>
+              </div>
             )}
-          </div>
-        </div>
-
-        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">About Turing Machines</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-600">
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-2">Key Components:</h3>
-              <ul className="space-y-1 text-sm">
-                <li>• Infinite tape with cells containing symbols</li>
-                <li>• Read/write head that can move left or right</li>
-                <li>• Finite set of states including start, accept, and reject</li>
-                <li>• Transition function: δ(state, symbol) → (symbol, direction, state)</li>
-                <li>• Tape alphabet including blank symbol</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-800 mb-2">Applications:</h3>
-              <ul className="space-y-1 text-sm">
-                <li>• Model of computation and computability theory</li>
-                <li>• Theoretical foundation for modern computers</li>
-                <li>• Study of decidable and undecidable problems</li>
-                <li>• Complexity theory and algorithm analysis</li>
-                <li>• Understanding limits of computation</li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>

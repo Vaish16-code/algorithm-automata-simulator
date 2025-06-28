@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { simulateRegex, RegexResult } from "../../../utils/automataTheory";
+import { EducationalInfo, ExamResult } from "../../../../components";
 
 export default function RegexMatcherPage() {
   const [pattern, setPattern] = useState("(a|b)*abb");
@@ -45,11 +46,70 @@ export default function RegexMatcherPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
-          Regular Expression Matcher
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-orange-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            Regular Expression <span className="text-orange-600">Matcher</span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Test and validate regular expressions against multiple input strings with detailed matching analysis
+          </p>
+        </div>
+
+        <EducationalInfo
+          topic="Regular Expressions (Regex)"
+          description="Regular expressions are formal language patterns used to match and manipulate strings. They provide a powerful and concise way to search, match, and replace text patterns."
+          theory={{
+            definition: "A regular expression is a sequence of characters that defines a search pattern for strings. They are formally equivalent to finite automata and define regular languages.",
+            keyPoints: [
+              "Metacharacters define special matching behaviors (* + ? . | [ ] ^ $)",
+              "Character classes allow matching sets of characters",
+              "Quantifiers specify how many times to match",
+              "Equivalent to finite automata in computational power"
+            ],
+            applications: [
+              "Text search and pattern matching in editors",
+              "Data validation (email, phone numbers, URLs)",
+              "Log file analysis and data extraction",
+              "Programming language lexical analysis"
+            ]
+          }}
+          mumbaiUniversity={{
+            syllabus: [
+              "Regular expression definition and syntax",
+              "Metacharacters and quantifiers",
+              "Character classes and ranges",
+              "Equivalence with finite automata",
+              "Converting regex to NFA and DFA"
+            ],
+            marks: "6-8 marks",
+            commonQuestions: [
+              "Design regex for given language patterns",
+              "Convert regular expression to finite automaton",
+              "Test strings against regular expressions",
+              "Optimize regular expressions for efficiency"
+            ],
+            examTips: [
+              "Practice constructing regex for common patterns",
+              "Understand the equivalence with finite automata",
+              "Know how to convert between regex and NFA/DFA",
+              "Remember precedence rules for operators"
+            ]
+          }}
+          algorithm={{
+            steps: [
+              "Parse the regular expression pattern",
+              "Build NFA using Thompson's construction",
+              "Test input string against the automaton",
+              "Return match result and captured groups"
+            ],
+            complexity: {
+              time: "O(n*m) where n=text length, m=pattern length",
+              space: "O(m) for NFA states"
+            }
+          }}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Section */}
@@ -149,89 +209,101 @@ export default function RegexMatcherPage() {
           {/* Results Section */}
           <div className="space-y-6">
             {results.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-semibold mb-4 text-gray-700">Test Results</h2>
-                
-                <div className="space-y-4">
-                  {results.map((result, index) => (
-                    <div key={index} className="border rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="font-mono text-lg">{testStrings[index] || "(empty)"}</span>
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          result.matches 
-                            ? 'bg-green-100 text-green-700' 
-                            : 'bg-red-100 text-red-700'
-                        }`}>
-                          {result.matches ? 'MATCH' : 'NO MATCH'}
-                        </span>
-                      </div>
-                      
-                      <div className="text-sm text-gray-600">
-                        <div className="mb-2">
-                          <span className="font-medium">Pattern:</span> 
-                          <span className="font-mono ml-2">{result.pattern}</span>
-                        </div>
-                        <div>
-                          <span className="font-medium">Steps:</span>
-                          <div className="mt-1 space-y-1">
-                            {result.steps.map((step: string, stepIndex: number) => (
-                              <div key={stepIndex} className="text-xs bg-gray-100 p-2 rounded">
-                                {step}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                  <h3 className="font-semibold text-blue-800 mb-2">Summary</h3>
-                  <div className="text-sm text-blue-700">
-                    <div>Total Tests: {results.length}</div>
-                    <div>Matches: {results.filter(r => r.matches).length}</div>
-                    <div>Non-matches: {results.filter(r => !r.matches).length}</div>
-                    <div>Success Rate: {((results.filter(r => r.matches).length / results.length) * 100).toFixed(1)}%</div>
-                  </div>
-                </div>
-              </div>
+              <ExamResult
+                title="Regular Expression Test Results"
+                input={`Pattern: ${pattern}`}
+                result={results.some(r => r.matches)}
+                steps={results.map((result, index) => ({
+                  stepNumber: index + 1,
+                  description: `Testing: "${testStrings[index] || '(empty)'}"`,
+                  currentState: result.matches ? "MATCH" : "NO MATCH",
+                  explanation: result.matches 
+                    ? "String matches the regular expression pattern"
+                    : "String does not match the regular expression pattern"
+                }))}
+                finalAnswer={`Pattern "${pattern}" matched ${results.filter(r => r.matches).length} out of ${results.length} test strings`}
+                examFormat={{
+                  question: `Test the regular expression "${pattern}" against the given set of strings and analyze the results.`,
+                  solution: [
+                    `Regular Expression: ${pattern}`,
+                    `Test Results:`,
+                    ...results.map((result, index) => 
+                      `  "${testStrings[index] || '(empty)'}" → ${result.matches ? 'ACCEPTED' : 'REJECTED'}`
+                    ),
+                    `Summary: ${results.filter(r => r.matches).length} matches, ${results.filter(r => !r.matches).length} non-matches`
+                  ],
+                  conclusion: `The regular expression "${pattern}" has a success rate of ${((results.filter(r => r.matches).length / results.length) * 100).toFixed(1)}% for the given test set.`,
+                  marks: 10
+                }}
+              />
             )}
 
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Regular Expression Syntax</h2>
-              <div className="space-y-3 text-sm">
-                <div className="grid grid-cols-2 gap-4">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Pattern Analysis</h3>
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-medium text-gray-700 mb-2">Current Pattern:</h4>
+                  <div className="font-mono text-lg bg-white p-3 rounded border">
+                    {pattern}
+                  </div>
+                </div>
+                
+                {results.length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-gray-700">Test Results Summary:</h4>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-green-50 p-3 rounded">
+                        <div className="text-green-800 font-semibold">Matches</div>
+                        <div className="text-2xl font-bold text-green-600">
+                          {results.filter(r => r.matches).length}
+                        </div>
+                      </div>
+                      <div className="bg-red-50 p-3 rounded">
+                        <div className="text-red-800 font-semibold">Non-matches</div>
+                        <div className="text-2xl font-bold text-red-600">
+                          {results.filter(r => !r.matches).length}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Regular Expression Reference</h3>
+              <div className="space-y-4 text-sm">
+                <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <h3 className="font-medium mb-2">Basic Operators:</h3>
-                    <ul className="space-y-1 text-xs">
-                      <li><code className="bg-gray-100 px-1">.</code> - Any character</li>
-                      <li><code className="bg-gray-100 px-1">*</code> - Zero or more</li>
-                      <li><code className="bg-gray-100 px-1">+</code> - One or more</li>
-                      <li><code className="bg-gray-100 px-1">?</code> - Zero or one</li>
-                      <li><code className="bg-gray-100 px-1">|</code> - Alternation (OR)</li>
-                    </ul>
+                    <h4 className="font-medium text-gray-700 mb-2">Basic Operators:</h4>
+                    <div className="space-y-1 text-xs">
+                      <div><code className="bg-gray-100 px-1 rounded">.</code> - Any single character</div>
+                      <div><code className="bg-gray-100 px-1 rounded">*</code> - Zero or more repetitions</div>
+                      <div><code className="bg-gray-100 px-1 rounded">+</code> - One or more repetitions</div>
+                      <div><code className="bg-gray-100 px-1 rounded">?</code> - Zero or one occurrence</div>
+                      <div><code className="bg-gray-100 px-1 rounded">|</code> - Alternation (OR)</div>
+                    </div>
                   </div>
                   <div>
-                    <h3 className="font-medium mb-2">Character Classes:</h3>
-                    <ul className="space-y-1 text-xs">
-                      <li><code className="bg-gray-100 px-1">[abc]</code> - Any of a, b, c</li>
-                      <li><code className="bg-gray-100 px-1">[a-z]</code> - Any lowercase</li>
-                      <li><code className="bg-gray-100 px-1">[0-9]</code> - Any digit</li>
-                      <li><code className="bg-gray-100 px-1">\d</code> - Digit</li>
-                      <li><code className="bg-gray-100 px-1">\w</code> - Word character</li>
-                    </ul>
+                    <h4 className="font-medium text-gray-700 mb-2">Character Classes:</h4>
+                    <div className="space-y-1 text-xs">
+                      <div><code className="bg-gray-100 px-1 rounded">[abc]</code> - Any of a, b, or c</div>
+                      <div><code className="bg-gray-100 px-1 rounded">[a-z]</code> - Any lowercase letter</div>
+                      <div><code className="bg-gray-100 px-1 rounded">[0-9]</code> - Any digit</div>
+                      <div><code className="bg-gray-100 px-1 rounded">\d</code> - Digit character</div>
+                      <div><code className="bg-gray-100 px-1 rounded">\w</code> - Word character</div>
+                    </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="font-medium mb-2">Examples:</h3>
-                  <ul className="space-y-1 text-xs">
-                    <li><code className="bg-gray-100 px-1">ab*</code> - "a" followed by zero or more "b"s</li>
-                    <li><code className="bg-gray-100 px-1">(ab)+</code> - One or more "ab" sequences</li>
-                    <li><code className="bg-gray-100 px-1">a|b</code> - Either "a" or "b"</li>
-                    <li><code className="bg-gray-100 px-1">^a.*b$</code> - Starts with "a", ends with "b"</li>
-                  </ul>
+                  <h4 className="font-medium text-gray-700 mb-2">Example Patterns:</h4>
+                  <div className="space-y-1 text-xs">
+                    <div><code className="bg-gray-100 px-1 rounded">ab*</code> - &quot;a&quot; followed by zero or more &quot;b&quot;s</div>
+                    <div><code className="bg-gray-100 px-1 rounded">(ab)+</code> - One or more &quot;ab&quot; sequences</div>
+                    <div><code className="bg-gray-100 px-1 rounded">a|b</code> - Either &quot;a&quot; or &quot;b&quot;</div>
+                    <div><code className="bg-gray-100 px-1 rounded">^a.*b$</code> - Starts with &quot;a&quot;, ends with &quot;b&quot;</div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -386,7 +386,7 @@ const PageReplacementSimulator = () => {
         return;
       }
 
-      const results = Object.entries(algorithms).map(([name, func]) => 
+      const results = Object.entries(algorithms).map(([, func]) => 
         func(pageSequence, frameSize)
       );
 
@@ -498,7 +498,7 @@ const PageReplacementSimulator = () => {
             <div className="p-4 bg-green-50 rounded-lg">
               <h4 className="font-semibold text-green-800 mb-2">LRU</h4>
               <p className="text-sm text-green-700">
-                Replaces the page that hasn't been used for the longest time. More complex but often better performance.
+                Replaces the page that hasn&apos;t been used for the longest time. More complex but often better performance.
               </p>
             </div>
             <div className="p-4 bg-purple-50 rounded-lg">

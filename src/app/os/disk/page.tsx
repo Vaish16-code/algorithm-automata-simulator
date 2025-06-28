@@ -438,8 +438,8 @@ const DiskChart = ({ sequence, algorithm, seekTime, detailedSteps }: {
                 strokeWidth={2}
               />
               <Tooltip 
-                formatter={(value: any) => [value, 'Track Position']}
-                labelFormatter={(step: any) => `Step: ${step}`}
+                formatter={(value: number) => [value, 'Track Position']}
+                labelFormatter={(step: number) => `Step: ${step}`}
                 contentStyle={{
                   backgroundColor: '#1f2937',
                   border: '2px solid #3b82f6',

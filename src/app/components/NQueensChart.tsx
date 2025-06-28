@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NQueensResult, NQueensStep } from '../utils/backtracking';
+import { NQueensResult } from '../utils/backtracking';
 
 interface NQueensChartProps {
   data: NQueensResult;

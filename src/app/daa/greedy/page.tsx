@@ -1,164 +1,249 @@
 "use client";
 
-import { useState } from "react";
-import { KnapsackChart } from "../../components/KnapsackChart";
-import { fractionalKnapsack, KnapsackResult } from "../../utils/greedyAlgorithms";
+import Link from "next/link";
+import { Header, Footer } from "../../../components";
 
-export default function KnapsackPage() {
-  const [weights, setWeights] = useState<number[]>([3, 3, 2, 5, 1]);
-  const [profits, setProfits] = useState<number[]>([10, 15, 10, 20, 8]);
-  const [capacity, setCapacity] = useState<number>(5);
-  const [result, setResult] = useState<KnapsackResult | null>(null);
+export default function GreedyAlgorithmsPage() {
+  const greedyAlgorithms = [
+    {
+      title: "Fractional Knapsack",
+      description: "Solve the fractional knapsack problem using greedy approach",
+      path: "/daa/greedy/fractional-knapsack",
+      complexity: "O(n log n)",
+      examImportance: "High",
+    },
+    {
+      title: "Job Sequencing with Deadlines",
+      description: "Maximize profit by scheduling jobs within deadlines",
+      path: "/daa/greedy/job-sequencing", 
+      complexity: "O(n²)",
+      examImportance: "High",
+    },
+    {
+      title: "Kruskal's MST Algorithm",
+      description: "Find minimum spanning tree using edge-based greedy approach",
+      path: "/daa/greedy/kruskal",
+      complexity: "O(E log E)",
+      examImportance: "Very High",
+    },
+    {
+      title: "Prim's MST Algorithm", 
+      description: "Find minimum spanning tree using vertex-based greedy approach",
+      path: "/daa/greedy/prim",
+      complexity: "O(V²) or O(E log V)",
+      examImportance: "Very High",
+    },
+  ];
 
-  const handleSolve = () => {
-    const output = fractionalKnapsack(capacity, weights, profits);
-    setResult(output);
+  const educationalContent = {
+    overview: "Greedy algorithms make locally optimal choices at each step, hoping to find a global optimum. They are efficient for problems where local optimization leads to global optimization.",
+    keyCharacteristics: [
+      "Make the best choice at each step",
+      "Never reconsider previous choices",
+      "Often used for optimization problems", 
+      "Greedy choice property must hold",
+      "Optimal substructure required"
+    ],
+    applications: [
+      "Network routing algorithms",
+      "Activity selection problems",
+      "Huffman coding for data compression",
+      "Currency change problems",
+      "Task scheduling systems"
+    ],
+    examTips: [
+      "Understand when greedy approach gives optimal solution",
+      "Know the difference between greedy and dynamic programming",
+      "Practice proving greedy choice property",
+      "Learn time complexity analysis",
+      "Study counter-examples where greedy fails"
+    ]
   };
 
-  const handleWeightsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newWeights = e.target.value
-      .split(',')
-      .map(w => parseInt(w.trim()))
-      .filter(w => !isNaN(w));
-    setWeights(newWeights);
-  };
-
-  const handleProfitsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newProfits = e.target.value
-      .split(',')
-      .map(p => parseInt(p.trim()))
-      .filter(p => !isNaN(p));
-    setProfits(newProfits);
+  const examPrep = {
+    questionTypes: [
+      "Prove that greedy choice leads to optimal solution",
+      "Analyze time and space complexity", 
+      "Compare greedy vs dynamic programming approaches",
+      "Design greedy algorithms for given problems",
+      "Find counter-examples where greedy fails"
+    ],
+    practiceProblems: [
+      "Activity Selection Problem",
+      "Fractional vs 0/1 Knapsack comparison",
+      "Minimum number of coins problem",
+      "Job scheduling with profits and deadlines",
+      "Graph algorithms (MST, shortest path)"
+    ],
+    examPattern: "Mumbai University typically asks 1-2 questions on greedy algorithms worth 10-15 marks total, focusing on algorithm design and complexity analysis."
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-          Fractional Knapsack (Greedy Algorithm)
-        </h1>
-
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">Input Parameters</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Knapsack Capacity:
-              </label>
-              <input
-                type="number"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={capacity}
-                onChange={(e) => setCapacity(parseInt(e.target.value) || 0)}
-                min="1"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Weights (comma-separated):
-              </label>
-              <input
-                type="text"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={weights.join(', ')}
-                onChange={handleWeightsChange}
-                placeholder="e.g., 3, 3, 2, 5, 1"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Profits (comma-separated):
-              </label>
-              <input
-                type="text"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={profits.join(', ')}
-                onChange={handleProfitsChange}
-                placeholder="e.g., 10, 15, 10, 20, 8"
-              />
-            </div>
-          </div>
-
-          {weights.length !== profits.length && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              ⚠️ Weights and profits arrays must have the same length!
-            </div>
-          )}
-
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
-            onClick={handleSolve}
-            disabled={weights.length !== profits.length || weights.length === 0}
-          >
-            Solve Knapsack Problem
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+      <Header />
+      
+      <main className="container mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            Greedy Algorithms
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Master greedy algorithmic techniques with interactive simulators designed for Mumbai University curriculum
+          </p>
         </div>
 
-        {result && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Solution</h2>
-            
-            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-              <div className="flex items-center">
-                <span className="text-2xl mr-2">💰</span>
-                <div>
-                  <p className="font-bold text-lg">
-                    Maximum Profit: ${result.totalProfit.toFixed(2)}
-                  </p>
-                  <p className="text-sm">
-                    Achieved using greedy fractional knapsack algorithm
-                  </p>
+        {/* Algorithms Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {greedyAlgorithms.map((algorithm, index) => (
+            <Link
+              key={index}
+              href={algorithm.path}
+              className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-200 overflow-hidden"
+            >
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">
+                    {algorithm.title}
+                  </h3>
+                  <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                    {algorithm.examImportance}
+                  </div>
+                </div>
+                
+                <p className="text-gray-600 mb-4">
+                  {algorithm.description}
+                </p>
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500">
+                    Complexity: <code className="bg-gray-100 px-2 py-1 rounded text-green-600 font-mono">{algorithm.complexity}</code>
+                  </span>
+                  <svg className="w-5 h-5 text-green-500 group-hover:text-green-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
-            </div>
-
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-3 text-gray-700">Selected Items:</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-gray-300">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border border-gray-300 px-4 py-2 text-left">Item</th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">Fraction Taken</th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">Profit Earned</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {result.selectedItems.map((item, idx) => (
-                      <tr key={idx} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
-                        <td className="border border-gray-300 px-4 py-2 font-medium">
-                          Item {item.index}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {item.fraction === 1 ? "100%" : `${(item.fraction * 100).toFixed(1)}%`}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 font-medium text-green-600">
-                          ${item.profit.toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <KnapsackChart data={result.selectedItems} />
-          </div>
-        )}
-
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="text-lg font-semibold mb-2 text-blue-800">How it works:</h3>
-          <ul className="text-sm text-blue-700 space-y-1">
-            <li>• Calculate profit-to-weight ratio for each item</li>
-            <li>• Sort items by ratio in descending order</li>
-            <li>• Greedily select items with highest ratios first</li>
-            <li>• Take fractions of items when full item doesn't fit</li>
-          </ul>
+            </Link>
+          ))}
         </div>
-      </div>
+
+        {/* Educational Content */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Understanding Greedy Algorithms</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Overview</h3>
+              <p className="text-gray-600 mb-6">{educationalContent.overview}</p>
+              
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Characteristics</h3>
+              <ul className="space-y-2 text-gray-600">
+                {educationalContent.keyCharacteristics.map((char, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-green-500 mt-1">•</span>
+                    {char}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Applications</h3>
+              <ul className="space-y-2 text-gray-600 mb-6">
+                {educationalContent.applications.map((app, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-blue-500 mt-1">•</span>
+                    {app}
+                  </li>
+                ))}
+              </ul>
+              
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Exam Tips</h3>
+              <ul className="space-y-2 text-gray-600">
+                {educationalContent.examTips.map((tip, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-purple-500 mt-1">•</span>
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Exam Preparation */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>
+              <ul className="space-y-2 text-gray-600 mb-6">
+                {examPrep.questionTypes.map((type, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-blue-500 mt-1">•</span>
+                    {type}
+                  </li>
+                ))}
+              </ul>
+              
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Practice Problems</h3>
+              <ul className="space-y-2 text-gray-600">
+                {examPrep.practiceProblems.map((problem, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-green-500 mt-1">•</span>
+                    {problem}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Exam Pattern</h3>
+              <p className="text-gray-600 mb-6">{examPrep.examPattern}</p>
+              
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Tips</h3>
+              <ul className="space-y-2 text-gray-600">
+                {[
+                  "Focus on understanding the greedy choice property",
+                  "Practice algorithm design and complexity analysis", 
+                  "Study graph algorithms (MST) thoroughly",
+                  "Learn to identify when greedy approach works"
+                ].map((tip, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-purple-500 mt-1">•</span>
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Reference */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Quick Algorithm Reference</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">When Greedy Works</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>• Greedy choice property holds</li>
+                <li>• Optimal substructure exists</li>
+                <li>• Local optimum = Global optimum</li>
+                <li>• No need to reconsider choices</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">Common Patterns</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>• Sort by some criteria first</li>
+                <li>• Make greedy choice at each step</li>
+                <li>• Prove choice leads to optimal solution</li>
+                <li>• Analyze time complexity</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }

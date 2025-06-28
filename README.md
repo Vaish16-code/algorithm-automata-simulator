@@ -1,23 +1,32 @@
-# Algorithm & Automata Theory Simulator
+# AlgoMaster - Engineering Algorithm Simulator
 
-A comprehensive educational platform for visualizing and simulating algorithms and automata theory concepts.
+A comprehensive educational platform for engineering students to master algorithms and computer science concepts through interactive visualizations and simulations.
 
-## 🚀 Features
+## ✨ Features
 
-### Data Structures & Algorithms (DAA)
+### 🏠 **Modern Homepage**
+- **Responsive Design**: Beautiful gradient-based UI with modern animations
+- **Interactive Navigation**: Easy access to all subjects and tools
+- **Student-Focused**: Built specifically for engineering students' needs
+- **Professional Layout**: Header, main content sections, and informative footer
+
+### 📚 **Covered Subjects**
+
+#### **Automata Theory**
+- **Finite Automata (DFA)**: Interactive state transition simulator
+- **Context-Free Grammar**: Parser and derivation tree generator  
+- **Regular Expressions**: Pattern matching and regex testing
+- **Turing Machines**: Step-by-step execution simulator
+
+#### **Design & Analysis of Algorithms (DAA)**
 - **Greedy Algorithms**: Fractional Knapsack, Job Sequencing, Prim's MST, Kruskal's MST
 - **Dynamic Programming**: 0/1 Knapsack with DP table visualization
 - **Divide & Conquer**: Merge Sort with step-by-step visualization
 - **Backtracking**: N-Queens with interactive chessboard
 
-### Automata Theory
-- **Finite Automata**: DFA and NFA simulators with state transition visualization
-- **Regular Expressions**: Pattern matching and regex testing
-- **Context-Free Grammars**: Parser and derivation tree generator
-- **Turing Machines**: Step-by-step execution simulator
-
-### Operating Systems
-- **Disk Scheduling**: Various disk scheduling algorithms
+#### **Operating Systems**
+- **Disk Scheduling**: FCFS, SSTF, SCAN, C-SCAN algorithms
+- **Page Replacement**: FIFO, LRU, Optimal algorithms
 - **Page Replacement**: LRU, FIFO, and other page replacement algorithms
 
 ## 🛠️ Tech Stack

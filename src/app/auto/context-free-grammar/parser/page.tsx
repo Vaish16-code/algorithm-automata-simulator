@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { simulateCFG, ContextFreeGrammar, CFGProduction, CFGResult } from "../../../utils/automataTheory";
+import { EducationalInfo, ExamResult } from "../../../../components";
 
 export default function CFGParserPage() {
   const [terminals, setTerminals] = useState(["a", "b"]);
@@ -76,7 +77,7 @@ export default function CFGParserPage() {
     setProductions(productions.filter((_, i) => i !== index));
   };
 
-  const updateProduction = (index: number, field: 'left' | 'right', value: any) => {
+  const updateProduction = (index: number, field: 'left' | 'right', value: string) => {
     const newProductions = [...productions];
     if (field === 'right') {
       newProductions[index] = { ...newProductions[index], right: value.split(' ').filter((s: string) => s.trim()) };
@@ -114,7 +115,13 @@ export default function CFGParserPage() {
     }
   ];
 
-  const loadExample = (example: any) => {
+  const loadExample = (example: {
+    name: string;
+    terminals: string[];
+    nonTerminals: string[];
+    productions: CFGProduction[];
+    startSymbol: string;
+  }) => {
     setTerminals(example.terminals);
     setNonTerminals(example.nonTerminals);
     setProductions(example.productions);
@@ -122,11 +129,70 @@ export default function CFGParserPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
-          Context-Free Grammar Parser
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            Context-Free Grammar <span className="text-blue-600">Parser</span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Design and test context-free grammars for parsing structured languages and expressions
+          </p>
+        </div>
+
+        <EducationalInfo
+          topic="Context-Free Grammar (CFG)"
+          description="Context-Free Grammars are formal grammar systems that define the syntax of context-free languages. They are essential for parsing programming languages, XML, and mathematical expressions."
+          theory={{
+            definition: "A Context-Free Grammar is a 4-tuple G = (V, Σ, R, S) where V is a finite set of non-terminals, Σ is a finite set of terminals, R is a finite set of production rules, and S is the start symbol.",
+            keyPoints: [
+              "Production rules define how non-terminals expand into terminals and non-terminals",
+              "Supports nested structures and recursive definitions",
+              "Foundation for compiler design and parser construction",
+              "Used in programming language syntax specification"
+            ],
+            applications: [
+              "Programming language parsers and compilers",
+              "XML and markup language processing",
+              "Mathematical expression evaluation",
+              "Natural language processing systems"
+            ]
+          }}
+          mumbaiUniversity={{
+            syllabus: [
+              "Context-Free Grammar definition and components",
+              "Derivations: leftmost and rightmost",
+              "Parse trees and ambiguity",
+              "Chomsky Normal Form and Greibach Normal Form",
+              "Pumping Lemma for Context-Free Languages"
+            ],
+            marks: "8-10 marks",
+            commonQuestions: [
+              "Design CFG for given language specifications",
+              "Convert CFG to CNF or GNF",
+              "Check if a string belongs to a given CFG",
+              "Eliminate left recursion and left factoring"
+            ],
+            examTips: [
+              "Focus on leftmost and rightmost derivations",
+              "Practice converting between different normal forms",
+              "Remember the pumping lemma for context-free languages",
+              "Understand the relationship between CFGs and pushdown automata"
+            ]
+          }}
+          algorithm={{
+            steps: [
+              "Define terminals, non-terminals, and start symbol",
+              "Create production rules for the language",
+              "Apply productions to derive target string",
+              "Verify derivation and parse tree construction"
+            ],
+            complexity: {
+              time: "O(n³) for CYK parsing",
+              space: "O(n²) for parse table"
+            }
+          }}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Section */}
@@ -278,115 +344,76 @@ export default function CFGParserPage() {
           {/* Results Section */}
           <div className="space-y-6">
             {result && (
-              <>
-                <div className="bg-white rounded-lg shadow-md p-6">
-                  <h2 className="text-xl font-semibold mb-4 text-gray-700">Parse Result</h2>
-                  
-                  <div className={`p-4 rounded-lg mb-4 ${
-                    result.canDerive 
-                      ? 'bg-green-100 border border-green-400 text-green-700'
-                      : 'bg-red-100 border border-red-400 text-red-700'
-                  }`}>
-                    <div className="flex items-center">
-                      <span className="text-2xl mr-2">
-                        {result.canDerive ? '✅' : '❌'}
-                      </span>
-                      <div>
-                        <p className="font-bold text-lg">
-                          {result.canDerive ? 'DERIVABLE' : 'NOT DERIVABLE'}
-                        </p>
-                        <p className="text-sm">
-                          String: "{targetString}"
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h3 className="font-semibold">Derivation Steps:</h3>
-                    <div className="max-h-80 overflow-y-auto space-y-2">
-                      {result.derivation.map((step: any, index: number) => (
-                        <div key={index} className="p-3 bg-gray-50 rounded">
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="font-medium">Step {step.step}:</span>
-                            {step.productionUsed && (
-                              <span className="text-purple-600 text-sm">
-                                {step.productionUsed.left} → {step.productionUsed.right.join(' ') || 'ε'}
-                              </span>
-                            )}
-                          </div>
-                          <div className="font-mono bg-white p-2 rounded border">
-                            {step.sententialForm.map((symbol: string, i: number) => (
-                              <span 
-                                key={i}
-                                className={`px-1 ${
-                                  step.appliedAt === i ? 'bg-yellow-200' : ''
-                                } ${
-                                  nonTerminals.includes(symbol) ? 'font-bold text-green-600' : 'text-blue-600'
-                                }`}
-                              >
-                                {symbol}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg shadow-md p-6">
-                  <h3 className="text-lg font-semibold mb-3">Grammar Summary</h3>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium">Terminals:</span> {terminals.join(', ')}
-                    </div>
-                    <div>
-                      <span className="font-medium">Non-terminals:</span> {nonTerminals.join(', ')}
-                    </div>
-                    <div>
-                      <span className="font-medium">Start Symbol:</span> {startSymbol}
-                    </div>
-                    <div>
-                      <span className="font-medium">Productions:</span> {productions.length}
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <h4 className="font-medium mb-2">Grammar Rules:</h4>
-                    <div className="space-y-1">
-                      {productions.map((prod, index) => (
-                        <div key={index} className="text-xs font-mono bg-gray-100 p-1 rounded">
-                          {prod.left} → {prod.right.join(' ') || 'ε'}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </>
+              <ExamResult
+                title="CFG Parse Analysis"
+                input={targetString}
+                result={result.canDerive}
+                steps={result.derivation.map((step: { sententialForm: string[]; productionUsed?: CFGProduction }, index: number) => ({
+                  stepNumber: index + 1,
+                  description: step.productionUsed 
+                    ? `Applied: ${step.productionUsed.left} → ${step.productionUsed.right.join(' ') || 'ε'}`
+                    : "Initial sentential form",
+                  currentState: step.sententialForm.join(' '),
+                  explanation: step.productionUsed
+                    ? `Production rule applied to derive new sentential form`
+                    : "Starting with the start symbol"
+                }))}
+                finalAnswer={result.canDerive ? `String "${targetString}" is DERIVABLE` : `String "${targetString}" is NOT DERIVABLE`}
+                examFormat={{
+                  question: `Design a Context-Free Grammar and check if the string "${targetString}" can be derived from it.`,
+                  solution: [
+                    `Given CFG G = (V, Σ, R, S) where:`,
+                    `V = {${nonTerminals.join(', ')}} (non-terminals)`,
+                    `Σ = {${terminals.join(', ')}} (terminals)`,
+                    `S = ${startSymbol} (start symbol)`,
+                    `Production rules R:`,
+                    ...productions.map(p => `  ${p.left} → ${p.right.join(' ') || 'ε'}`),
+                    `Derivation sequence:`,
+                    ...result.derivation.map((step: { sententialForm: string[] }) => `  ${step.sententialForm.join(' ')}`)
+                  ],
+                  conclusion: result.canDerive 
+                    ? `The string "${targetString}" can be derived from the given CFG through the above derivation sequence.`
+                    : `The string "${targetString}" cannot be derived from the given CFG.`,
+                  marks: 12
+                }}
+              />
             )}
 
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">About Context-Free Grammars</h2>
-              <div className="space-y-3 text-sm text-gray-600">
-                <div>
-                  <h3 className="font-medium text-gray-800 mb-1">Components:</h3>
-                  <ul className="space-y-1 text-xs">
-                    <li>• <strong>Terminals:</strong> Basic symbols of the language</li>
-                    <li>• <strong>Non-terminals:</strong> Variables that can be expanded</li>
-                    <li>• <strong>Productions:</strong> Rules for replacing non-terminals</li>
-                    <li>• <strong>Start Symbol:</strong> The initial non-terminal</li>
-                  </ul>
+              <h3 className="text-lg font-semibold mb-3 text-gray-800">Grammar Visualization</h3>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-700">Terminals:</span> 
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {terminals.map(t => (
+                        <span key={t} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-mono">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Non-terminals:</span>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {nonTerminals.map(nt => (
+                        <span key={nt} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-mono font-bold">{nt}</span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 
                 <div>
-                  <h3 className="font-medium text-gray-800 mb-1">Applications:</h3>
-                  <ul className="space-y-1 text-xs">
-                    <li>• Programming language syntax definition</li>
-                    <li>• Parser construction and compiler design</li>
-                    <li>• Natural language processing</li>
-                    <li>• XML and markup language processing</li>
-                  </ul>
+                  <span className="font-medium text-gray-700">Production Rules:</span>
+                  <div className="mt-2 space-y-1 max-h-48 overflow-y-auto">
+                    {productions.map((prod, index) => (
+                      <div key={index} className="text-sm font-mono bg-gray-50 p-2 rounded border">
+                        <span className="text-green-600 font-bold">{prod.left}</span> 
+                        <span className="mx-2">→</span> 
+                        <span className="text-blue-600">
+                          {prod.right.length > 0 ? prod.right.join(' ') : 'ε'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

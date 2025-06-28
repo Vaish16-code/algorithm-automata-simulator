@@ -1,5 +1,5 @@
 import React from 'react';
-import { JobSequencingResult, ScheduledJob } from '../utils/greedyAlgorithms';
+import { JobSequencingResult } from '../utils/greedyAlgorithms';
 
 interface JobSequencingChartProps {
   data: JobSequencingResult;

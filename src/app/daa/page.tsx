@@ -145,16 +145,53 @@ export default function DAAHomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-8">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              Design & Analysis of <span className="text-blue-200">Algorithms</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
+              Master algorithmic thinking through interactive visualizations and step-by-step analysis
+            </p>
+            <p className="text-lg text-blue-200 mt-4 max-w-3xl mx-auto">
+              Explore fundamental algorithm design paradigms with real-time simulations, complexity analysis, and Mumbai University exam preparation
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
+              <span className="text-blue-100">✅ Interactive Visualizations</span>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
+              <span className="text-blue-100">✅ Complexity Analysis</span>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
+              <span className="text-blue-100">✅ Exam Preparation</span>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full">
+              <span className="text-blue-100">✅ Step-by-Step Solutions</span>
+            </div>
+          </div>
+          
+          <a
+            href="#algorithms"
+            className="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors"
+          >
+            Start Learning
+            <span className="ml-2">→</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Algorithm Categories Section */}
+      <div id="algorithms" className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">
-            🧮 Design & Analysis of Algorithms
-          </h1>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Algorithm Categories</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Interactive visualizations and step-by-step explanations of fundamental algorithms. 
-            Learn through hands-on exploration and real-time simulations.
+            Master each algorithmic paradigm with interactive tools and comprehensive analysis
           </p>
         </div>
 

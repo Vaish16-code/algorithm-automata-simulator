@@ -301,7 +301,7 @@ export default function StudentFriendlyKnapsack() {
             </div>
             <div className="bg-white p-4 rounded-xl border-2 border-indigo-200 shadow-md">
               <div className="text-lg font-bold text-gray-800 mb-2">Step 4: Take Fractions</div>
-              <div className="text-gray-700">Take partial items when full items don't fit</div>
+              <div className="text-gray-700">Take partial items when full items don&apos;t fit</div>
             </div>
           </div>
         </div>

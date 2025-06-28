@@ -182,7 +182,7 @@ export function simulateRegex(pattern: string, input: string): RegexResult {
       input,
       steps
     };
-  } catch (error) {
+  } catch {
     steps.push(`Error: Invalid regular expression`);
     return {
       matches: false,
@@ -234,7 +234,7 @@ export function simulateTuringMachine(tm: TuringMachine, input: string): TMResul
   const steps: TMStep[] = [];
   let currentState = tm.startState;
   let headPosition = 0;
-  let tape = input.split('');
+  const tape = input.split('');
   
   // Ensure tape has blank symbols on both sides
   while (tape.length < 20) tape.push(tm.blankSymbol);
@@ -359,7 +359,6 @@ export interface CFGResult {
 
 export function simulateCFG(cfg: ContextFreeGrammar, target: string): CFGResult {
   const steps: CFGDerivationStep[] = [];
-  const targetSymbols = target.split('');
   
   // Start with the start symbol
   let current = [cfg.startSymbol];

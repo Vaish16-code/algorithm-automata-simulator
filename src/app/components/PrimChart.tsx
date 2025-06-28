@@ -1,5 +1,5 @@
 import React from 'react';
-import { PrimResult, MSTEdge } from '../utils/greedyAlgorithms';
+import { PrimResult } from '../utils/greedyAlgorithms';
 
 interface PrimChartProps {
   data: PrimResult;

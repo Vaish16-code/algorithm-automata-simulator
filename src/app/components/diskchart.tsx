@@ -26,7 +26,7 @@ const DiskChart: React.FC<DiskChartProps> = ({ sequence }) => {
             label={{ value: 'Track Position', angle: -90, position: 'insideLeft' }}
           />
           <Tooltip 
-            formatter={(value, name) => [value, 'Track Position']}
+            formatter={(value) => [value, 'Track Position']}
             labelFormatter={(step) => `Step: ${step}`}
           />
           <Line 

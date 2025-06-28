@@ -122,7 +122,7 @@ export default function JobSequencingPage() {
           <ul className="text-sm text-blue-700 space-y-1">
             <li>• Sort jobs by profit in descending order</li>
             <li>• Try to schedule each job at its latest possible time</li>
-            <li>• A job can only be scheduled if there's a free time slot before its deadline</li>
+            <li>• A job can only be scheduled if there&apos;s a free time slot before its deadline</li>
             <li>• Greedy approach: always pick the most profitable job that can be scheduled</li>
           </ul>
         </div>

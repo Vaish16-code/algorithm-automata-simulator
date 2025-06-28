@@ -15,10 +15,10 @@ export function fcfs(queue: number[], head: number): DiskResult {
 export function sstf(queue: number[], head: number): DiskResult {
   const sequence = [head];
   let seekTime = 0;
-  let q = [...queue];
+  const q = [...queue];
 
   while (q.length) {
-    let closest = q.reduce((prev, curr) =>
+    const closest = q.reduce((prev, curr) =>
       Math.abs(curr - head) < Math.abs(prev - head) ? curr : prev
     );
     seekTime += Math.abs(closest - head);
@@ -31,9 +31,9 @@ export function sstf(queue: number[], head: number): DiskResult {
 }
 
 export function scan(queue: number[], head: number, direction: "left" | "right", diskSize = 200): DiskResult {
-  let left = queue.filter(p => p < head).sort((a, b) => b - a);
-  let right = queue.filter(p => p >= head).sort((a, b) => a - b);
-  let sequence: number[] = [head];
+  const left = queue.filter(p => p < head).sort((a, b) => b - a);
+  const right = queue.filter(p => p >= head).sort((a, b) => a - b);
+  const sequence: number[] = [head];
   let seekTime = 0;
 
   if (direction === "left") {
@@ -50,9 +50,9 @@ export function scan(queue: number[], head: number, direction: "left" | "right",
 }
 
 export function cscan(queue: number[], head: number, diskSize = 200): DiskResult {
-  let left = queue.filter(p => p < head).sort((a, b) => a - b);
-  let right = queue.filter(p => p >= head).sort((a, b) => a - b);
-  let sequence: number[] = [head];
+  const left = queue.filter(p => p < head).sort((a, b) => a - b);
+  const right = queue.filter(p => p >= head).sort((a, b) => a - b);
+  const sequence: number[] = [head];
   let seekTime = 0;
 
   right.forEach(p => { seekTime += Math.abs(head - p); head = p; sequence.push(p); });
@@ -71,9 +71,9 @@ export function cscan(queue: number[], head: number, diskSize = 200): DiskResult
 }
 
 export function look(queue: number[], head: number, direction: "left" | "right"): DiskResult {
-  let left = queue.filter(p => p < head).sort((a, b) => b - a);
-  let right = queue.filter(p => p >= head).sort((a, b) => a - b);
-  let sequence: number[] = [head];
+  const left = queue.filter(p => p < head).sort((a, b) => b - a);
+  const right = queue.filter(p => p >= head).sort((a, b) => a - b);
+  const sequence: number[] = [head];
   let seekTime = 0;
 
   if (direction === "left") {
@@ -88,9 +88,9 @@ export function look(queue: number[], head: number, direction: "left" | "right")
 }
 
 export function clook(queue: number[], head: number): DiskResult {
-  let left = queue.filter(p => p < head).sort((a, b) => a - b);
-  let right = queue.filter(p => p >= head).sort((a, b) => a - b);
-  let sequence: number[] = [head];
+  const left = queue.filter(p => p < head).sort((a, b) => a - b);
+  const right = queue.filter(p => p >= head).sort((a, b) => a - b);
+  const sequence: number[] = [head];
   let seekTime = 0;
 
   right.forEach(p => { seekTime += Math.abs(head - p); head = p; sequence.push(p); });
