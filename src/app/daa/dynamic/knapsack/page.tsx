@@ -117,7 +117,7 @@ export default function KnapsackDPPage() {
                 <input
                   type="number"
                   min="1"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  className="w-full border-4 border-gray-800 rounded-md px-3 py-2 bg-white text-gray-900 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:border-purple-500 shadow-md"
                   value={capacity}
                   onChange={(e) => setCapacity(parseInt(e.target.value) || 1)}
                 />
@@ -133,7 +133,7 @@ export default function KnapsackDPPage() {
                       <input
                         type="number"
                         min="1"
-                        className="w-20 border border-gray-300 rounded px-2 py-1"
+                        className="w-20 border-4 border-gray-800 rounded px-2 py-1 bg-white text-gray-900 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                         value={item.weight}
                         onChange={(e) => updateItem(index, 'weight', parseInt(e.target.value) || 1)}
                       />
@@ -143,7 +143,7 @@ export default function KnapsackDPPage() {
                       <input
                         type="number"
                         min="1"
-                        className="w-20 border border-gray-300 rounded px-2 py-1"
+                        className="w-20 border-4 border-gray-800 rounded px-2 py-1 bg-white text-gray-900 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                         value={item.value}
                         onChange={(e) => updateItem(index, 'value', parseInt(e.target.value) || 1)}
                       />

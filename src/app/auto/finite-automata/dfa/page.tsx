@@ -251,7 +251,7 @@ export default function DFASimulatorPage() {
                       type="text"
                       value={state.name}
                       onChange={(e) => updateState(index, 'name', e.target.value)}
-                      className="w-20 border border-gray-300 rounded-lg px-3 py-2 text-center font-mono"
+                      className="w-20 border-4 border-gray-800 rounded-lg px-3 py-2 text-center font-mono text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                       placeholder="q0"
                     />
                     <label className="flex items-center gap-2 cursor-pointer">
@@ -333,7 +333,7 @@ export default function DFASimulatorPage() {
                       <select
                         value={transition.from}
                         onChange={(e) => updateTransition(index, 'from', e.target.value)}
-                        className="border border-gray-300 rounded px-2 py-1 text-sm"
+                        className="border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                       >
                         {states.map(state => (
                           <option key={state.name} value={state.name}>{state.name}</option>
@@ -343,7 +343,7 @@ export default function DFASimulatorPage() {
                       <select
                         value={transition.symbol}
                         onChange={(e) => updateTransition(index, 'symbol', e.target.value)}
-                        className="border border-gray-300 rounded px-2 py-1 text-sm font-mono"
+                        className="border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black font-mono bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                       >
                         {alphabet.map(symbol => (
                           <option key={symbol} value={symbol}>{symbol}</option>
@@ -353,7 +353,7 @@ export default function DFASimulatorPage() {
                       <select
                         value={transition.to}
                         onChange={(e) => updateTransition(index, 'to', e.target.value)}
-                        className="border border-gray-300 rounded px-2 py-1 text-sm"
+                        className="border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                       >
                         {states.map(state => (
                           <option key={state.name} value={state.name}>{state.name}</option>
@@ -390,7 +390,7 @@ export default function DFASimulatorPage() {
                     type="text"
                     value={inputString}
                     onChange={(e) => setInputString(e.target.value)}
-                    className="flex-1 border border-gray-300 rounded-lg px-4 py-3 font-mono text-lg"
+                    className="flex-1 border-4 border-gray-800 rounded-lg px-4 py-3 font-mono text-lg text-black font-bold bg-white focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
                     placeholder="Enter string to test..."
                   />
                   <button
@@ -424,12 +424,12 @@ export default function DFASimulatorPage() {
               </div>
               <div className="p-6">
                 <div className="overflow-x-auto">
-                  <table className="min-w-full border-collapse border border-gray-300">
+                  <table className="min-w-full border-collapse border-4 border-gray-800">
                     <thead>
-                      <tr className="bg-gray-50">
-                        <th className="border border-gray-300 px-4 py-2 text-left font-semibold">State</th>
+                      <tr className="bg-gray-100">
+                        <th className="border-4 border-gray-800 px-4 py-3 text-left font-bold text-lg text-black">State</th>
                         {alphabet.map(symbol => (
-                          <th key={symbol} className="border border-gray-300 px-4 py-2 text-center font-semibold font-mono">
+                          <th key={symbol} className="border-4 border-gray-800 px-4 py-3 text-center font-bold text-lg font-mono text-black">
                             {symbol}
                           </th>
                         ))}
@@ -437,14 +437,14 @@ export default function DFASimulatorPage() {
                     </thead>
                     <tbody>
                       {states.map(state => (
-                        <tr key={state.name} className={state.isStart ? 'bg-blue-50' : state.isAccept ? 'bg-green-50' : ''}>
-                          <td className="border border-gray-300 px-4 py-2 font-mono font-bold">
+                        <tr key={state.name} className={state.isStart ? 'bg-blue-100' : state.isAccept ? 'bg-green-100' : 'bg-white'}>
+                          <td className="border-4 border-gray-800 px-4 py-3 font-mono font-bold text-lg text-black">
                             {state.isStart && '→'}{state.name}{state.isAccept && '*'}
                           </td>
                           {alphabet.map(symbol => {
                             const transition = transitions.find(t => t.from === state.name && t.symbol === symbol);
                             return (
-                              <td key={symbol} className="border border-gray-300 px-4 py-2 text-center font-mono">
+                              <td key={symbol} className="border-4 border-gray-800 px-4 py-3 text-center font-mono font-bold text-lg text-black">
                                 {transition ? transition.to : '-'}
                               </td>
                             );

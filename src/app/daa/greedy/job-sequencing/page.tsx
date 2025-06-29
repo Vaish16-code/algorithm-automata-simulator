@@ -53,7 +53,7 @@ export default function JobSequencingPage() {
                   <input
                     type="number"
                     min="1"
-                    className="w-20 border border-gray-300 rounded px-2 py-1"
+                    className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                     value={job.deadline}
                     onChange={(e) => updateJob(job.id, 'deadline', parseInt(e.target.value) || 1)}
                   />
@@ -63,7 +63,7 @@ export default function JobSequencingPage() {
                   <input
                     type="number"
                     min="1"
-                    className="w-20 border border-gray-300 rounded px-2 py-1"
+                    className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                     value={job.profit}
                     onChange={(e) => updateJob(job.id, 'profit', parseInt(e.target.value) || 1)}
                   />

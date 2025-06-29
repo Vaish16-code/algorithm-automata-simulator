@@ -270,7 +270,7 @@ export default function CFGParserPage() {
                   <select
                     value={startSymbol}
                     onChange={(e) => setStartSymbol(e.target.value)}
-                    className="border rounded px-2 py-1"
+                    className="border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-green-600 focus:ring-2 focus:ring-green-200"
                   >
                     {nonTerminals.map(nt => (
                       <option key={nt} value={nt}>{nt}</option>
@@ -289,7 +289,7 @@ export default function CFGParserPage() {
                     <select
                       value={production.left}
                       onChange={(e) => updateProduction(index, 'left', e.target.value)}
-                      className="border rounded px-2 py-1"
+                      className="border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-purple-600 focus:ring-2 focus:ring-purple-200"
                     >
                       {nonTerminals.map(nt => (
                         <option key={nt} value={nt}>{nt}</option>
@@ -301,7 +301,7 @@ export default function CFGParserPage() {
                       value={production.right.join(' ')}
                       onChange={(e) => updateProduction(index, 'right', e.target.value)}
                       placeholder="Space-separated symbols (empty for ε)"
-                      className="flex-1 border rounded px-2 py-1"
+                      className="flex-1 border-4 border-gray-800 rounded px-4 py-2 text-lg font-bold text-black bg-white focus:border-purple-600 focus:ring-2 focus:ring-purple-200"
                     />
                     <button
                       onClick={() => removeProduction(index)}
@@ -329,7 +329,7 @@ export default function CFGParserPage() {
                   value={targetString}
                   onChange={(e) => setTargetString(e.target.value)}
                   placeholder="Enter string to parse"
-                  className="flex-1 border border-gray-300 rounded px-3 py-2"
+                  className="flex-1 border-4 border-gray-800 rounded px-4 py-3 text-lg font-bold text-black bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-200"
                 />
                 <button
                   onClick={handleParse}

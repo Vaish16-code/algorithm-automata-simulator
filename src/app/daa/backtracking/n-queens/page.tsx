@@ -108,7 +108,7 @@ export default function NQueensPage() {
                     type="number"
                     min="4"
                     max="8"
-                    className="w-32 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-32 border-4 border-gray-800 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:border-purple-600 focus:ring-4 focus:ring-purple-200"
                     value={boardSize}
                     onChange={(e) => setBoardSize(parseInt(e.target.value) || 4)}
                   />

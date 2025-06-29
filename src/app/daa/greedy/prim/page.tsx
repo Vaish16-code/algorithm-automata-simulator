@@ -115,7 +115,7 @@ export default function PrimPage() {
               type="number"
               min="3"
               max="10"
-              className="w-32 border border-gray-300 rounded-md px-3 py-2"
+              className="w-32 border-4 border-gray-800 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
               value={vertices}
               onChange={(e) => setVertices(parseInt(e.target.value) || 3)}
             />
@@ -131,7 +131,7 @@ export default function PrimPage() {
                     type="number"
                     min="0"
                     max={vertices - 1}
-                    className="w-16 border border-gray-300 rounded px-2 py-1"
+                    className="w-16 border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                     value={edge.from}
                     onChange={(e) => updateEdge(index, 'from', parseInt(e.target.value) || 0)}
                   />
@@ -142,7 +142,7 @@ export default function PrimPage() {
                     type="number"
                     min="0"
                     max={vertices - 1}
-                    className="w-16 border border-gray-300 rounded px-2 py-1"
+                    className="w-16 border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                     value={edge.to}
                     onChange={(e) => updateEdge(index, 'to', parseInt(e.target.value) || 0)}
                   />
@@ -152,7 +152,7 @@ export default function PrimPage() {
                   <input
                     type="number"
                     min="1"
-                    className="w-20 border border-gray-300 rounded px-2 py-1"
+                    className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                     value={edge.weight}
                     onChange={(e) => updateWeight(index, parseInt(e.target.value) || 1)}
                   />

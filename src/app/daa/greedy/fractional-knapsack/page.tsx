@@ -115,13 +115,13 @@ export default function FractionalKnapsackPage() {
               <h2 className="text-xl font-semibold mb-4 text-gray-700">Problem Input</h2>
               
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-lg font-bold text-gray-900 mb-3">
                   Knapsack Capacity:
                 </label>
                 <input
                   type="number"
                   min="1"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  className="w-full border-4 border-gray-800 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-200"
                   value={capacity}
                   onChange={(e) => setCapacity(parseInt(e.target.value) || 1)}
                 />
@@ -137,7 +137,7 @@ export default function FractionalKnapsackPage() {
                       <input
                         type="number"
                         min="1"
-                        className="w-20 border border-gray-300 rounded px-2 py-1"
+                        className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                         value={weight}
                         onChange={(e) => updateWeight(index, parseInt(e.target.value) || 1)}
                       />
@@ -147,7 +147,7 @@ export default function FractionalKnapsackPage() {
                       <input
                         type="number"
                         min="1"
-                        className="w-20 border border-gray-300 rounded px-2 py-1"
+                        className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                         value={profits[index]}
                         onChange={(e) => updateProfit(index, parseInt(e.target.value) || 1)}
                       />

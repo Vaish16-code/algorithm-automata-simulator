@@ -126,7 +126,7 @@ export default function RegexMatcherPage() {
                     type="text"
                     value={pattern}
                     onChange={(e) => setPattern(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 font-mono"
+                    className="w-full border-4 border-gray-800 rounded-md px-4 py-3 font-mono text-lg font-bold text-black bg-white focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
                     placeholder="Enter regular expression"
                   />
                 </div>
@@ -185,7 +185,7 @@ export default function RegexMatcherPage() {
                   onChange={(e) => setNewTestString(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && addTestString()}
                   placeholder="Add test string"
-                  className="flex-1 border border-gray-300 rounded px-3 py-2"
+                  className="flex-1 border-4 border-gray-800 rounded px-4 py-3 text-lg font-bold text-black bg-white focus:border-green-600 focus:ring-2 focus:ring-green-200"
                 />
                 <button
                   onClick={addTestString}

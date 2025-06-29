@@ -63,9 +63,9 @@ export function KnapsackDPChart({ data, capacity }: KnapsackDPChartProps) {
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr>
-                <th className="border border-gray-400 px-2 py-2 bg-gray-200 font-bold">Items\\Capacity</th>
+                <th className="border-4 border-gray-800 px-4 py-3 bg-gray-900 text-white font-bold text-lg">Items\Capacity</th>
                 {Array.from({ length: capacity + 1 }, (_, i) => (
-                  <th key={i} className="border border-gray-400 px-2 py-2 bg-gray-200 font-bold">
+                  <th key={i} className="border-4 border-gray-800 px-4 py-3 bg-gray-900 text-white font-bold text-lg">
                     {i}
                   </th>
                 ))}
@@ -74,14 +74,14 @@ export function KnapsackDPChart({ data, capacity }: KnapsackDPChartProps) {
             <tbody>
               {data.dpTable.map((row, i) => (
                 <tr key={i}>
-                  <td className="border border-gray-400 px-2 py-2 bg-gray-100 font-bold">
+                  <td className="border-4 border-gray-600 px-4 py-3 bg-gray-800 text-white font-bold text-lg">
                     {i === 0 ? "0" : `Item ${i}`}
                   </td>
                   {row.map((value, j) => (
                     <td 
                       key={j} 
-                      className={`border border-gray-400 px-2 py-2 text-center font-semibold ${
-                        value > 0 ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600'
+                      className={`border-4 border-gray-600 px-4 py-3 text-center font-bold text-lg ${
+                        value > 0 ? 'bg-blue-100 text-blue-900' : 'bg-white text-gray-900'
                       }`}
                     >
                       {value}

@@ -110,7 +110,7 @@ export default function KruskalPage() {
                   type="number"
                   value={vertices}
                   onChange={(e) => setVertices(parseInt(e.target.value) || 1)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border-4 border-gray-800 rounded-lg px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-200"
                   min="1"
                   max="10"
                 />
@@ -127,7 +127,7 @@ export default function KruskalPage() {
                           type="number"
                           value={edge.from}
                           onChange={(e) => updateEdge(index, 'from', parseInt(e.target.value) || 0)}
-                          className="w-16 border border-gray-300 rounded px-2 py-1 text-center"
+                          className="w-16 border-4 border-gray-800 rounded px-3 py-2 text-center text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                           min="0"
                           max={vertices - 1}
                         />
@@ -141,7 +141,7 @@ export default function KruskalPage() {
                           type="number"
                           value={edge.to}
                           onChange={(e) => updateEdge(index, 'to', parseInt(e.target.value) || 0)}
-                          className="w-16 border border-gray-300 rounded px-2 py-1 text-center"
+                          className="w-16 border-4 border-gray-800 rounded px-3 py-2 text-center text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                           min="0"
                           max={vertices - 1}
                         />
@@ -153,7 +153,7 @@ export default function KruskalPage() {
                           type="number"
                           value={edge.weight}
                           onChange={(e) => updateEdge(index, 'weight', parseInt(e.target.value) || 0)}
-                          className="w-20 border border-gray-300 rounded px-2 py-1 text-center"
+                          className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-center text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                           min="1"
                         />
                       </div>
@@ -210,47 +210,69 @@ export default function KruskalPage() {
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Algorithm Result</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-green-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-green-800 mb-4">MST Properties</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Total Weight:</span>
-                    <span className="font-bold text-green-600">{result.totalWeight}</span>
+              <div className="bg-green-100 rounded-lg p-6 border-4 border-green-600">
+                <h3 className="text-2xl font-bold text-white mb-6 bg-green-600 p-3 rounded-lg">MST Properties</h3>
+                <div className="space-y-4">
+                  <div className="bg-white p-4 rounded-lg border-4 border-gray-800 flex justify-between items-center">
+                    <span className="text-xl font-bold text-black">Total Weight:</span>
+                    <span className="font-bold text-green-600 text-2xl bg-green-100 px-4 py-2 rounded-lg border-2 border-green-600">{result.totalWeight}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Edges in MST:</span>
-                    <span className="font-bold text-green-600">{result.mstEdges.length}</span>
+                  <div className="bg-white p-4 rounded-lg border-4 border-gray-800 flex justify-between items-center">
+                    <span className="text-xl font-bold text-black">Edges in MST:</span>
+                    <span className="font-bold text-green-600 text-2xl bg-green-100 px-4 py-2 rounded-lg border-2 border-green-600">{result.mstEdges.length}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Algorithm:</span>
-                    <span className="font-bold text-green-600">Kruskal&apos;s MST</span>
+                  <div className="bg-white p-4 rounded-lg border-4 border-gray-800 flex justify-between items-center">
+                    <span className="text-xl font-bold text-black">Algorithm:</span>
+                    <span className="font-bold text-green-600 text-2xl bg-green-100 px-4 py-2 rounded-lg border-2 border-green-600">Kruskal&apos;s MST</span>
                   </div>
                 </div>
               </div>
-              <div className="bg-blue-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-blue-800 mb-4">Complexity Analysis</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Time Complexity:</span>
-                    <span className="font-bold text-blue-600">O(E log E)</span>
+              <div className="bg-blue-100 rounded-lg p-6 border-4 border-blue-600">
+                <h3 className="text-2xl font-bold text-white mb-6 bg-blue-600 p-3 rounded-lg">Complexity Analysis</h3>
+                <div className="space-y-4">
+                  <div className="bg-white p-4 rounded-lg border-4 border-gray-800 flex justify-between items-center">
+                    <span className="text-xl font-bold text-black">Time Complexity:</span>
+                    <span className="font-bold text-blue-600 text-2xl bg-blue-100 px-4 py-2 rounded-lg border-2 border-blue-600">O(E log E)</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-700">Space Complexity:</span>
-                    <span className="font-bold text-blue-600">O(V)</span>
+                  <div className="bg-white p-4 rounded-lg border-4 border-gray-800 flex justify-between items-center">
+                    <span className="text-xl font-bold text-black">Space Complexity:</span>
+                    <span className="font-bold text-blue-600 text-2xl bg-blue-100 px-4 py-2 rounded-lg border-2 border-blue-600">O(V)</span>
                   </div>
                 </div>
               </div>
             </div>
             <div className="mt-6">
-              <h3 className="text-lg font-semibold text-gray-700 mb-3">Algorithm Steps</h3>
-              <div className="space-y-2">
+              <h3 className="text-2xl font-bold text-black mb-6 bg-blue-100 p-4 rounded-lg border-4 border-blue-600">Algorithm Steps:</h3>
+              <div className="space-y-4">
                 {result.mstEdges.map((edge, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-3">
-                    <span className="text-gray-700">
-                      Step {index + 1}: Add edge ({edge.from}, {edge.to}) with weight {edge.weight}
+                  <div key={index} className="bg-blue-600 text-white rounded-lg p-6 border-4 border-blue-800 shadow-lg">
+                    <span className="text-xl font-bold">
+                      Step {index + 2}: Add edge ({edge.from}, {edge.to}) with weight {edge.weight} - no cycle formed
                     </span>
                   </div>
                 ))}
+              </div>
+              
+              <div className="mt-8 bg-blue-100 p-6 rounded-lg border-4 border-blue-600">
+                <h4 className="text-2xl font-bold text-black mb-4">MST Details:</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-blue-600 text-white p-4 rounded-lg">
+                    <span className="text-xl font-bold">Total Weight: {result.totalWeight}</span>
+                  </div>
+                  <div className="bg-blue-600 text-white p-4 rounded-lg">
+                    <span className="text-xl font-bold">Number of Edges: {result.mstEdges.length}</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h5 className="text-xl font-bold text-black mb-3">Selected Edges:</h5>
+                  <div className="flex flex-wrap gap-3">
+                    {result.mstEdges.map((edge, index) => (
+                      <div key={index} className="bg-gradient-to-r from-pink-500 to-red-500 text-white px-4 py-2 rounded-lg border-2 border-red-700">
+                        <span className="text-lg font-bold">({edge.from}, {edge.to}): {edge.weight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -261,34 +283,34 @@ export default function KruskalPage() {
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Understanding Kruskal&apos;s Algorithm</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Characteristics</h3>
-              <ul className="space-y-2 text-gray-600">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Key Characteristics</h3>
+              <ul className="space-y-3 text-gray-900">
                 {educationalContent.keyCharacteristics.map((item, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">•</span>
-                    {item}
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="text-green-600 mt-1 text-xl font-bold">•</span>
+                    <span className="text-lg font-bold text-black">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">Applications</h3>
-              <ul className="space-y-2 text-gray-600">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Applications</h3>
+              <ul className="space-y-3 text-gray-900">
                 {educationalContent.applications.map((item, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-blue-500 mt-1">•</span>
-                    {item}
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="text-blue-600 mt-1 text-xl font-bold">•</span>
+                    <span className="text-lg font-bold text-black">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
           <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">Exam Tips</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Exam Tips</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {educationalContent.examTips.map((tip, index) => (
                 <div key={index} className="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
-                  <p className="text-gray-700">{tip}</p>
+                  <p className="text-lg font-bold text-gray-900">{tip}</p>
                 </div>
               ))}
             </div>
@@ -333,42 +355,42 @@ export default function KruskalPage() {
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Algorithm Steps</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-3">Kruskal&apos;s Process</h3>
-              <ol className="space-y-2 text-gray-600">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Kruskal&apos;s Process</h3>
+              <ol className="space-y-3 text-gray-900">
                 <li className="flex gap-3">
-                  <span className="bg-blue-100 text-blue-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">1</span>
-                  Sort all edges by weight in ascending order
+                  <span className="bg-blue-600 text-white w-8 h-8 rounded-full text-lg flex items-center justify-center font-bold">1</span>
+                  <span className="text-lg font-bold text-black">Sort all edges by weight in ascending order</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="bg-blue-100 text-blue-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">2</span>
-                  Initialize Union-Find for all vertices
+                  <span className="bg-blue-600 text-white w-8 h-8 rounded-full text-lg flex items-center justify-center font-bold">2</span>
+                  <span className="text-lg font-bold text-black">Initialize Union-Find for all vertices</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="bg-blue-100 text-blue-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">3</span>
-                  For each edge in sorted order:
+                  <span className="bg-blue-600 text-white w-8 h-8 rounded-full text-lg flex items-center justify-center font-bold">3</span>
+                  <span className="text-lg font-bold text-black">For each edge in sorted order:</span>
                 </li>
                 <li className="flex gap-3 ml-6">
-                  <span className="bg-green-100 text-green-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">a</span>
-                  Check if endpoints are in same component
+                  <span className="bg-green-600 text-white w-8 h-8 rounded-full text-lg flex items-center justify-center font-bold">a</span>
+                  <span className="text-lg font-bold text-black">Check if endpoints are in same component</span>
                 </li>
                 <li className="flex gap-3 ml-6">
-                  <span className="bg-green-100 text-green-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">b</span>
-                  If not, add edge to MST and union components
+                  <span className="bg-green-600 text-white w-8 h-8 rounded-full text-lg flex items-center justify-center font-bold">b</span>
+                  <span className="text-lg font-bold text-black">If not, add edge to MST and union components</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="bg-blue-100 text-blue-700 w-6 h-6 rounded-full text-sm flex items-center justify-center font-medium">4</span>
-                  Stop when MST has V-1 edges
+                  <span className="bg-blue-600 text-white w-8 h-8 rounded-full text-lg flex items-center justify-center font-bold">4</span>
+                  <span className="text-lg font-bold text-black">Stop when MST has V-1 edges</span>
                 </li>
               </ol>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-3">Key Properties</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li>• <strong>Greedy Choice:</strong> Always pick minimum weight edge</li>
-                <li>• <strong>Cycle Detection:</strong> Uses Union-Find efficiently</li>
-                <li>• <strong>Optimal Substructure:</strong> MST property preserved</li>
-                <li>• <strong>Cut Property:</strong> Minimum edge across any cut</li>
-                <li>• <strong>Time Complexity:</strong> Dominated by edge sorting</li>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Key Properties</h3>
+              <ul className="space-y-3 text-gray-900">
+                <li className="text-lg font-bold text-black">• <strong>Greedy Choice:</strong> Always pick minimum weight edge</li>
+                <li className="text-lg font-bold text-black">• <strong>Cycle Detection:</strong> Uses Union-Find efficiently</li>
+                <li className="text-lg font-bold text-black">• <strong>Optimal Substructure:</strong> MST property preserved</li>
+                <li className="text-lg font-bold text-black">• <strong>Cut Property:</strong> Minimum edge across any cut</li>
+                <li className="text-lg font-bold text-black">• <strong>Time Complexity:</strong> Dominated by edge sorting</li>
               </ul>
             </div>
           </div>
