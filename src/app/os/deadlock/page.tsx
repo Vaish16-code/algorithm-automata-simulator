@@ -198,7 +198,7 @@ export default function DeadlockPage() {
                     max="5"
                     value={numResources}
                     onChange={(e) => updateNumResources(parseInt(e.target.value) || 1)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-black bg-white font-medium"
                   />
                 </div>
                 
@@ -214,7 +214,7 @@ export default function DeadlockPage() {
                         min="0"
                         value={value}
                         onChange={(e) => updateAvailable(index, parseInt(e.target.value) || 0)}
-                        className="w-16 px-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                        className="w-16 px-2 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-black bg-white font-medium text-center"
                         placeholder={`R${index}`}
                       />
                     ))}
@@ -237,71 +237,71 @@ export default function DeadlockPage() {
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
+                <table className="w-full border-collapse border-2 border-gray-400">
                   <thead>
-                    <tr className="bg-gray-50">
-                      <th className="border border-gray-300 px-4 py-2 text-left">Process</th>
-                      <th className="border border-gray-300 px-4 py-2 text-center" colSpan={numResources}>
+                    <tr className="bg-gray-800 text-white">
+                      <th className="border-2 border-gray-400 px-4 py-3 text-left font-semibold">Process</th>
+                      <th className="border-2 border-gray-400 px-4 py-3 text-center font-semibold" colSpan={numResources}>
                         Allocation
                       </th>
-                      <th className="border border-gray-300 px-4 py-2 text-center" colSpan={numResources}>
+                      <th className="border-2 border-gray-400 px-4 py-3 text-center font-semibold" colSpan={numResources}>
                         Max Demand
                       </th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">Action</th>
+                      <th className="border-2 border-gray-400 px-4 py-3 text-left font-semibold">Action</th>
                     </tr>
-                    <tr className="bg-gray-50">
-                      <th className="border border-gray-300 px-4 py-1"></th>
+                    <tr className="bg-gray-700 text-white">
+                      <th className="border-2 border-gray-400 px-4 py-2"></th>
                       {Array.from({ length: numResources }, (_, i) => (
-                        <th key={`alloc-${i}`} className="border border-gray-300 px-2 py-1 text-xs">R{i}</th>
+                        <th key={`alloc-${i}`} className="border-2 border-gray-400 px-2 py-2 text-sm font-semibold">R{i}</th>
                       ))}
                       {Array.from({ length: numResources }, (_, i) => (
-                        <th key={`max-${i}`} className="border border-gray-300 px-2 py-1 text-xs">R{i}</th>
+                        <th key={`max-${i}`} className="border-2 border-gray-400 px-2 py-2 text-sm font-semibold">R{i}</th>
                       ))}
-                      <th className="border border-gray-300 px-4 py-1"></th>
+                      <th className="border-2 border-gray-400 px-4 py-2"></th>
                     </tr>
                   </thead>
                   <tbody>
                     {processes.map((process, processIndex) => (
-                      <tr key={process.id} className="hover:bg-gray-50">
-                        <td className="border border-gray-300 px-4 py-2">
+                      <tr key={process.id} className={`${processIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}>
+                        <td className="border-2 border-gray-400 px-4 py-2">
                           <input
                             type="text"
                             value={process.id}
                             onChange={(e) => updateProcessId(processIndex, e.target.value)}
-                            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                            className="w-full px-2 py-1 border-2 border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500 text-black bg-white font-medium"
                           />
                         </td>
                         
                         {/* Allocation columns */}
                         {process.allocation.map((value, resourceIndex) => (
-                          <td key={`alloc-${resourceIndex}`} className="border border-gray-300 px-2 py-2">
+                          <td key={`alloc-${resourceIndex}`} className="border-2 border-gray-400 px-2 py-2">
                             <input
                               type="number"
                               min="0"
                               value={value}
                               onChange={(e) => updateProcess(processIndex, 'allocation', resourceIndex, parseInt(e.target.value) || 0)}
-                              className="w-full px-1 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 text-center"
+                              className="w-full px-1 py-1 border-2 border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500 text-center text-black bg-white font-medium"
                             />
                           </td>
                         ))}
                         
                         {/* Max columns */}
                         {process.max.map((value, resourceIndex) => (
-                          <td key={`max-${resourceIndex}`} className="border border-gray-300 px-2 py-2">
+                          <td key={`max-${resourceIndex}`} className="border-2 border-gray-400 px-2 py-2">
                             <input
                               type="number"
                               min="0"
                               value={value}
                               onChange={(e) => updateProcess(processIndex, 'max', resourceIndex, parseInt(e.target.value) || 0)}
-                              className="w-full px-1 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-red-500 text-center"
+                              className="w-full px-1 py-1 border-2 border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500 text-center text-black bg-white font-medium"
                             />
                           </td>
                         ))}
                         
-                        <td className="border border-gray-300 px-4 py-2">
+                        <td className="border-2 border-gray-400 px-4 py-2 text-center">
                           <button
                             onClick={() => removeProcess(processIndex)}
-                            className="text-red-500 hover:text-red-700 p-1"
+                            className="text-red-600 hover:text-red-800 p-1 bg-red-100 hover:bg-red-200 rounded-full"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -423,21 +423,21 @@ export default function DeadlockPage() {
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">Need Matrix</h2>
               
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
+                <table className="w-full border-collapse border-2 border-gray-400">
                   <thead>
-                    <tr className="bg-gray-50">
-                      <th className="border border-gray-300 px-4 py-2 text-left">Process</th>
+                    <tr className="bg-gray-800 text-white">
+                      <th className="border-2 border-gray-400 px-4 py-3 text-left font-bold">Process</th>
                       {Array.from({ length: numResources }, (_, i) => (
-                        <th key={i} className="border border-gray-300 px-4 py-2 text-center">R{i}</th>
+                        <th key={i} className="border-2 border-gray-400 px-4 py-3 text-center font-bold">R{i}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {result.processes.map((process) => (
-                      <tr key={process.id} className="hover:bg-gray-50">
-                        <td className="border border-gray-300 px-4 py-2 font-medium">{process.id}</td>
+                    {result.processes.map((process, index) => (
+                      <tr key={process.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}>
+                        <td className="border-2 border-gray-400 px-4 py-3 font-semibold text-black">{process.id}</td>
                         {process.need!.map((need, index) => (
-                          <td key={index} className="border border-gray-300 px-4 py-2 text-center">
+                          <td key={index} className="border-2 border-gray-400 px-4 py-3 text-center text-black font-medium">
                             {need}
                           </td>
                         ))}

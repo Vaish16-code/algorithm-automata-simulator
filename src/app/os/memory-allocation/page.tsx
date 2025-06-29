@@ -224,37 +224,37 @@ export default function MemoryAllocationPage() {
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-gray-50">
-                      <th className="border border-gray-300 px-4 py-2 text-left">Block ID</th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">Size (KB)</th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">Start Address</th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">Action</th>
+                    <tr className="bg-gray-900 text-white">
+                      <th className="border-4 border-black px-4 py-4 text-left font-bold text-lg">Block ID</th>
+                      <th className="border-4 border-black px-4 py-4 text-left font-bold text-lg">Size (KB)</th>
+                      <th className="border-4 border-black px-4 py-4 text-left font-bold text-lg">Start Address</th>
+                      <th className="border-4 border-black px-4 py-4 text-left font-bold text-lg">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {memoryBlocks.map((block, index) => (
-                      <tr key={block.id} className="hover:bg-gray-50">
-                        <td className="border border-gray-300 px-4 py-2">
+                      <tr key={block.id} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition-colors`}>
+                        <td className="border-4 border-gray-600 px-4 py-4">
                           <input
                             type="text"
                             value={block.id}
                             onChange={(e) => updateMemoryBlock(index, "id", e.target.value)}
-                            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-3 py-2 border-4 border-gray-800 rounded-md bg-white text-gray-900 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:border-purple-500 shadow-md"
                           />
                         </td>
-                        <td className="border border-gray-300 px-4 py-2">
+                        <td className="border-4 border-gray-600 px-4 py-4">
                           <input
                             type="number"
                             min="1"
                             value={block.size}
                             onChange={(e) => updateMemoryBlock(index, "size", parseInt(e.target.value) || 1)}
-                            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-3 py-2 border-4 border-gray-800 rounded-md bg-white text-gray-900 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:border-purple-500 shadow-md"
                           />
                         </td>
-                        <td className="border border-gray-300 px-4 py-2 text-gray-600">
+                        <td className="border-4 border-gray-600 px-4 py-4 text-gray-900 font-bold text-lg bg-gray-100">
                           {block.startAddress}
                         </td>
-                        <td className="border border-gray-300 px-4 py-2">
+                        <td className="border-4 border-gray-600 px-4 py-4">
                           <button
                             onClick={() => removeMemoryBlock(index)}
                             className="text-red-500 hover:text-red-700 p-1"
@@ -285,33 +285,33 @@ export default function MemoryAllocationPage() {
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-gray-50">
-                      <th className="border border-gray-300 px-4 py-2 text-left">Process ID</th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">Size (KB)</th>
-                      <th className="border border-gray-300 px-4 py-2 text-left">Action</th>
+                    <tr className="bg-gray-900 text-white">
+                      <th className="border-4 border-black px-4 py-4 text-left font-bold text-lg">Process ID</th>
+                      <th className="border-4 border-black px-4 py-4 text-left font-bold text-lg">Size (KB)</th>
+                      <th className="border-4 border-black px-4 py-4 text-left font-bold text-lg">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {allocationRequests.map((request, index) => (
-                      <tr key={index} className="hover:bg-gray-50">
-                        <td className="border border-gray-300 px-4 py-2">
+                      <tr key={index} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition-colors`}>
+                        <td className="border-4 border-gray-600 px-4 py-4">
                           <input
                             type="text"
                             value={request.processId}
                             onChange={(e) => updateAllocationRequest(index, "processId", e.target.value)}
-                            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-3 py-2 border-4 border-gray-800 rounded-md bg-white text-gray-900 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:border-purple-500 shadow-md"
                           />
                         </td>
-                        <td className="border border-gray-300 px-4 py-2">
+                        <td className="border-4 border-gray-600 px-4 py-4">
                           <input
                             type="number"
                             min="1"
                             value={request.size}
                             onChange={(e) => updateAllocationRequest(index, "size", parseInt(e.target.value) || 1)}
-                            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full px-3 py-2 border-4 border-gray-800 rounded-md bg-white text-gray-900 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:border-purple-500 shadow-md"
                           />
                         </td>
-                        <td className="border border-gray-300 px-4 py-2">
+                        <td className="border-4 border-gray-600 px-4 py-4">
                           <button
                             onClick={() => removeAllocationRequest(index)}
                             className="text-red-500 hover:text-red-700 p-1"

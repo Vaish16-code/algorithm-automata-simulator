@@ -410,7 +410,7 @@ export default function IOSchedulingPage() {
                   max="199"
                   value={headPosition}
                   onChange={(e) => setHeadPosition(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border-2 border-gray-400 rounded-lg bg-white text-black font-medium focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                 />
               </div>
             </div>
@@ -435,14 +435,14 @@ export default function IOSchedulingPage() {
                       type="text"
                       value={request.id}
                       onChange={(e) => updateRequest(index, "id", e.target.value)}
-                      className="px-2 py-1 border border-gray-300 rounded text-center text-sm"
+                      className="px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium text-center focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       placeholder="ID"
                     />
                     <input
                       type="number"
                       value={request.track}
                       onChange={(e) => updateRequest(index, "track", Number(e.target.value))}
-                      className="px-2 py-1 border border-gray-300 rounded text-center text-sm"
+                      className="px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium text-center focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       placeholder="Track"
                       min="0"
                       max="199"
@@ -451,7 +451,7 @@ export default function IOSchedulingPage() {
                       type="number"
                       value={request.arrivalTime}
                       onChange={(e) => updateRequest(index, "arrivalTime", Number(e.target.value))}
-                      className="px-2 py-1 border border-gray-300 rounded text-center text-sm"
+                      className="px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium text-center focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       placeholder="Arrival"
                       min="0"
                     />
@@ -459,7 +459,7 @@ export default function IOSchedulingPage() {
                       type="number"
                       value={request.processTime}
                       onChange={(e) => updateRequest(index, "processTime", Number(e.target.value))}
-                      className="px-2 py-1 border border-gray-300 rounded text-center text-sm"
+                      className="px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium text-center focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       placeholder="Process"
                       min="1"
                     />

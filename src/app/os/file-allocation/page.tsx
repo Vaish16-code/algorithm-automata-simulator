@@ -369,7 +369,7 @@ export default function FileAllocationPage() {
                   max="50"
                   value={diskSize}
                   onChange={(e) => setDiskSize(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border-2 border-gray-400 rounded-lg bg-white text-black font-medium focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 />
               </div>
             </div>
@@ -394,14 +394,14 @@ export default function FileAllocationPage() {
                       type="text"
                       value={file.name}
                       onChange={(e) => updateFile(index, "name", e.target.value)}
-                      className="col-span-2 px-2 py-1 border border-gray-300 rounded text-center text-sm"
+                      className="col-span-2 px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium text-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       placeholder="Filename"
                     />
                     <input
                       type="number"
                       value={file.size}
                       onChange={(e) => updateFile(index, "size", Number(e.target.value))}
-                      className="px-2 py-1 border border-gray-300 rounded text-center text-sm"
+                      className="px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium text-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                       placeholder="Size"
                       min="1"
                     />

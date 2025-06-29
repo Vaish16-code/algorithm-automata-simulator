@@ -415,80 +415,90 @@ const DiskChart = ({ sequence, algorithm, seekTime, detailedSteps }: {
 
   return (
     <div className="w-full mt-6">
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
-        <h3 className="text-xl font-bold mb-4 text-gray-800">
-          📈 {algorithm} Algorithm - Track Position vs Time
+      <div className="bg-white rounded-lg p-6 border-2 border-gray-300 shadow-lg">
+        <h3 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+          📈 {algorithm} Algorithm - Head Movement Chart
         </h3>
         
-        <div className="h-96 mb-4">
+        <div className="h-96 mb-6">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" strokeWidth={1} />
+            <LineChart data={chartData} margin={{ top: 20, right: 30, left: 40, bottom: 80 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" strokeWidth={1} />
               <XAxis 
                 dataKey="step" 
-                label={{ value: 'Step', position: 'insideBottom', offset: -10, style: { textAnchor: 'middle', fontSize: '14px', fontWeight: 'bold' } }}
-                tick={{ fontSize: 12, fill: '#374151', fontWeight: 'bold' }}
+                label={{ value: 'Steps', position: 'insideBottom', offset: -10, style: { textAnchor: 'middle', fontSize: '16px', fontWeight: 'bold' } }}
+                tick={{ fontSize: 14, fill: '#374151', fontWeight: 'bold' }}
                 stroke="#374151"
                 strokeWidth={2}
+                type="number"
+                domain={[0, sequence.length - 1]}
               />
               <YAxis 
-                label={{ value: 'Track Position', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fontSize: '14px', fontWeight: 'bold' } }}
-                tick={{ fontSize: 12, fill: '#374151', fontWeight: 'bold' }}
+                label={{ value: 'Track Position', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fontSize: '16px', fontWeight: 'bold' } }}
+                tick={{ fontSize: 14, fill: '#374151', fontWeight: 'bold' }}
                 stroke="#374151"
                 strokeWidth={2}
+                domain={[0, 200]}
               />
               <Tooltip 
                 formatter={(value: number) => [value, 'Track Position']}
                 labelFormatter={(step: number) => `Step: ${step}`}
                 contentStyle={{
-                  backgroundColor: '#1f2937',
+                  backgroundColor: '#ffffff',
                   border: '2px solid #3b82f6',
                   borderRadius: '8px',
-                  color: '#ffffff',
-                  fontWeight: 'bold'
+                  color: '#374151',
+                  fontWeight: 'bold',
+                  fontSize: '14px'
                 }}
-                labelStyle={{ color: '#60a5fa', fontWeight: 'bold' }}
               />
               <Line 
-                type="monotone" 
+                type="linear" 
                 dataKey="position" 
-                stroke="#dc2626" 
-                strokeWidth={4}
-                dot={{ fill: '#dc2626', strokeWidth: 3, r: 6, stroke: '#ffffff' }}
-                activeDot={{ r: 8, stroke: '#dc2626', strokeWidth: 3, fill: '#fef2f2' }}
+                stroke="#22c55e" 
+                strokeWidth={3}
+                dot={{ fill: '#22c55e', strokeWidth: 2, r: 4, stroke: '#ffffff' }}
+                activeDot={{ r: 6, stroke: '#22c55e', strokeWidth: 3, fill: '#dcfce7' }}
+                connectNulls={false}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
         
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg p-4 border-2 border-gray-200 shadow-md">
-            <h4 className="text-lg font-bold text-gray-800 mb-2">Sequence Path</h4>
-            <p className="text-sm font-semibold text-blue-800 bg-blue-50 p-3 rounded border">
-              {sequence.join(' → ')}
-            </p>
-            <div className="mt-3 text-sm text-gray-600">
-              <p><strong>Total Steps:</strong> {sequence.length - 1}</p>
-              <p><strong>Range:</strong> {Math.min(...sequence)} - {Math.max(...sequence)}</p>
+          <div className="bg-blue-50 rounded-lg p-4 border-2 border-blue-200">
+            <h4 className="text-lg font-bold text-gray-800 mb-3">📋 Execution Summary</h4>
+            <div className="space-y-2">
+              <p className="text-sm"><span className="font-bold">Algorithm:</span> {algorithm}</p>
+              <p className="text-sm"><span className="font-bold">Total Seek Time:</span> {seekTime} cylinders</p>
+              <p className="text-sm"><span className="font-bold">Total Steps:</span> {sequence.length - 1}</p>
+              <p className="text-sm"><span className="font-bold">Average Seek Time:</span> {(seekTime / (sequence.length - 1)).toFixed(2)} cylinders/step</p>
             </div>
           </div>
           
-          {detailedSteps && (
-            <div className="bg-white rounded-lg p-4 border-2 border-gray-200 shadow-md">
-              <h4 className="text-lg font-bold text-gray-800 mb-2">Calculation Steps</h4>
-              <div className="max-h-32 overflow-y-auto text-sm font-mono bg-gray-50 p-3 rounded border">
-                {detailedSteps.map((step, index) => (
-                  <div key={index} className="text-gray-700 mb-1">
-                    {step}
-                  </div>
-                ))}
-                <div className="font-bold text-green-700 border-t pt-2 mt-2">
-                  Total: {seekTime}
+          <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
+            <h4 className="text-lg font-bold text-gray-800 mb-3">🎯 Sequence Path</h4>
+            <p className="text-sm font-mono bg-white p-3 rounded border text-gray-800 break-all">
+              {sequence.join(' → ')}
+            </p>
+          </div>
+        </div>
+        
+        {detailedSteps && (
+          <div className="mt-6 bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
+            <h4 className="text-lg font-bold text-gray-800 mb-3">🔢 Step-by-Step Calculation</h4>
+            <div className="max-h-32 overflow-y-auto text-sm font-mono bg-white p-3 rounded border">
+              {detailedSteps.map((step, index) => (
+                <div key={index} className="text-gray-700 mb-1">
+                  Step {index + 1}: {step}
                 </div>
+              ))}
+              <div className="font-bold text-green-700 border-t pt-2 mt-2">
+                Total Seek Time: {seekTime} cylinders
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -547,7 +557,7 @@ export default function DiskPage() {
                 onChange={(e) =>
                   setQueue(e.target.value.split(",").map((x) => parseInt(x.trim())).filter(x => !isNaN(x)))
                 }
-                className="border-2 border-gray-300 rounded-lg w-full p-3 text-lg font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                className="border-4 border-gray-800 rounded-lg w-full p-4 text-xl font-bold bg-white text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 shadow-lg"
                 placeholder="82, 170, 43, 140, 24, 16, 190"
               />
             </div>
@@ -561,7 +571,7 @@ export default function DiskPage() {
                   type="number"
                   value={head}
                   onChange={(e) => setHead(+e.target.value)}
-                  className="border-2 border-gray-300 rounded-lg p-3 w-full text-lg font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="border-4 border-gray-800 rounded-lg p-4 w-full text-xl font-bold bg-white text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 shadow-lg"
                   min="0"
                   max="199"
                 />
@@ -574,7 +584,7 @@ export default function DiskPage() {
                 <select
                   value={algo}
                   onChange={(e) => setAlgo(e.target.value)}
-                  className="border-2 border-gray-300 rounded-lg p-3 w-full text-lg font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="border-4 border-gray-800 rounded-lg p-4 w-full text-xl font-bold bg-white text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 shadow-lg"
                 >
                   <option value="FCFS">FCFS (First Come First Serve)</option>
                   <option value="SSTF">SSTF (Shortest Seek Time First)</option>
@@ -593,7 +603,7 @@ export default function DiskPage() {
                   <select
                     value={direction}
                     onChange={(e) => setDirection(e.target.value as "left" | "right")}
-                    className="border-2 border-gray-300 rounded-lg p-3 w-full text-lg font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    className="border-4 border-gray-800 rounded-lg p-4 w-full text-xl font-bold bg-white text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 shadow-lg"
                   >
                     <option value="left">⬅️ Left (Decreasing)</option>
                     <option value="right">➡️ Right (Increasing)</option>

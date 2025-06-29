@@ -259,75 +259,84 @@ const PageReplacementChart: React.FC<{
         </div>
       </div>
 
-      {/* Visualization Table */}
+      {/* Visualization Table - Vertical Column Style */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="w-full border-collapse border-2 border-gray-800">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-gray-300 px-3 py-2 text-center font-semibold">
+            <tr className="bg-gray-800 text-white">
+              <th className="border-2 border-gray-800 px-4 py-3 text-center font-bold text-sm">
                 Page
               </th>
-              {Array.from({ length: frameSize }, (_, i) => (
-                <th key={i} className="border border-gray-300 px-3 py-2 text-center font-semibold">
-                  Frame {i + 1}
+              {result.steps.map((step, index) => (
+                <th key={index} className="border-2 border-gray-800 px-3 py-3 text-center font-bold text-sm min-w-[60px]">
+                  {step.page}
                 </th>
               ))}
-              <th className="border border-gray-300 px-3 py-2 text-center font-semibold">
-                Status
-              </th>
             </tr>
           </thead>
           <tbody>
-            {result.steps.map((step, index) => (
-              <tr key={index} className={step.hit ? 'bg-green-50' : 'bg-red-50'}>
-                <td className="border border-gray-300 px-3 py-2 text-center font-medium">
-                  {step.page}
+            {Array.from({ length: frameSize }, (_, frameIndex) => (
+              <tr key={frameIndex} className={frameIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                <td className="border-2 border-gray-800 px-4 py-3 text-center font-bold bg-gray-200 text-gray-800">
+                  Frame {frameIndex + 1}
                 </td>
-                {step.frames.map((frame, frameIndex) => (
+                {result.steps.map((step, stepIndex) => (
                   <td
-                    key={frameIndex}
-                    className={`border border-gray-300 px-3 py-2 text-center ${
+                    key={stepIndex}
+                    className={`border-2 border-gray-800 px-3 py-3 text-center font-bold ${
                       step.replacedIndex === frameIndex && !step.hit
-                        ? 'bg-red-200 font-bold'
-                        : frame !== null
-                        ? 'bg-gray-100'
-                        : ''
+                        ? 'bg-red-200 text-red-800'
+                        : step.frames[frameIndex] !== null
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-gray-100 text-gray-500'
                     }`}
                   >
-                    {frame !== null ? frame : '-'}
+                    {step.frames[frameIndex] !== null ? step.frames[frameIndex] : '-'}
                   </td>
                 ))}
-                <td className="border border-gray-300 px-3 py-2 text-center">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      step.hit
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {step.hit ? 'HIT' : 'FAULT'}
-                  </span>
-                </td>
               </tr>
             ))}
+            {/* Hit/Miss Row */}
+            <tr className="bg-gray-800 text-white">
+              <td className="border-2 border-gray-800 px-4 py-3 text-center font-bold">
+                Status
+              </td>
+              {result.steps.map((step, index) => (
+                <td key={index} className="border-2 border-gray-800 px-3 py-3 text-center font-bold">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-bold ${
+                      step.hit
+                        ? 'bg-green-400 text-green-900'
+                        : 'bg-red-400 text-red-900'
+                    }`}
+                  >
+                    {step.hit ? 'HIT' : 'MISS'}
+                  </span>
+                </td>
+              ))}
+            </tr>
           </tbody>
         </table>
       </div>
 
       {/* Legend */}
-      <div className="mt-4 text-sm text-gray-600">
-        <div className="flex flex-wrap gap-4">
+      <div className="mt-4 text-sm text-gray-700">
+        <div className="flex flex-wrap gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-green-50 border border-green-200 rounded"></div>
-            <span>Page Hit</span>
+            <div className="w-4 h-4 bg-green-400 border-2 border-gray-800 rounded"></div>
+            <span className="font-medium">Page Hit</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-red-50 border border-red-200 rounded"></div>
-            <span>Page Fault</span>
+            <div className="w-4 h-4 bg-red-400 border-2 border-gray-800 rounded"></div>
+            <span className="font-medium">Page Miss (Fault)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-red-200 border border-red-300 rounded"></div>
-            <span>Replaced Frame</span>
+            <div className="w-4 h-4 bg-red-200 border-2 border-gray-800 rounded"></div>
+            <span className="font-medium">Replaced Frame</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-blue-100 border-2 border-gray-800 rounded"></div>
+            <span className="font-medium">Occupied Frame</span>
           </div>
         </div>
       </div>
@@ -425,7 +434,7 @@ const PageReplacementSimulator = () => {
                 value={sequence}
                 onChange={(e) => setSequence(e.target.value)}
                 placeholder="e.g., 7,0,1,2,0,3,0,4,2,3"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border-2 border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black font-medium"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Comma-separated page numbers
@@ -442,7 +451,7 @@ const PageReplacementSimulator = () => {
                 onChange={(e) => setFrameSize(parseInt(e.target.value))}
                 min="1"
                 max="10"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border-2 border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black font-medium"
               />
             </div>
 
@@ -453,7 +462,7 @@ const PageReplacementSimulator = () => {
               <select
                 value={algorithm}
                 onChange={(e) => setAlgorithm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border-2 border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black font-medium"
               >
                 <option value="FIFO">FIFO (First In First Out)</option>
                 <option value="LRU">LRU (Least Recently Used)</option>

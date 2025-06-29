@@ -35,6 +35,13 @@ export default function Header() {
       href: '/os',
       icon: Database,
       submenu: [
+        { name: 'CPU Scheduling', href: '/os/cpu-scheduling' },
+        { name: 'Memory Allocation', href: '/os/memory-allocation' },
+        { name: 'Deadlock Detection', href: '/os/deadlock' },
+        { name: 'Synchronization', href: '/os/synchronization' },
+        { name: 'Virtual Memory', href: '/os/virtual-memory' },
+        { name: 'File Allocation', href: '/os/file-allocation' },
+        { name: 'I/O Scheduling', href: '/os/io-scheduling' },
         { name: 'Disk Scheduling', href: '/os/disk' },
         { name: 'Page Replacement', href: '/os/page-replacement' },
       ]

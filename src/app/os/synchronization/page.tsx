@@ -335,11 +335,11 @@ export default function SynchronizationPage() {
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">Custom Operation Sequence</h2>
               
               {customOperations.map((op, index) => (
-                <div key={index} className="flex items-center space-x-4 mb-3 p-3 bg-gray-50 rounded-lg">
+                <div key={index} className="flex items-center space-x-4 mb-3 p-3 bg-gray-50 rounded-lg border border-gray-300">
                   <select
                     value={op.process}
                     onChange={(e) => updateCustomOperation(index, 'process', e.target.value)}
-                    className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     {selectedProblem.processes.map(process => (
                       <option key={process} value={process}>{process}</option>
@@ -349,7 +349,7 @@ export default function SynchronizationPage() {
                   <select
                     value={op.operation}
                     onChange={(e) => updateCustomOperation(index, 'operation', e.target.value as 'wait' | 'signal')}
-                    className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     <option value="wait">wait()</option>
                     <option value="signal">signal()</option>
@@ -358,7 +358,7 @@ export default function SynchronizationPage() {
                   <select
                     value={op.semaphore}
                     onChange={(e) => updateCustomOperation(index, 'semaphore', e.target.value)}
-                    className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     {selectedProblem.semaphores.map(semaphore => (
                       <option key={semaphore} value={semaphore}>{semaphore}</option>
@@ -367,7 +367,7 @@ export default function SynchronizationPage() {
                   
                   <button
                     onClick={() => removeCustomOperation(index)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500 hover:text-red-700 px-3 py-2 font-semibold"
                   >
                     Remove
                   </button>
@@ -377,7 +377,7 @@ export default function SynchronizationPage() {
               <div className="flex space-x-4">
                 <button
                   onClick={addCustomOperation}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors font-semibold"
                 >
                   Add Operation
                 </button>
