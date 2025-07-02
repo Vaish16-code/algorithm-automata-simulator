@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu, X, BookOpen, Cpu, Database } from 'lucide-react';
+import { Menu, X, BookOpen, Cpu, Database, Globe } from 'lucide-react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,6 +44,18 @@ export default function Header() {
         { name: 'I/O Scheduling', href: '/os/io-scheduling' },
         { name: 'Disk Scheduling', href: '/os/disk' },
         { name: 'Page Replacement', href: '/os/page-replacement' },
+      ]
+    },
+    {
+      name: 'Computer Networks',
+      href: '/cn',
+      icon: Globe,
+      submenu: [
+        { name: 'Dijkstra Algorithm', href: '/cn/routing/dijkstra' },
+        { name: 'IP Address Calculator', href: '/cn/ip-addressing/calculator' },
+        { name: 'Huffman Encoding', href: '/cn/compression/huffman' },
+        { name: 'Network Protocols', href: '/cn/protocols/tcp-flow' },
+        { name: 'Network Security', href: '/cn/security/rsa' },
       ]
     }
   ];

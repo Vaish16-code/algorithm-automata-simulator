@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Cpu, BookOpen, Database, ArrowRight, Play, Code, GitBranch, Layers, HardDrive, Brain, Shuffle } from 'lucide-react';
+import { Cpu, BookOpen, Database, ArrowRight, Play, Code, GitBranch, Layers, HardDrive, Brain, Shuffle, Globe, Network, Shield } from 'lucide-react';
 
 export default function SubjectsSection() {
   const subjects = [
@@ -44,6 +44,20 @@ export default function SubjectsSection() {
         { name: 'Page Replacement', href: '/os/page-replacement', icon: Layers }
       ],
       stats: { algorithms: 4, problems: '12+' }
+    },
+    {
+      title: 'Computer Networks',
+      description: 'Master networking concepts including routing algorithms, IP addressing, protocols, and network security.',
+      icon: Globe,
+      color: 'from-orange-500 to-red-500',
+      href: '/cn',
+      algorithms: [
+        { name: 'Dijkstra Algorithm', href: '/cn/routing/dijkstra', icon: Network },
+        { name: 'IP Addressing', href: '/cn/ip-addressing/calculator', icon: Globe },
+        { name: 'Huffman Encoding', href: '/cn/compression/huffman', icon: Code },
+        { name: 'Network Protocols', href: '/cn/protocols/tcp-flow', icon: Shield }
+      ],
+      stats: { algorithms: 6, problems: '25+' }
     }
   ];
 
@@ -68,7 +82,7 @@ export default function SubjectsSection() {
         </div>
 
         {/* Subjects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8">
           {subjects.map((subject, index) => (
             <div
               key={index}
