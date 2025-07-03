@@ -108,12 +108,10 @@ export function mergeSort(arr: number[]): MergeSortResult {
 // Quick Sort interfaces
 export interface QuickSortStep {
   step: number;
-  action: string;
+  description: string;
   array: number[];
-  pivot: number;
   pivotIndex: number;
-  left: number[];
-  right: number[];
+  compareIndices?: number[];
   range: [number, number];
 }
 
@@ -121,85 +119,124 @@ export interface QuickSortResult {
   sortedArray: number[];
   steps: QuickSortStep[];
   comparisons: number;
+  swaps: number;
+  recursionDepth: number;
 }
 
 // Quick Sort Algorithm
-export function quickSort(arr: number[]): QuickSortResult {
+export function quickSort(arr: number[], pivotStrategy: 'first' | 'last' | 'middle' | 'random' = 'last'): QuickSortResult {
   const steps: QuickSortStep[] = [];
+  const sortedArray = [...arr];
   let stepCount = 0;
   let comparisons = 0;
-  const result = [...arr];
+  let swaps = 0;
+  let maxDepth = 0;
 
-  function quickSortHelper(array: number[], low: number, high: number): void {
+  function quickSortHelper(array: number[], low: number, high: number, depth: number): void {
+    maxDepth = Math.max(maxDepth, depth);
+    
     if (low < high) {
       const pivotIndex = partition(array, low, high);
-      
-      quickSortHelper(array, low, pivotIndex - 1);
-      quickSortHelper(array, pivotIndex + 1, high);
+      quickSortHelper(array, low, pivotIndex - 1, depth + 1);
+      quickSortHelper(array, pivotIndex + 1, high, depth + 1);
     }
   }
 
   function partition(array: number[], low: number, high: number): number {
-    const pivot = array[high];
-    let i = low - 1;
+    // Select pivot based on strategy
+    let pivotIndex = high; // default to last
+    switch (pivotStrategy) {
+      case 'first':
+        pivotIndex = low;
+        break;
+      case 'middle':
+        pivotIndex = Math.floor((low + high) / 2);
+        break;
+      case 'random':
+        pivotIndex = Math.floor(Math.random() * (high - low + 1)) + low;
+        break;
+    }
 
+    // Move pivot to end if not already there
+    if (pivotIndex !== high) {
+      [array[pivotIndex], array[high]] = [array[high], array[pivotIndex]];
+      swaps++;
+    }
+
+    const pivot = array[high];
     steps.push({
       step: stepCount++,
-      action: `Choose pivot: ${pivot} at index ${high}`,
-      array: array.slice(low, high + 1),
-      pivot,
+      description: `Selected pivot: ${pivot} at position ${high}`,
+      array: [...array],
       pivotIndex: high,
-      left: [],
-      right: [],
       range: [low, high]
     });
 
+    let i = low - 1;
+
     for (let j = low; j < high; j++) {
       comparisons++;
+      steps.push({
+        step: stepCount++,
+        description: `Comparing ${array[j]} with pivot ${pivot}`,
+        array: [...array],
+        pivotIndex: high,
+        compareIndices: [j],
+        range: [low, high]
+      });
+
       if (array[j] < pivot) {
         i++;
-        [array[i], array[j]] = [array[j], array[i]];
+        if (i !== j) {
+          [array[i], array[j]] = [array[j], array[i]];
+          swaps++;
+          steps.push({
+            step: stepCount++,
+            description: `Swapped ${array[j]} and ${array[i]} (moving ${array[j]} to left partition)`,
+            array: [...array],
+            pivotIndex: high,
+            compareIndices: [i, j],
+            range: [low, high]
+          });
+        }
       }
     }
 
+    // Place pivot in correct position
     [array[i + 1], array[high]] = [array[high], array[i + 1]];
-
-    const left = array.slice(low, i + 1);
-    const right = array.slice(i + 2, high + 1);
-
+    swaps++;
     steps.push({
       step: stepCount++,
-      action: `Partitioned around pivot ${pivot}`,
-      array: array.slice(low, high + 1),
-      pivot,
+      description: `Placed pivot ${pivot} in correct position ${i + 1}`,
+      array: [...array],
       pivotIndex: i + 1,
-      left,
-      right,
       range: [low, high]
     });
 
     return i + 1;
   }
 
-  quickSortHelper(result, 0, result.length - 1);
+  quickSortHelper(sortedArray, 0, arr.length - 1, 0);
 
   return {
-    sortedArray: result,
+    sortedArray,
     steps,
-    comparisons
+    comparisons,
+    swaps,
+    recursionDepth: maxDepth
   };
 }
 
 // Binary Search interfaces
 export interface BinarySearchStep {
   step: number;
-  action: string;
+  description: string;
   array: number[];
-  target: number;
   left: number;
   right: number;
   mid: number;
-  found: boolean;
+  target: number;
+  found?: boolean;
 }
 
 export interface BinarySearchResult {
@@ -217,79 +254,65 @@ export function binarySearch(arr: number[], target: number): BinarySearchResult 
   let left = 0;
   let right = arr.length - 1;
 
-  steps.push({
-    step: stepCount++,
-    action: `Searching for ${target} in sorted array`,
-    array: [...arr],
-    target,
-    left,
-    right,
-    mid: -1,
-    found: false
-  });
-
   while (left <= right) {
     const mid = Math.floor((left + right) / 2);
     comparisons++;
 
     steps.push({
       step: stepCount++,
-      action: `Check middle element at index ${mid}`,
+      description: `Checking middle element at index ${mid}: ${arr[mid]}`,
       array: [...arr],
-      target,
       left,
       right,
       mid,
-      found: false
+      target
     });
 
     if (arr[mid] === target) {
       steps.push({
         step: stepCount++,
-        action: `Found target ${target} at index ${mid}`,
+        description: `Found target ${target} at index ${mid}!`,
         array: [...arr],
-        target,
         left,
         right,
         mid,
+        target,
         found: true
       });
       return { found: true, index: mid, steps, comparisons };
     } else if (arr[mid] < target) {
+      steps.push({
+        step: stepCount++,
+        description: `${arr[mid]} < ${target}, searching right half`,
+        array: [...arr],
+        left,
+        right,
+        mid,
+        target
+      });
       left = mid + 1;
-      steps.push({
-        step: stepCount++,
-        action: `${arr[mid]} < ${target}, search right half`,
-        array: [...arr],
-        target,
-        left,
-        right,
-        mid,
-        found: false
-      });
     } else {
-      right = mid - 1;
       steps.push({
         step: stepCount++,
-        action: `${arr[mid]} > ${target}, search left half`,
+        description: `${arr[mid]} > ${target}, searching left half`,
         array: [...arr],
-        target,
         left,
         right,
         mid,
-        found: false
+        target
       });
+      right = mid - 1;
     }
   }
 
   steps.push({
     step: stepCount++,
-    action: `Target ${target} not found in array`,
+    description: `Target ${target} not found in array`,
     array: [...arr],
-    target,
     left,
     right,
     mid: -1,
+    target,
     found: false
   });
 
@@ -297,85 +320,101 @@ export function binarySearch(arr: number[], target: number): BinarySearchResult 
 }
 
 // Maximum Subarray (Kadane's Algorithm) interfaces
-export interface KadaneStep {
+export interface MaxSubarrayStep {
   step: number;
-  index: number;
-  currentElement: number;
+  description: string;
+  array: number[];
+  currentIndex: number;
   currentSum: number;
   maxSum: number;
-  action: string;
+  maxStart: number;
+  maxEnd: number;
+  currentStart: number;
 }
 
-export interface KadaneResult {
+export interface MaxSubarrayResult {
   maxSum: number;
+  subarray: number[];
   startIndex: number;
   endIndex: number;
-  subarray: number[];
-  steps: KadaneStep[];
+  steps: MaxSubarrayStep[];
 }
 
-// Maximum Subarray using Kadane's Algorithm
-export function kadaneAlgorithm(arr: number[]): KadaneResult {
-  const steps: KadaneStep[] = [];
+// Maximum Subarray Algorithm (Kadane's Algorithm)
+export function maxSubarray(arr: number[]): MaxSubarrayResult {
+  const steps: MaxSubarrayStep[] = [];
+  let stepCount = 0;
   let maxSum = arr[0];
   let currentSum = arr[0];
-  let startIndex = 0;
-  let endIndex = 0;
-  let tempStart = 0;
+  let maxStart = 0;
+  let maxEnd = 0;
+  let currentStart = 0;
 
   steps.push({
-    step: 0,
-    index: 0,
-    currentElement: arr[0],
-    currentSum: arr[0],
-    maxSum: arr[0],
-    action: `Initialize with first element: ${arr[0]}`
+    step: stepCount++,
+    description: `Initialize: maxSum = currentSum = ${arr[0]}`,
+    array: [...arr],
+    currentIndex: 0,
+    currentSum,
+    maxSum,
+    maxStart,
+    maxEnd,
+    currentStart
   });
 
   for (let i = 1; i < arr.length; i++) {
     if (currentSum < 0) {
       currentSum = arr[i];
-      tempStart = i;
+      currentStart = i;
       steps.push({
-        step: i,
-        index: i,
-        currentElement: arr[i],
+        step: stepCount++,
+        description: `Previous sum was negative, restart from index ${i} with value ${arr[i]}`,
+        array: [...arr],
+        currentIndex: i,
         currentSum,
         maxSum,
-        action: `Previous sum was negative, start new subarray at index ${i}`
+        maxStart,
+        maxEnd,
+        currentStart
       });
     } else {
       currentSum += arr[i];
       steps.push({
-        step: i,
-        index: i,
-        currentElement: arr[i],
+        step: stepCount++,
+        description: `Add ${arr[i]} to current sum: ${currentSum}`,
+        array: [...arr],
+        currentIndex: i,
         currentSum,
         maxSum,
-        action: `Add ${arr[i]} to current sum: ${currentSum}`
+        maxStart,
+        maxEnd,
+        currentStart
       });
     }
 
     if (currentSum > maxSum) {
       maxSum = currentSum;
-      startIndex = tempStart;
-      endIndex = i;
+      maxStart = currentStart;
+      maxEnd = i;
       steps.push({
-        step: i,
-        index: i,
-        currentElement: arr[i],
+        step: stepCount++,
+        description: `New maximum sum found: ${maxSum} from index ${maxStart} to ${maxEnd}`,
+        array: [...arr],
+        currentIndex: i,
         currentSum,
         maxSum,
-        action: `New maximum sum found: ${maxSum} (subarray from ${startIndex} to ${i})`
+        maxStart,
+        maxEnd,
+        currentStart
       });
     }
   }
 
   return {
     maxSum,
-    startIndex,
-    endIndex,
-    subarray: arr.slice(startIndex, endIndex + 1),
+    subarray: arr.slice(maxStart, maxEnd + 1),
+    startIndex: maxStart,
+    endIndex: maxEnd,
     steps
   };
 }
