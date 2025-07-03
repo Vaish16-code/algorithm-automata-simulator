@@ -91,7 +91,7 @@ export default function TuringMachineSimulatorPage() {
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Turing Machine <span className="text-emerald-600">Simulator</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-900 max-w-3xl mx-auto">
             Design and simulate Turing machines to understand the fundamentals of computation theory
           </p>
         </div>
@@ -157,7 +157,7 @@ export default function TuringMachineSimulatorPage() {
           <div className="space-y-6">
             {/* States */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">States</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">States</h2>
               {states.map((state, index) => (
                 <div key={index} className="flex items-center gap-4 mb-3 p-3 bg-gray-50 rounded">
                   <input
@@ -168,7 +168,7 @@ export default function TuringMachineSimulatorPage() {
                       newStates[index] = e.target.value;
                       setStates(newStates);
                     }}
-                    className="flex-1 border rounded px-2 py-1"
+                    className="flex-1 border-4 border-gray-800 rounded px-3 py-2 font-mono text-black font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                   />
                   <span className={`text-xs px-2 py-1 rounded ${
                     state === 'q0' ? 'bg-blue-100 text-blue-700' :
@@ -199,11 +199,11 @@ export default function TuringMachineSimulatorPage() {
 
             {/* Tape Alphabet */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Tape Alphabet</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Tape Alphabet</h2>
               <div className="flex flex-wrap gap-2 mb-4">
                 {tapeAlphabet.map((symbol, index) => (
                   <div key={index} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded">
-                    <span className="font-mono">{symbol}</span>
+                    <span className="font-mono font-bold text-black">{symbol}</span>
                     <button
                       onClick={() => removeTapeSymbol(index)}
                       className="text-red-500 hover:text-red-700"
@@ -224,8 +224,8 @@ export default function TuringMachineSimulatorPage() {
 
             {/* Transitions */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Transitions</h2>
-              <div className="text-xs text-gray-600 mb-4">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Transitions</h2>
+              <div className="text-xs text-gray-900 mb-4">
                 Format: (state, read) → (write, direction, next_state)
               </div>
               {transitions.map((transition, index) => (
@@ -233,7 +233,7 @@ export default function TuringMachineSimulatorPage() {
                   <select
                     value={transition.currentState}
                     onChange={(e) => updateTransition(index, 'currentState', e.target.value)}
-                    className="border rounded px-2 py-1 text-sm"
+                    className="border-2 border-gray-600 rounded px-2 py-1 text-md text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                   >
                     {states.map(state => (
                       <option key={state} value={state}>{state}</option>
@@ -243,7 +243,7 @@ export default function TuringMachineSimulatorPage() {
                   <select
                     value={transition.readSymbol}
                     onChange={(e) => updateTransition(index, 'readSymbol', e.target.value)}
-                    className="border rounded px-2 py-1 text-sm"
+                    className="border-2 border-gray-600 rounded px-2 py-1 text-md text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                   >
                     {tapeAlphabet.map(symbol => (
                       <option key={symbol} value={symbol}>{symbol}</option>
@@ -253,7 +253,7 @@ export default function TuringMachineSimulatorPage() {
                   <select
                     value={transition.writeSymbol}
                     onChange={(e) => updateTransition(index, 'writeSymbol', e.target.value)}
-                    className="border rounded px-2 py-1 text-sm"
+                    className="border-2 border-gray-600 rounded px-2 py-1 text-md text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                   >
                     {tapeAlphabet.map(symbol => (
                       <option key={symbol} value={symbol}>{symbol}</option>
@@ -263,7 +263,7 @@ export default function TuringMachineSimulatorPage() {
                   <select
                     value={transition.moveDirection}
                     onChange={(e) => updateTransition(index, 'moveDirection', e.target.value)}
-                    className="border rounded px-2 py-1 text-sm"
+                    className="border-2 border-gray-600 rounded px-2 py-1 text-md text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                   >
                     <option value="L">L</option>
                     <option value="R">R</option>
@@ -272,7 +272,7 @@ export default function TuringMachineSimulatorPage() {
                   <select
                     value={transition.nextState}
                     onChange={(e) => updateTransition(index, 'nextState', e.target.value)}
-                    className="border rounded px-2 py-1 text-sm"
+                    className="border-2 border-gray-600 rounded px-2 py-1 text-md text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                   >
                     {states.map(state => (
                       <option key={state} value={state}>{state}</option>
@@ -297,14 +297,14 @@ export default function TuringMachineSimulatorPage() {
 
             {/* Input String */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Input String</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Input String</h2>
               <div className="flex gap-4">
                 <input
                   type="text"
                   value={inputString}
                   onChange={(e) => setInputString(e.target.value)}
                   placeholder="Enter input string"
-                  className="flex-1 border border-gray-300 rounded px-3 py-2"
+                  className="flex-1 border-4 border-gray-800 rounded-lg px-4 py-3 font-mono text-lg text-black font-bold bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-200"
                 />
                 <button
                   onClick={handleSimulate}
@@ -359,11 +359,11 @@ export default function TuringMachineSimulatorPage() {
             )}
 
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Machine Configuration</h3>
+              <h3 className="text-lg font-semibold mb-4 text-black">Machine Configuration</h3>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="font-medium text-gray-700">States:</span>
+                    <span className="font-medium text-gray-900">States:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {states.map(state => (
                         <span key={state} className={`px-2 py-1 rounded text-xs font-mono ${
@@ -378,7 +378,7 @@ export default function TuringMachineSimulatorPage() {
                     </div>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700">Tape Alphabet:</span>
+                    <span className="font-medium text-gray-900">Tape Alphabet:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {tapeAlphabet.map(symbol => (
                         <span key={symbol} className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs font-mono">
@@ -390,7 +390,7 @@ export default function TuringMachineSimulatorPage() {
                 </div>
                 
                 <div>
-                  <span className="font-medium text-gray-700">Transition Function:</span>
+                  <span className="font-medium text-gray-900">Transition Function:</span>
                   <div className="mt-2 space-y-1 max-h-48 overflow-y-auto">
                     {transitions.map((trans, index) => (
                       <div key={index} className="text-sm font-mono bg-gray-50 p-2 rounded border">
@@ -406,16 +406,16 @@ export default function TuringMachineSimulatorPage() {
 
             {result && (
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold mb-4 text-gray-800">Tape Visualization</h3>
+                <h3 className="text-lg font-semibold mb-4 text-black">Tape Visualization</h3>
                 <TMChart result={result} />
                 
                 <div className="mt-4">
-                  <h4 className="font-medium text-gray-700 mb-2">Step-by-Step Execution:</h4>
+                  <h4 className="font-medium text-black mb-2">Step-by-Step Execution:</h4>
                   <div className="max-h-64 overflow-y-auto space-y-2">
                     {result.steps.slice(0, 10).map((step: TMStep, index: number) => (
                       <div key={index} className="p-3 bg-gray-50 rounded text-sm">
                         <div className="flex justify-between items-center mb-2">
-                          <span className="font-medium">Step {index}:</span>
+                          <span className="font-medium text-black">Step {index}:</span>
                           <span className={`px-2 py-1 rounded text-xs font-mono ${
                             step.state === 'qaccept' ? 'bg-green-100 text-green-800' :
                             step.state === 'qreject' ? 'bg-red-100 text-red-800' :
@@ -424,7 +424,7 @@ export default function TuringMachineSimulatorPage() {
                             {step.state}
                           </span>
                         </div>
-                        <div className="font-mono text-xs bg-white p-2 rounded border">
+                        <div className="font-mono text-sm bg-white p-2 rounded border border-gray-800 text-black font-bold">
                           {step.tape.map((symbol: string, i: number) => (
                             <span 
                               key={i} 
@@ -437,7 +437,7 @@ export default function TuringMachineSimulatorPage() {
                           ))}
                         </div>
                         {step.transition && (
-                          <div className="text-purple-600 mt-1 text-xs">
+                          <div className="text-purple-800 mt-1 text-xs font-semibold">
                             δ({step.transition.currentState}, {step.transition.readSymbol}) = 
                             ({step.transition.writeSymbol}, {step.transition.moveDirection}, {step.transition.nextState})
                           </div>
@@ -445,7 +445,7 @@ export default function TuringMachineSimulatorPage() {
                       </div>
                     ))}
                     {result.steps.length > 10 && (
-                      <div className="text-center text-gray-500 text-sm">
+                      <div className="text-center text-black font-medium text-sm">
                         ... and {result.steps.length - 10} more steps
                       </div>
                     )}

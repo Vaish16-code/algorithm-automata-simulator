@@ -332,6 +332,154 @@ export function simulateTuringMachine(tm: TuringMachine, input: string): TMResul
   };
 }
 
+// Pushdown Automata Types
+export interface PDATransition {
+  fromState: string;
+  inputSymbol: string; // can be ε
+  popSymbol: string;   // can be ε
+  toState: string;
+  pushSymbols: string[]; // can be empty for pop-only
+}
+
+export interface PushdownAutomaton {
+  states: string[];
+  inputAlphabet: string[];
+  stackAlphabet: string[];
+  transitions: PDATransition[];
+  startState: string;
+  initialStackSymbol: string;
+  acceptStates: string[];
+}
+
+export interface PDAStackSymbol {
+  value: string;
+  index: number;
+}
+
+export interface PDASimulationStep {
+  step: number;
+  state: string;
+  remainingInput: string;
+  consumedInput: string;
+  stack: PDAStackSymbol[];
+  transition?: PDATransition;
+  accepted?: boolean;
+}
+
+export interface PDAResult {
+  accepted: boolean;
+  steps: PDASimulationStep[];
+  finalState: string;
+}
+
+export function simulatePDA(pda: PushdownAutomaton, input: string): PDAResult {
+  const steps: PDASimulationStep[] = [];
+  let currentState = pda.startState;
+  let stack: PDAStackSymbol[] = [{ value: pda.initialStackSymbol, index: 0 }];
+  let consumedInput = "";
+  let stepCount = 0;
+  
+  // Initial step
+  steps.push({
+    step: stepCount++,
+    state: currentState,
+    remainingInput: input,
+    consumedInput: "",
+    stack: [...stack]
+  });
+  
+  let i = 0;
+  const maxSteps = 100; // Prevent infinite loops from ε-transitions
+  
+  while (stepCount < maxSteps) {
+    // Check if we're done processing input
+    if (i >= input.length) {
+      // If we've consumed all input, check if we're in an accept state
+      const accepted = pda.acceptStates.includes(currentState);
+      steps[steps.length - 1].accepted = accepted;
+      return {
+        accepted,
+        steps,
+        finalState: currentState
+      };
+    }
+    
+    const inputSymbol = i < input.length ? input[i] : "ε";
+    const topStack = stack.length > 0 ? stack[stack.length - 1].value : "ε";
+    
+    // Find applicable transitions
+    // First, check for transitions that consume input
+    let possibleTransitions = pda.transitions.filter(t => 
+      t.fromState === currentState && 
+      t.inputSymbol === inputSymbol &&
+      (t.popSymbol === topStack || t.popSymbol === "ε")
+    );
+    
+    // If no transitions consume input, try ε-transitions
+    if (possibleTransitions.length === 0 && inputSymbol !== "ε") {
+      possibleTransitions = pda.transitions.filter(t => 
+        t.fromState === currentState && 
+        t.inputSymbol === "ε" &&
+        (t.popSymbol === topStack || t.popSymbol === "ε")
+      );
+    }
+    
+    if (possibleTransitions.length === 0) {
+      // No valid transition, reject
+      return {
+        accepted: false,
+        steps,
+        finalState: currentState
+      };
+    }
+    
+    // For simplicity, take the first applicable transition
+    // In a real NFA, we would explore all possibilities
+    const transition = possibleTransitions[0];
+    
+    // Update state
+    currentState = transition.toState;
+    
+    // Update stack
+    if (transition.popSymbol !== "ε" && stack.length > 0) {
+      stack.pop(); // Pop the top symbol
+    }
+    
+    // Push new symbols (in reverse order)
+    for (let j = transition.pushSymbols.length - 1; j >= 0; j--) {
+      if (transition.pushSymbols[j] !== "ε") {
+        stack.push({ 
+          value: transition.pushSymbols[j], 
+          index: stack.length > 0 ? stack[stack.length - 1].index + 1 : 0 
+        });
+      }
+    }
+    
+    // If we consumed input, move to next symbol
+    if (transition.inputSymbol !== "ε") {
+      consumedInput += input[i];
+      i++;
+    }
+    
+    // Record step
+    steps.push({
+      step: stepCount++,
+      state: currentState,
+      remainingInput: input.substring(i),
+      consumedInput,
+      stack: [...stack],
+      transition
+    });
+  }
+  
+  // If we reach here, we hit the step limit
+  return {
+    accepted: false,
+    steps,
+    finalState: currentState
+  };
+}
+
 // Context-Free Grammar Types
 export interface CFGProduction {
   left: string;

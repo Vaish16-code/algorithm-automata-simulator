@@ -95,17 +95,17 @@ export default function ExamResult({ title, input, result, steps, finalAnswer, e
                 <div className="flex-1">
                   <div className="font-semibold text-gray-800 mb-1">{step.description}</div>
                   {step.currentState && (
-                    <div className="text-sm text-gray-600 mb-1">
+                    <div className="text-sm text-gray-900 mb-1">
                       <span className="font-medium">Current State:</span> {step.currentState}
                     </div>
                   )}
                   {step.input && (
-                    <div className="text-sm text-gray-600 mb-1">
+                    <div className="text-sm text-gray-900 mb-1">
                       <span className="font-medium">Processing:</span> {step.input}
                     </div>
                   )}
                   {step.transition && (
-                    <div className="text-sm text-gray-600 mb-1">
+                    <div className="text-sm text-gray-900 mb-1">
                       <span className="font-medium">Transition:</span> {step.transition}
                     </div>
                   )}
@@ -166,7 +166,7 @@ export default function ExamResult({ title, input, result, steps, finalAnswer, e
             <div>
               <h5 className="font-bold text-gray-800 mb-2">Question:</h5>
               <div className="bg-white border-l-4 border-purple-500 p-4 rounded">
-                <p className="text-gray-700">{examFormat.question}</p>
+                <p className="text-gray-900 font-medium">{examFormat.question}</p>
               </div>
             </div>
 
@@ -180,7 +180,7 @@ export default function ExamResult({ title, input, result, steps, finalAnswer, e
                       <span className="bg-purple-100 text-purple-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0">
                         {index + 1}
                       </span>
-                      <span className="text-gray-700">{line}</span>
+                      <span className="text-gray-900">{line}</span>
                     </li>
                   ))}
                 </ol>
@@ -195,19 +195,19 @@ export default function ExamResult({ title, input, result, steps, finalAnswer, e
                   <table className="min-w-full text-sm">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-3 py-2 text-left font-semibold text-gray-700">Step</th>
-                        <th className="px-3 py-2 text-left font-semibold text-gray-700">Description</th>
-                        <th className="px-3 py-2 text-left font-semibold text-gray-700">State</th>
-                        <th className="px-3 py-2 text-left font-semibold text-gray-700">Explanation</th>
+                        <th className="px-3 py-2 text-left font-semibold text-gray-900">Step</th>
+                        <th className="px-3 py-2 text-left font-semibold text-gray-900">Description</th>
+                        <th className="px-3 py-2 text-left font-semibold text-gray-900">State</th>
+                        <th className="px-3 py-2 text-left font-semibold text-gray-900">Explanation</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {steps.map((step, index) => (
                         <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                           <td className="px-3 py-2 font-medium text-purple-700">{step.stepNumber}</td>
-                          <td className="px-3 py-2 text-gray-700">{step.description}</td>
-                          <td className="px-3 py-2 text-gray-700">{step.currentState || '-'}</td>
-                          <td className="px-3 py-2 text-gray-600 text-xs">{step.explanation}</td>
+                          <td className="px-3 py-2 text-black">{step.description}</td>
+                          <td className="px-3 py-2 text-black">{step.currentState || '-'}</td>
+                          <td className="px-3 py-2 text-gray-900 text-sm">{step.explanation}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -223,7 +223,7 @@ export default function ExamResult({ title, input, result, steps, finalAnswer, e
                 <p className={`font-semibold ${result ? 'text-green-800' : 'text-red-800'}`}>
                   {examFormat.conclusion}
                 </p>
-                <p className="text-gray-700 mt-1">
+                <p className="text-gray-900 mt-1 font-medium">
                   <strong>Final Answer:</strong> {finalAnswer}
                 </p>
               </div>
