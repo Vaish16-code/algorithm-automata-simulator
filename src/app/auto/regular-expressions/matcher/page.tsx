@@ -52,7 +52,7 @@ export default function RegexMatcherPage() {
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Regular Expression <span className="text-orange-600">Matcher</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-900 max-w-3xl mx-auto">
             Test and validate regular expressions against multiple input strings with detailed matching analysis
           </p>
         </div>
@@ -116,10 +116,10 @@ export default function RegexMatcherPage() {
           <div className="space-y-6">
             {/* Pattern Input */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Regular Expression</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Regular Expression</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
                     Pattern:
                   </label>
                   <input
@@ -132,7 +132,7 @@ export default function RegexMatcherPage() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
                     Common Patterns:
                   </label>
                   <div className="grid grid-cols-1 gap-2">
@@ -143,7 +143,7 @@ export default function RegexMatcherPage() {
                         className="text-left p-2 bg-gray-50 hover:bg-gray-100 rounded border text-sm"
                       >
                         <div className="font-medium">{p.name}</div>
-                        <div className="text-gray-600 font-mono text-xs">{p.pattern}</div>
+                        <div className="text-gray-900 font-mono text-sm">{p.pattern}</div>
                       </button>
                     ))}
                   </div>
@@ -153,12 +153,12 @@ export default function RegexMatcherPage() {
 
             {/* Test Strings */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Test Strings</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Test Strings</h2>
               
               <div className="space-y-3 mb-4">
                 {testStrings.map((str, index) => (
                   <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded">
-                    <span className="flex-1 font-mono">{str || "(empty string)"}</span>
+                    <span className="flex-1 font-mono font-bold text-black">{str || "(empty string)"}</span>
                     {results.length > 0 && results[index] && (
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
                         results[index].matches 
@@ -239,18 +239,18 @@ export default function RegexMatcherPage() {
             )}
 
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Pattern Analysis</h3>
+              <h3 className="text-lg font-semibold mb-4 text-gray-900">Pattern Analysis</h3>
               <div className="space-y-4">
                 <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-medium text-gray-700 mb-2">Current Pattern:</h4>
-                  <div className="font-mono text-lg bg-white p-3 rounded border">
+                  <h4 className="font-medium text-gray-900 mb-2">Current Pattern:</h4>
+                  <div className="font-mono text-lg bg-white p-3 rounded border border-gray-800 font-bold text-black">
                     {pattern}
                   </div>
                 </div>
                 
                 {results.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="font-medium text-gray-700">Test Results Summary:</h4>
+                    <h4 className="font-medium text-gray-900">Test Results Summary:</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-green-50 p-3 rounded">
                         <div className="text-green-800 font-semibold">Matches</div>
@@ -271,12 +271,12 @@ export default function RegexMatcherPage() {
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Regular Expression Reference</h3>
+              <h3 className="text-lg font-semibold mb-4 text-gray-900">Regular Expression Reference</h3>
               <div className="space-y-4 text-sm">
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-medium text-gray-700 mb-2">Basic Operators:</h4>
-                    <div className="space-y-1 text-xs">
+                    <h4 className="font-medium text-gray-900 mb-2">Basic Operators:</h4>
+                    <div className="space-y-1 text-sm text-black">
                       <div><code className="bg-gray-100 px-1 rounded">.</code> - Any single character</div>
                       <div><code className="bg-gray-100 px-1 rounded">*</code> - Zero or more repetitions</div>
                       <div><code className="bg-gray-100 px-1 rounded">+</code> - One or more repetitions</div>
@@ -285,8 +285,8 @@ export default function RegexMatcherPage() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-medium text-gray-700 mb-2">Character Classes:</h4>
-                    <div className="space-y-1 text-xs">
+                    <h4 className="font-medium text-gray-900 mb-2">Character Classes:</h4>
+                    <div className="space-y-1 text-sm text-black">
                       <div><code className="bg-gray-100 px-1 rounded">[abc]</code> - Any of a, b, or c</div>
                       <div><code className="bg-gray-100 px-1 rounded">[a-z]</code> - Any lowercase letter</div>
                       <div><code className="bg-gray-100 px-1 rounded">[0-9]</code> - Any digit</div>
@@ -297,8 +297,8 @@ export default function RegexMatcherPage() {
                 </div>
                 
                 <div>
-                  <h4 className="font-medium text-gray-700 mb-2">Example Patterns:</h4>
-                  <div className="space-y-1 text-xs">
+                  <h4 className="font-medium text-gray-900 mb-2">Example Patterns:</h4>
+                  <div className="space-y-1 text-sm text-black">
                     <div><code className="bg-gray-100 px-1 rounded">ab*</code> - &quot;a&quot; followed by zero or more &quot;b&quot;s</div>
                     <div><code className="bg-gray-100 px-1 rounded">(ab)+</code> - One or more &quot;ab&quot; sequences</div>
                     <div><code className="bg-gray-100 px-1 rounded">a|b</code> - Either &quot;a&quot; or &quot;b&quot;</div>

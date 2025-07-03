@@ -42,7 +42,7 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
       <div className="p-6 space-y-6">
         {/* Theory Section */}
         <div>
-          <h3 className="flex items-center text-lg font-semibold text-gray-800 mb-3">
+          <h3 className="flex items-center text-lg font-semibold text-gray-900 mb-3">
             <Lightbulb className="h-5 w-5 mr-2 text-yellow-500" />
             Theory & Concepts
           </h3>
@@ -53,10 +53,10 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h4 className="font-semibold text-gray-700 mb-2 text-sm">Key Points:</h4>
+              <h4 className="font-semibold text-gray-900 mb-2 text-sm">Key Points:</h4>
               <ul className="space-y-1">
                 {theory.keyPoints.map((point, index) => (
-                  <li key={index} className="flex items-start text-sm text-gray-600">
+                  <li key={index} className="flex items-start text-sm text-black">
                     <CheckCircle2 className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                     {point}
                   </li>
@@ -65,10 +65,10 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-700 mb-2 text-sm">Applications:</h4>
+              <h4 className="font-semibold text-gray-900 mb-2 text-sm">Applications:</h4>
               <ul className="space-y-1">
                 {theory.applications.map((app, index) => (
-                  <li key={index} className="flex items-start text-sm text-gray-600">
+                  <li key={index} className="flex items-start text-sm text-black">
                     <div className="w-2 h-2 bg-purple-400 rounded-full mr-2 mt-2 flex-shrink-0"></div>
                     {app}
                   </li>
@@ -80,7 +80,7 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
 
         {/* Mumbai University Section */}
         <div className="border-t pt-6">
-          <h3 className="flex items-center text-lg font-semibold text-gray-800 mb-3">
+          <h3 className="flex items-center text-lg font-semibold text-gray-900 mb-3">
             <Award className="h-5 w-5 mr-2 text-purple-500" />
             Mumbai University Guidelines
           </h3>
@@ -99,13 +99,13 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div>
-              <h4 className="font-semibold text-gray-700 mb-2 text-sm flex items-center">
+              <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center">
                 <Users className="h-4 w-4 mr-1 text-blue-500" />
                 Syllabus Coverage:
               </h4>
               <ul className="space-y-1 mb-4">
                 {mumbaiUniversity.syllabus.map((item, index) => (
-                  <li key={index} className="text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded">
+                  <li key={index} className="text-sm text-black bg-gray-50 px-3 py-1 rounded">
                     {item}
                   </li>
                 ))}
@@ -113,13 +113,13 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-700 mb-2 text-sm flex items-center">
+              <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center">
                 <AlertCircle className="h-4 w-4 mr-1 text-orange-500" />
                 Common Questions:
               </h4>
               <ul className="space-y-1 mb-4">
                 {mumbaiUniversity.commonQuestions.map((question, index) => (
-                  <li key={index} className="text-sm text-gray-600 bg-orange-50 px-3 py-1 rounded border-l-2 border-orange-300">
+                  <li key={index} className="text-sm text-gray-900 bg-orange-50 px-3 py-1 rounded border-l-2 border-orange-300 font-medium">
                     {question}
                   </li>
                 ))}
@@ -128,7 +128,7 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
           </div>
 
           <div>
-            <h4 className="font-semibold text-gray-700 mb-2 text-sm flex items-center">
+            <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center">
               <Clock className="h-4 w-4 mr-1 text-green-500" />
               Exam Tips:
             </h4>
@@ -145,7 +145,7 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
 
         {/* Algorithm Section */}
         <div className="border-t pt-6">
-          <h3 className="flex items-center text-lg font-semibold text-gray-800 mb-3">
+          <h3 className="flex items-center text-lg font-semibold text-gray-900 mb-3">
             <FileText className="h-5 w-5 mr-2 text-indigo-500" />
             Algorithm Details
           </h3>
@@ -164,10 +164,10 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
           </div>
 
           <div>
-            <h4 className="font-semibold text-gray-700 mb-3 text-sm">Algorithm Steps:</h4>
+            <h4 className="font-semibold text-gray-900 mb-3 text-sm">Algorithm Steps:</h4>
             <ol className="space-y-2">
               {algorithm.steps.map((step, index) => (
-                <li key={index} className="flex items-start text-sm text-gray-700">
+                <li key={index} className="flex items-start text-sm text-black font-medium">
                   <span className="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0">
                     {index + 1}
                   </span>

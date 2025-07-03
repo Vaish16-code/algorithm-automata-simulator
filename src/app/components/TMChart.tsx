@@ -22,14 +22,14 @@ export function TMChart({ result }: TMChartProps) {
   return (
     <div className="space-y-4">
       <div className="bg-gray-50 p-4 rounded-lg">
-        <h4 className="font-semibold mb-3">Current Tape State</h4>
+        <h4 className="font-semibold text-black mb-3">Current Tape State</h4>
         <div className="flex justify-center">
           <div className="grid grid-cols-15 gap-0 border-2 border-gray-300 bg-white">
             {visibleTape.map((symbol, index) => (
               <div
                 key={startIndex + index}
                 className={`
-                  w-8 h-8 border border-gray-300 flex items-center justify-center text-sm font-mono
+                  w-8 h-8 border border-gray-300 flex items-center justify-center text-sm font-mono font-bold text-black
                   ${index === adjustedHeadPosition 
                     ? 'bg-yellow-200 border-yellow-400 border-2' 
                     : 'bg-white'
@@ -58,14 +58,14 @@ export function TMChart({ result }: TMChartProps) {
           </div>
         </div>
         
-        <div className="text-center mt-2 text-sm text-gray-600">
+        <div className="text-center mt-2 text-sm text-black font-medium">
           Head Position: {headPosition} | Current State: {currentStep.state}
         </div>
       </div>
 
       <div className="bg-blue-50 p-4 rounded-lg">
-        <h4 className="font-semibold mb-2">Execution Summary</h4>
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <h4 className="font-semibold text-black mb-2">Execution Summary</h4>
+        <div className="grid grid-cols-2 gap-4 text-sm text-black">
           <div>
             <span className="font-medium">Total Steps:</span> {result.steps.length - 1}
           </div>
@@ -74,7 +74,7 @@ export function TMChart({ result }: TMChartProps) {
           </div>
           <div>
             <span className="font-medium">Result:</span> 
-            <span className={result.accepted ? 'text-green-600' : 'text-red-600'}>
+            <span className={result.accepted ? 'text-green-700 font-bold' : 'text-red-700 font-bold'}>
               {result.accepted ? ' ACCEPTED' : ' REJECTED'}
             </span>
           </div>
@@ -86,9 +86,9 @@ export function TMChart({ result }: TMChartProps) {
 
       {result.steps.length > 1 && (
         <div className="bg-white border rounded-lg p-4">
-          <h4 className="font-semibold mb-2">Last Transition</h4>
+          <h4 className="font-semibold mb-2 text-black">Last Transition</h4>
           {currentStep.transition && (
-            <div className="font-mono text-sm bg-gray-100 p-2 rounded">
+            <div className="font-mono text-sm bg-gray-100 p-2 rounded text-black font-semibold">
               δ({currentStep.transition.currentState}, {currentStep.transition.readSymbol}) = 
               ({currentStep.transition.writeSymbol}, {currentStep.transition.moveDirection}, {currentStep.transition.nextState})
             </div>

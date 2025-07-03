@@ -24,6 +24,12 @@ export default function AutomataTheoryPage() {
           href: "/auto/finite-automata/nfa",
           description: "Non-deterministic Finite Automaton simulation",
           examTips: "Understand ε-transitions and multiple paths"
+        },
+        {
+          name: "Pumping Lemma",
+          href: "/auto/regular-languages/pumping-lemma",
+          description: "Prove a language is not regular",
+          examTips: "Practice identifying non-regular languages"
         }
       ],
       applications: [
@@ -76,6 +82,18 @@ export default function AutomataTheoryPage() {
           href: "/auto/context-free-grammar/parser",
           description: "Parse strings using context-free grammars",
           examTips: "Master derivation steps and parse trees"
+        },
+        {
+          name: "Chomsky Hierarchy",
+          href: "/auto/language-theory/chomsky-hierarchy",
+          description: "The 4 types of grammars and languages",
+          examTips: "Know the relationships between grammar types"
+        },
+        {
+          name: "CFL Properties",
+          href: "/auto/context-free-languages/properties",
+          description: "Pumping lemma and closure properties of CFLs",
+          examTips: "Practice applying the pumping lemma to CFLs"
         }
       ],
       applications: [
@@ -102,6 +120,18 @@ export default function AutomataTheoryPage() {
           href: "/auto/turing-machines/simulator",
           description: "Simulate Turing machine execution",
           examTips: "Focus on tape movements and halting conditions"
+        },
+        {
+          name: "Undecidability",
+          href: "/auto/computability/undecidability",
+          description: "Undecidable problems and reduction techniques",
+          examTips: "Understand the halting problem proof"
+        },
+        {
+          name: "Post Correspondence",
+          href: "/auto/computability/post-correspondence",
+          description: "Post Correspondence Problem (PCP)",
+          examTips: "Practice solving PCP instances"
         }
       ],
       applications: [
@@ -113,6 +143,38 @@ export default function AutomataTheoryPage() {
         marks: "10-15",
         topics: ["TM Design", "Decidability", "Halting Problem"],
         questions: "Design TM for operations, Prove decidability"
+      }
+    },
+    {
+      title: "Pushdown Automata",
+      description: "Computational model for context-free languages",
+      icon: Globe,
+      color: "from-indigo-500 to-blue-500",
+      difficulty: "Advanced",
+      examWeight: "High",
+      categories: [
+        {
+          name: "PDA Simulator",
+          href: "/auto/pushdown-automata/simulator",
+          description: "Simulate pushdown automaton execution",
+          examTips: "Understand stack operations and acceptance conditions"
+        },
+        {
+          name: "PDA to CFG",
+          href: "/auto/pushdown-automata/pda-to-cfg",
+          description: "Convert PDA to context-free grammar",
+          examTips: "Focus on the systematic conversion steps"
+        }
+      ],
+      applications: [
+        "Parsing Context-Free Languages",
+        "Expression Evaluation",
+        "Nested Structure Validation"
+      ],
+      examInfo: {
+        marks: "15-20",
+        topics: ["PDA Design", "Stack Operations", "Acceptance Criteria"],
+        questions: "Design PDA for CFLs, Convert CFG to PDA"
       }
     }
   ];

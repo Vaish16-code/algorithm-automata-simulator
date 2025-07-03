@@ -135,7 +135,7 @@ export default function CFGParserPage() {
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Context-Free Grammar <span className="text-blue-600">Parser</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-900 max-w-3xl mx-auto">
             Design and test context-free grammars for parsing structured languages and expressions
           </p>
         </div>
@@ -199,7 +199,7 @@ export default function CFGParserPage() {
           <div className="space-y-6">
             {/* Example Grammars */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Example Grammars</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Example Grammars</h2>
               <div className="space-y-2">
                 {exampleGrammars.map((example, index) => (
                   <button
@@ -208,7 +208,7 @@ export default function CFGParserPage() {
                     className="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded border"
                   >
                     <div className="font-medium">{example.name}</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-black font-medium">
                       {example.productions.length} productions, {example.terminals.length} terminals
                     </div>
                   </button>
@@ -218,11 +218,11 @@ export default function CFGParserPage() {
 
             {/* Terminals */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Terminals</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Terminals</h2>
               <div className="flex flex-wrap gap-2 mb-4">
                 {terminals.map((terminal, index) => (
                   <div key={index} className="flex items-center gap-2 bg-blue-100 px-3 py-1 rounded">
-                    <span className="font-mono">{terminal}</span>
+                    <span className="font-mono font-bold text-black">{terminal}</span>
                     <button
                       onClick={() => removeTerminal(index)}
                       className="text-red-500 hover:text-red-700"
@@ -243,11 +243,11 @@ export default function CFGParserPage() {
 
             {/* Non-terminals */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Non-terminals</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Non-terminals</h2>
               <div className="flex flex-wrap gap-2 mb-4">
                 {nonTerminals.map((nonTerminal, index) => (
                   <div key={index} className="flex items-center gap-2 bg-green-100 px-3 py-1 rounded">
-                    <span className="font-mono font-bold">{nonTerminal}</span>
+                    <span className="font-mono font-bold text-black">{nonTerminal}</span>
                     <button
                       onClick={() => removeNonTerminal(index)}
                       className="text-red-500 hover:text-red-700"
@@ -282,7 +282,7 @@ export default function CFGParserPage() {
 
             {/* Productions */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Productions</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Productions</h2>
               <div className="space-y-3 mb-4">
                 {productions.map((production, index) => (
                   <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded">
@@ -322,7 +322,7 @@ export default function CFGParserPage() {
 
             {/* Target String */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Target String</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Target String</h2>
               <div className="flex gap-4">
                 <input
                   type="text"
@@ -384,7 +384,7 @@ export default function CFGParserPage() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="font-medium text-gray-700">Terminals:</span> 
+                    <span className="font-medium text-gray-900">Terminals:</span> 
                     <div className="mt-1 flex flex-wrap gap-1">
                       {terminals.map(t => (
                         <span key={t} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-mono">{t}</span>
@@ -392,7 +392,7 @@ export default function CFGParserPage() {
                     </div>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700">Non-terminals:</span>
+                    <span className="font-medium text-gray-900">Non-terminals:</span>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {nonTerminals.map(nt => (
                         <span key={nt} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-mono font-bold">{nt}</span>
@@ -402,7 +402,7 @@ export default function CFGParserPage() {
                 </div>
                 
                 <div>
-                  <span className="font-medium text-gray-700">Production Rules:</span>
+                  <span className="font-medium text-gray-900">Production Rules:</span>
                   <div className="mt-2 space-y-1 max-h-48 overflow-y-auto">
                     {productions.map((prod, index) => (
                       <div key={index} className="text-sm font-mono bg-gray-50 p-2 rounded border">
