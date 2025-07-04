@@ -8,8 +8,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export default function CflProperties() {
+  // Add light/dark mode handling
+  React.useEffect(() => {
+    // Set explicit background color on the body to prevent dark background
+    document.body.classList.add('bg-white');
+    
+    return () => {
+      document.body.classList.remove('bg-white');
+    };
+  }, []);
   // State for CFL pumping lemma demo
-  const [stringLength, setStringLength] = useState<number>(10);
   const [pumpingLength, setPumpingLength] = useState<number>(3);
   const [originalString, setOriginalString] = useState<string>("aaabbbccc");
   const [decomposition, setDecomposition] = useState<{u: string, v: string, x: string, y: string, z: string}>({
@@ -91,8 +99,8 @@ export default function CflProperties() {
   };
 
   return (
-    <div className="container mx-auto py-6">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+    <div className="container mx-auto py-6 bg-white min-h-screen auto-page">
+      <h1 className="text-3xl font-bold text-black mb-6">
         Context-Free Languages Properties
       </h1>
 
@@ -155,25 +163,25 @@ export default function CflProperties() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+        <Card className="p-6 bg-white border border-gray-200">
+          <h2 className="text-xl font-semibold mb-4 text-black">
             CFL Pumping Lemma Visualizer
           </h2>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Original String
             </label>
             <Input 
               value={originalString} 
               onChange={(e) => setOriginalString(e.target.value)} 
               placeholder="e.g., aaabbbccc"
-              className="text-gray-900 dark:text-white"
+              className="text-black bg-white border-gray-300"
             />
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Pumping Length (p)
             </label>
             <Input 
@@ -181,65 +189,65 @@ export default function CflProperties() {
               value={pumpingLength} 
               onChange={(e) => setPumpingLength(parseInt(e.target.value) || 1)} 
               min="1"
-              className="text-gray-900 dark:text-white"
+              className="text-black bg-white border-gray-300"
             />
           </div>
           
           <div className="grid grid-cols-5 gap-2 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 u
               </label>
               <Input 
                 value={decomposition.u} 
                 onChange={(e) => setDecomposition({...decomposition, u: e.target.value})} 
-                className="text-gray-900 dark:text-white"
+                className="text-black bg-white border-gray-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 v
               </label>
               <Input 
                 value={decomposition.v} 
                 onChange={(e) => setDecomposition({...decomposition, v: e.target.value})} 
-                className="text-gray-900 dark:text-white"
+                className="text-black bg-white border-gray-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 x
               </label>
               <Input 
                 value={decomposition.x} 
                 onChange={(e) => setDecomposition({...decomposition, x: e.target.value})} 
-                className="text-gray-900 dark:text-white"
+                className="text-black bg-white border-gray-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 y
               </label>
               <Input 
                 value={decomposition.y} 
                 onChange={(e) => setDecomposition({...decomposition, y: e.target.value})} 
-                className="text-gray-900 dark:text-white"
+                className="text-black bg-white border-gray-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 z
               </label>
               <Input 
                 value={decomposition.z} 
                 onChange={(e) => setDecomposition({...decomposition, z: e.target.value})} 
-                className="text-gray-900 dark:text-white"
+                className="text-black bg-white border-gray-300"
               />
             </div>
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Pumping Count (i)
             </label>
             <Input 
@@ -247,7 +255,7 @@ export default function CflProperties() {
               value={pumpingCount} 
               onChange={(e) => setPumpingCount(parseInt(e.target.value) || 0)} 
               min="0"
-              className="text-gray-900 dark:text-white"
+              className="text-black bg-white border-gray-300"
             />
           </div>
           
@@ -259,52 +267,52 @@ export default function CflProperties() {
           </Button>
           
           {pumpedString && (
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="font-medium mb-2 text-gray-900 dark:text-white">Result:</h3>
-              <p className="break-all text-gray-900 dark:text-white">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium mb-2 text-black">Result:</h3>
+              <p className="break-all text-black">
                 {pumpedString}
               </p>
             </div>
           )}
         </Card>
         
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+        <Card className="p-6 bg-white border border-gray-200">
+          <h2 className="text-xl font-semibold mb-4 text-black">
             CFL Closure Properties
           </h2>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Context-Free Language 1
             </label>
             <Input 
               value={cfl1} 
               onChange={(e) => setCfl1(e.target.value)} 
               placeholder="e.g., {a^n b^n | n >= 0}"
-              className="text-gray-900 dark:text-white"
+              className="text-black bg-white border-gray-300"
             />
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Context-Free Language 2
             </label>
             <Input 
               value={cfl2} 
               onChange={(e) => setCfl2(e.target.value)} 
               placeholder="e.g., {b^m c^m | m >= 0}"
-              className="text-gray-900 dark:text-white"
+              className="text-black bg-white border-gray-300"
             />
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Operation
             </label>
             <select 
               value={selectedOperation} 
               onChange={(e) => setSelectedOperation(e.target.value)}
-              className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full p-2 border rounded-md bg-white text-black border-gray-300"
             >
               <option value="union">Union (Closed)</option>
               <option value="concatenation">Concatenation (Closed)</option>
@@ -325,13 +333,13 @@ export default function CflProperties() {
           </Button>
           
           {operationResult && (
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="font-medium mb-2 text-gray-900 dark:text-white">Result:</h3>
-              <p className="text-gray-900 dark:text-white">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium mb-2 text-black">Result:</h3>
+              <p className="text-black">
                 {operationResult}
               </p>
               {selectedOperation === "intersection" || selectedOperation === "complement" ? (
-                <p className="text-amber-600 dark:text-amber-400 mt-2">
+                <p className="text-amber-600 mt-2">
                   Note: This is an operation under which CFLs are not closed in general.
                 </p>
               ) : null}
@@ -340,17 +348,17 @@ export default function CflProperties() {
         </Card>
       </div>
 
-      <Card className="p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+      <Card className="p-6 mb-8 bg-white border border-gray-200">
+        <h2 className="text-xl font-semibold mb-4 text-black">
           Proving Languages are Not Context-Free
         </h2>
         
-        <div className="text-gray-900 dark:text-white">
+        <div className="text-black">
           <h3 className="font-medium mb-2">Steps to use the CFL Pumping Lemma to prove a language is not context-free:</h3>
           <ol className="list-decimal list-inside space-y-2">
             <li>Assume the language L is context-free.</li>
             <li>By the pumping lemma, there exists a pumping length p.</li>
-            <li>Choose a string s in L such that |s| &gt;= p. This is your "witness string".</li>
+            <li>Choose a string s in L such that |s| &gt;= p. This is your &quot;witness string&quot;.</li>
             <li>Consider any decomposition s = uvxyz where:
               <ul className="list-disc list-inside ml-6 mt-1">
                 <li>|vxy| &lt;= p</li>
@@ -368,23 +376,23 @@ export default function CflProperties() {
             <li>For any decomposition s = uvxyz where |vxy| &lt;= p and |vy| &gt; 0:
               <ul className="list-disc list-inside ml-6 mt-1">
                 <li>Since |vxy| &lt;= p, vxy must be contained within a^p or span two regions.</li>
-                <li>If vxy is within a^p, then v and y contain only a's.</li>
+                <li>If vxy is within a^p, then v and y contain only a&apos;s.</li>
                 <li>If vxy spans two regions, then v and y contain different symbols.</li>
               </ul>
             </li>
-            <li>When we pump with i=2: uv^2 xy^2 z will have unequal numbers of a's, b's, and c's.</li>
+            <li>When we pump with i=2: uv^2 xy^2 z will have unequal numbers of a&apos;s, b&apos;s, and c&apos;s.</li>
             <li>Thus, uv^2 xy^2 z is not in L, contradicting the pumping lemma.</li>
             <li>Therefore, L is not context-free.</li>
           </ol>
         </div>
       </Card>
       
-      <Card className="p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+      <Card className="p-6 mb-8 bg-white border border-gray-200">
+        <h2 className="text-xl font-semibold mb-4 text-black">
           Summary: CFL Decision Problems
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-900 dark:text-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-black">
           <div>
             <h3 className="font-medium mb-2">Decidable Problems for CFLs:</h3>
             <ul className="list-disc list-inside space-y-1">

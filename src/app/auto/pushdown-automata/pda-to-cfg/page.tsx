@@ -98,7 +98,7 @@ export default function PdaToCfgConverter() {
   const extractStates = (transitions: string[]): string[] => {
     const states = new Set<string>();
     transitions.forEach(transition => {
-      const [from, _, __, to] = parseTransition(transition);
+      const [from, , , to] = parseTransition(transition);
       states.add(from);
       states.add(to);
     });
@@ -276,7 +276,7 @@ export default function PdaToCfgConverter() {
             </div>
           ) : (
             <div className="text-center py-10 text-gray-500 dark:text-gray-400">
-              Click "Convert PDA to CFG" to see the equivalent context-free grammar
+              Click &quot;Convert PDA to CFG&quot; to see the equivalent context-free grammar
             </div>
           )}
         </Card>

@@ -10,93 +10,51 @@ import {
 } from "../../../utils/automataTheory";
 import EducationalInfo from "@/components/EducationalInfo";
 import ExamResult from "@/components/ExamResult";
-import { Play, Plus, Trash2, Settings, BookOpen, Cpu, ArrowRight } from "lucide-react";
+import { Play, Plus, Trash2, Settings, BookOpen, Cpu } from "lucide-react";
 
 export default function PDASimulatorPage() {
   const [states, setStates] = useState<string[]>([
-    "q0", "q1", "q2"
+    "q0", "q1"
   ]);
   
-  const [inputAlphabet, setInputAlphabet] = useState(["0", "1", "ε"]);
-  const [stackAlphabet, setStackAlphabet] = useState(["Z", "0", "1", "ε"]);
+  const [inputAlphabet, setInputAlphabet] = useState(["(", ")", "ε"]);
+  const [stackAlphabet, setStackAlphabet] = useState(["Z", "(", "ε"]);
   const [transitions, setTransitions] = useState<PDATransition[]>([
     { 
       fromState: "q0", 
-      inputSymbol: "0", 
+      inputSymbol: "(", 
       popSymbol: "Z", 
       toState: "q0", 
-      pushSymbols: ["0", "Z"] 
+      pushSymbols: ["(", "Z"] 
     },
     { 
       fromState: "q0", 
-      inputSymbol: "1", 
-      popSymbol: "Z", 
+      inputSymbol: "(", 
+      popSymbol: "(", 
       toState: "q0", 
-      pushSymbols: ["1", "Z"] 
+      pushSymbols: ["(", "("] 
     },
     { 
       fromState: "q0", 
-      inputSymbol: "0", 
-      popSymbol: "0", 
+      inputSymbol: ")", 
+      popSymbol: "(", 
       toState: "q0", 
-      pushSymbols: ["0", "0"] 
-    },
-    { 
-      fromState: "q0", 
-      inputSymbol: "0", 
-      popSymbol: "1", 
-      toState: "q0", 
-      pushSymbols: ["0", "1"] 
-    },
-    { 
-      fromState: "q0", 
-      inputSymbol: "1", 
-      popSymbol: "0", 
-      toState: "q0", 
-      pushSymbols: ["1", "0"] 
-    },
-    { 
-      fromState: "q0", 
-      inputSymbol: "1", 
-      popSymbol: "1", 
-      toState: "q0", 
-      pushSymbols: ["1", "1"] 
+      pushSymbols: [] 
     },
     { 
       fromState: "q0", 
       inputSymbol: "ε", 
       popSymbol: "Z", 
       toState: "q1", 
-      pushSymbols: ["Z"] 
-    },
-    { 
-      fromState: "q1", 
-      inputSymbol: "0", 
-      popSymbol: "0", 
-      toState: "q1", 
-      pushSymbols: [] 
-    },
-    { 
-      fromState: "q1", 
-      inputSymbol: "1", 
-      popSymbol: "1", 
-      toState: "q1", 
-      pushSymbols: [] 
-    },
-    { 
-      fromState: "q1", 
-      inputSymbol: "ε", 
-      popSymbol: "Z", 
-      toState: "q2", 
       pushSymbols: ["Z"] 
     }
   ]);
   
-  const [acceptStates, setAcceptStates] = useState(["q2"]);
+  const [acceptStates, setAcceptStates] = useState(["q1"]);
   const [startState, setStartState] = useState("q0");
   const [initialStackSymbol, setInitialStackSymbol] = useState("Z");
   
-  const [inputString, setInputString] = useState("0011");
+  const [inputString, setInputString] = useState("(())");
   const [result, setResult] = useState<PDAResult | null>(null);
   const [showEducationalInfo, setShowEducationalInfo] = useState(true);
 
@@ -639,7 +597,7 @@ export default function PDASimulatorPage() {
                 </button>
                 <div className="mt-2 text-xs text-gray-900 font-medium">
                   <p>Push format: comma-separated list of symbols (empty for no push)</p>
-                  <p>Example: "Z,A" pushes A then Z (Z will be on top)</p>
+                  <p>Example: &quot;Z,A&quot; pushes A then Z (Z will be on top)</p>
                 </div>
               </div>
             </div>

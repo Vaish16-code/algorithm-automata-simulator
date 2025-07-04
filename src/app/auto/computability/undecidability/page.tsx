@@ -8,6 +8,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export default function Undecidability() {
+  // Add light/dark mode handling
+  React.useEffect(() => {
+    // Set explicit background color on the body to prevent dark background
+    document.body.classList.add('bg-white');
+    
+    return () => {
+      document.body.classList.remove('bg-white');
+    };
+  }, []);
+  
   // State for Turing machine halting problem
   const [tmDescription, setTmDescription] = useState<string>(`
 // Turing Machine that checks if input has equal number of 0s and 1s
@@ -65,7 +75,7 @@ q3 Y -> q3 Y R
         return;
       }
       
-      const [_, currentState, readSymbol, nextState, writeSymbol, moveDirection] = match;
+      const [, currentState, readSymbol, nextState, writeSymbol, moveDirection] = match;
       
       if (!transitions[currentState]) {
         transitions[currentState] = {};
@@ -75,7 +85,7 @@ q3 Y -> q3 Y R
     }
     
     // Simulate the TM on the input
-    let tape = inputString.split('');
+    const tape = inputString.split('');
     let headPosition = 0;
     let currentState = "q0";
     const steps: string[] = [];
@@ -229,8 +239,8 @@ q3 Y -> q3 Y R
   };
 
   return (
-    <div className="container mx-auto py-6">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+    <div className="container mx-auto py-6 bg-white min-h-screen">
+      <h1 className="text-3xl font-bold text-black mb-6">
         Undecidability and the Halting Problem
       </h1>
 
@@ -283,41 +293,41 @@ q3 Y -> q3 Y R
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+        <Card className="p-6 bg-white border border-gray-200">
+          <h2 className="text-xl font-semibold mb-4 text-black">
             Halting Problem Demonstration
           </h2>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Turing Machine Description
             </label>
             <textarea 
               value={tmDescription} 
               onChange={(e) => setTmDescription(e.target.value)} 
               rows={10}
-              className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono"
+              className="w-full p-2 border rounded-md bg-white text-black font-mono"
               placeholder="Enter Turing machine transitions"
             />
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-black mt-1">
               Format: state symbol → new_state new_symbol direction
             </p>
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Input String
             </label>
             <Input 
               value={inputString} 
               onChange={(e) => setInputString(e.target.value)} 
               placeholder="e.g., 0101"
-              className="text-gray-900 dark:text-white"
+              className="text-black bg-white border-gray-300"
             />
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Simulation Step Limit
             </label>
             <Input 
@@ -325,10 +335,10 @@ q3 Y -> q3 Y R
               value={simulationLimit} 
               onChange={(e) => setSimulationLimit(parseInt(e.target.value) || 100)} 
               min="1"
-              className="text-gray-900 dark:text-white"
+              className="text-black bg-white border-gray-300"
             />
-            <p className="text-sm text-gray-500 mt-1">
-              To prevent infinite loops. In reality, we can't determine if a TM will halt!
+            <p className="text-sm text-black mt-1">
+              To prevent infinite loops. In reality, we can&apos;t determine if a TM will halt!
             </p>
           </div>
           
@@ -342,18 +352,18 @@ q3 Y -> q3 Y R
           {simulationStatus && (
             <div className={`p-3 rounded-md mb-4 ${
               simulationStatus.includes("Halted") 
-                ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200" 
-                : "bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200"
+                ? "bg-green-100 text-green-800" 
+                : "bg-amber-100 text-amber-800"
             }`}>
               {simulationStatus}
             </div>
           )}
           
           {simulationSteps.length > 0 && (
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg max-h-[300px] overflow-y-auto">
-              <h3 className="font-medium mb-2 text-gray-900 dark:text-white">Simulation Steps:</h3>
+            <div className="bg-gray-50 p-4 rounded-lg max-h-[300px] overflow-y-auto">
+              <h3 className="font-medium mb-2 text-black">Simulation Steps:</h3>
               {simulationSteps.map((step, index) => (
-                <pre key={index} className="text-sm font-mono whitespace-pre-wrap text-gray-900 dark:text-white mb-2">
+                <pre key={index} className="text-sm font-mono whitespace-pre-wrap text-black mb-2">
                   {step}
                 </pre>
               ))}
@@ -361,34 +371,34 @@ q3 Y -> q3 Y R
           )}
         </Card>
         
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+        <Card className="p-6 bg-white border border-gray-200">
+          <h2 className="text-xl font-semibold mb-4 text-black">
             Reductions Between Undecidable Problems
           </h2>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Problem 1 (Known to be undecidable)
             </label>
             <select 
               value={problem1} 
               onChange={(e) => setProblem1(e.target.value)}
-              className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full p-2 border rounded-md bg-white text-black border-gray-300"
             >
               <option value="Halting Problem">Halting Problem</option>
-              <option value="Rice's Theorem">Rice's Theorem</option>
+              <option value="Rice's Theorem">Rice&apos;s Theorem</option>
               <option value="Post Correspondence Problem">Post Correspondence Problem</option>
             </select>
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Problem 2 (To prove undecidable)
             </label>
             <select 
               value={problem2} 
               onChange={(e) => setProblem2(e.target.value)}
-              className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full p-2 border rounded-md bg-white text-black border-gray-300"
             >
               <option value="Equivalence of TMs">Equivalence of TMs</option>
               <option value="TM Emptiness Problem">TM Emptiness Problem</option>
@@ -406,9 +416,9 @@ q3 Y -> q3 Y R
           </Button>
           
           {reductionExplanation && (
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg max-h-[400px] overflow-y-auto">
-              <h3 className="font-medium mb-2 text-gray-900 dark:text-white">Reduction:</h3>
-              <div className="prose prose-sm dark:prose-invert text-gray-900 dark:text-white">
+            <div className="bg-gray-50 p-4 rounded-lg max-h-[400px] overflow-y-auto">
+              <h3 className="font-medium mb-2 text-black">Reduction:</h3>
+              <div className="prose prose-sm text-black">
                 <pre className="whitespace-pre-wrap font-sans">{reductionExplanation}</pre>
               </div>
             </div>
@@ -416,28 +426,28 @@ q3 Y -> q3 Y R
         </Card>
       </div>
       
-      <Card className="p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+      <Card className="p-6 mb-8 bg-white border border-gray-200">
+        <h2 className="text-xl font-semibold mb-4 text-black">
           Undecidability Proofs: The Diagonalization Argument
         </h2>
         
-        <div className="text-gray-900 dark:text-white">
-          <h3 className="font-medium mb-2">Cantor's Diagonalization Method:</h3>
-          <p className="mb-4">
-            The proof of the halting problem's undecidability uses a technique known as "diagonalization," 
+        <div className="text-black">
+          <h3 className="font-medium mb-2 text-black">Cantor&apos;s Diagonalization Method:</h3>
+          <p className="mb-4 text-black">
+            The proof of the halting problem&apos;s undecidability uses a technique known as &quot;diagonalization,&quot; 
             first introduced by Georg Cantor to prove that the real numbers are uncountable.
           </p>
           
-          <h3 className="font-medium mb-2">The Halting Problem Proof:</h3>
-          <ol className="list-decimal list-inside space-y-2">
+          <h3 className="font-medium mb-2 text-black">The Halting Problem Proof:</h3>
+          <ol className="list-decimal list-inside space-y-2 text-black">
             <li>Assume there exists a Turing machine H that solves the halting problem:
-              <ul className="list-disc list-inside ml-6 mt-1">
+              <ul className="list-disc list-inside ml-6 mt-1 text-black">
                 <li>H(M,w) = 1 if M halts on input w</li>
                 <li>H(M,w) = 0 if M runs forever on input w</li>
               </ul>
             </li>
             <li>We construct a new Turing machine D that:
-              <ul className="list-disc list-inside ml-6 mt-1">
+              <ul className="list-disc list-inside ml-6 mt-1 text-black">
                 <li>Takes a Turing machine description M as input</li>
                 <li>Runs H(M,M) to determine if M halts when given itself as input</li>
                 <li>If H(M,M) = 1 (meaning M halts on M), then D enters an infinite loop</li>
@@ -450,59 +460,59 @@ q3 Y -> q3 Y R
             <li>This contradiction proves that H cannot exist</li>
           </ol>
           
-          <h3 className="font-medium mt-6 mb-2">Visualization:</h3>
+          <h3 className="font-medium mt-6 mb-2 text-black">Visualization:</h3>
           <div className="overflow-x-auto">
-            <table className="table-auto border-collapse border border-gray-400 dark:border-gray-600 w-full">
+            <table className="table-auto border-collapse border border-gray-400 w-full">
               <thead>
-                <tr className="bg-gray-200 dark:bg-gray-700">
-                  <th className="border border-gray-400 dark:border-gray-600 p-2"></th>
-                  <th className="border border-gray-400 dark:border-gray-600 p-2">Input TM₁</th>
-                  <th className="border border-gray-400 dark:border-gray-600 p-2">Input TM₂</th>
-                  <th className="border border-gray-400 dark:border-gray-600 p-2">Input TM₃</th>
-                  <th className="border border-gray-400 dark:border-gray-600 p-2">...</th>
-                  <th className="border border-gray-400 dark:border-gray-600 p-2">Input TM_D</th>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-400 p-2"></th>
+                  <th className="border border-gray-400 p-2">Input TM₁</th>
+                  <th className="border border-gray-400 p-2">Input TM₂</th>
+                  <th className="border border-gray-400 p-2">Input TM₃</th>
+                  <th className="border border-gray-400 p-2">...</th>
+                  <th className="border border-gray-400 p-2">Input TM_D</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2 font-semibold">TM₁</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Halts</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Loops</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Halts</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Loops</td>
+                  <td className="border border-gray-400 p-2 font-semibold">TM₁</td>
+                  <td className="border border-gray-400 p-2">Halts</td>
+                  <td className="border border-gray-400 p-2">Loops</td>
+                  <td className="border border-gray-400 p-2">Halts</td>
+                  <td className="border border-gray-400 p-2">...</td>
+                  <td className="border border-gray-400 p-2">Loops</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2 font-semibold">TM₂</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Halts</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Halts</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Loops</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Loops</td>
+                  <td className="border border-gray-400 p-2 font-semibold">TM₂</td>
+                  <td className="border border-gray-400 p-2">Halts</td>
+                  <td className="border border-gray-400 p-2">Halts</td>
+                  <td className="border border-gray-400 p-2">Loops</td>
+                  <td className="border border-gray-400 p-2">...</td>
+                  <td className="border border-gray-400 p-2">Loops</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2 font-semibold">TM₃</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Loops</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Loops</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Halts</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Halts</td>
+                  <td className="border border-gray-400 p-2 font-semibold">TM₃</td>
+                  <td className="border border-gray-400 p-2">Loops</td>
+                  <td className="border border-gray-400 p-2">Loops</td>
+                  <td className="border border-gray-400 p-2">Halts</td>
+                  <td className="border border-gray-400 p-2">...</td>
+                  <td className="border border-gray-400 p-2">Halts</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2 font-semibold">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
+                  <td className="border border-gray-400 p-2 font-semibold">...</td>
+                  <td className="border border-gray-400 p-2">...</td>
+                  <td className="border border-gray-400 p-2">...</td>
+                  <td className="border border-gray-400 p-2">...</td>
+                  <td className="border border-gray-400 p-2">...</td>
+                  <td className="border border-gray-400 p-2">...</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2 font-semibold">TM_D</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Loops</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Halts</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">Loops</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2">...</td>
-                  <td className="border border-gray-400 dark:border-gray-600 p-2 bg-red-100 dark:bg-red-900 font-bold">???</td>
+                  <td className="border border-gray-400 p-2 font-semibold">TM_D</td>
+                  <td className="border border-gray-400 p-2">Loops</td>
+                  <td className="border border-gray-400 p-2">Halts</td>
+                  <td className="border border-gray-400 p-2">Loops</td>
+                  <td className="border border-gray-400 p-2">...</td>
+                  <td className="border border-gray-400 p-2 bg-red-100 font-bold">???</td>
                 </tr>
               </tbody>
             </table>

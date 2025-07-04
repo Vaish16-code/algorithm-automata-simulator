@@ -26,6 +26,18 @@ export default function AutomataTheoryPage() {
           examTips: "Understand ε-transitions and multiple paths"
         },
         {
+          name: "NFA to DFA Conversion",
+          href: "/auto/finite-automata/nfa-to-dfa",
+          description: "Convert NFA to equivalent DFA using subset construction",
+          examTips: "Master the subset construction algorithm"
+        },
+        {
+          name: "DFA Minimization",
+          href: "/auto/finite-automata/minimization",
+          description: "Minimize DFA using equivalence classes",
+          examTips: "Learn table-filling method for minimization"
+        },
+        {
           name: "Pumping Lemma",
           href: "/auto/regular-languages/pumping-lemma",
           description: "Prove a language is not regular",
@@ -84,6 +96,12 @@ export default function AutomataTheoryPage() {
           examTips: "Master derivation steps and parse trees"
         },
         {
+          name: "CFG Normal Forms",
+          href: "/auto/context-free-grammar/normal-forms",
+          description: "Convert CFG to Chomsky and Greibach Normal Forms",
+          examTips: "Practice CNF and GNF conversion algorithms"
+        },
+        {
           name: "Chomsky Hierarchy",
           href: "/auto/language-theory/chomsky-hierarchy",
           description: "The 4 types of grammars and languages",
@@ -94,6 +112,12 @@ export default function AutomataTheoryPage() {
           href: "/auto/context-free-languages/properties",
           description: "Pumping lemma and closure properties of CFLs",
           examTips: "Practice applying the pumping lemma to CFLs"
+        },
+        {
+          name: "CFL Pumping Lemma",
+          href: "/auto/context-free-languages/pumping-lemma",
+          description: "Prove languages are not context-free",
+          examTips: "Understand the CFL pumping lemma conditions"
         }
       ],
       applications: [
@@ -126,6 +150,12 @@ export default function AutomataTheoryPage() {
           href: "/auto/computability/undecidability",
           description: "Undecidable problems and reduction techniques",
           examTips: "Understand the halting problem proof"
+        },
+        {
+          name: "Rice's Theorem",
+          href: "/auto/computability/rice-theorem",
+          description: "Non-trivial properties of TM languages are undecidable",
+          examTips: "Learn to apply Rice's theorem to prove undecidability"
         },
         {
           name: "Post Correspondence",

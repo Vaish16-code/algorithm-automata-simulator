@@ -428,7 +428,7 @@ export default function PumpingLemmaPage() {
                 
                 <div className="p-4 bg-blue-100 rounded-lg">
                   <h3 className="font-semibold text-black mb-2">Step 5: Reach a contradiction</h3>
-                  <p className="text-sm text-black">Since we've found a case where the pumping property is violated, we have a contradiction to our assumption that the language is regular.</p>
+                  <p className="text-sm text-black">Since we&apos;ve found a case where the pumping property is violated, we have a contradiction to our assumption that the language is regular.</p>
                 </div>
               </div>
             </div>

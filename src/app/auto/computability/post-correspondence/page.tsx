@@ -8,6 +8,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export default function PostCorrespondenceProblem() {
+  // Add light/dark mode handling
+  React.useEffect(() => {
+    // Set explicit background color on the body to prevent dark background
+    document.body.classList.add('bg-white');
+    
+    return () => {
+      document.body.classList.remove('bg-white');
+    };
+  }, []);
+  
   // State for PCP instance
   const [dominoPairs, setDominoPairs] = useState<Array<[string, string]>>([
     ["a", "ab"],
@@ -106,8 +116,8 @@ export default function PostCorrespondenceProblem() {
   };
 
   return (
-    <div className="container mx-auto py-6">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+    <div className="container mx-auto py-6 bg-white min-h-screen">
+      <h1 className="text-3xl font-bold text-black mb-6">
         Post Correspondence Problem (PCP)
       </h1>
 
@@ -158,13 +168,13 @@ export default function PostCorrespondenceProblem() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+        <Card className="p-6 bg-white border border-gray-200">
+          <h2 className="text-xl font-semibold mb-4 text-black">
             PCP Instance
           </h2>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Add New Domino Pair
             </label>
             <div className="grid grid-cols-2 gap-2 mb-2">
@@ -172,13 +182,13 @@ export default function PostCorrespondenceProblem() {
                 value={newDominoTop} 
                 onChange={(e) => setNewDominoTop(e.target.value)} 
                 placeholder="Top string"
-                className="text-gray-900 dark:text-white"
+                className="text-black bg-white border-gray-300"
               />
               <Input 
                 value={newDominoBottom} 
                 onChange={(e) => setNewDominoBottom(e.target.value)} 
                 placeholder="Bottom string"
-                className="text-gray-900 dark:text-white"
+                className="text-black bg-white border-gray-300"
               />
             </div>
             <Button 
@@ -190,12 +200,12 @@ export default function PostCorrespondenceProblem() {
           </div>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Current Domino Pairs
             </label>
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg max-h-[300px] overflow-y-auto">
+            <div className="bg-gray-50 p-4 rounded-lg max-h-[300px] overflow-y-auto">
               {dominoPairs.map((pair, index) => (
-                <div key={index} className="flex items-center mb-2 text-gray-900 dark:text-white">
+                <div key={index} className="flex items-center mb-2 text-black">
                   <div className="border rounded-md p-2 flex-grow mr-2">
                     <div className="border-b pb-1">{pair[0]}</div>
                     <div className="pt-1">{pair[1]}</div>
@@ -210,7 +220,7 @@ export default function PostCorrespondenceProblem() {
                 </div>
               ))}
               {dominoPairs.length === 0 && (
-                <p className="text-gray-500 dark:text-gray-400 text-center py-2">
+                <p className="text-black text-center py-2">
                   No domino pairs added yet.
                 </p>
               )}
@@ -250,16 +260,16 @@ export default function PostCorrespondenceProblem() {
           </div>
         </Card>
         
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+        <Card className="p-6 bg-white border border-gray-200">
+          <h2 className="text-xl font-semibold mb-4 text-black">
             PCP Solution
           </h2>
           
           {status && (
             <div className={`p-3 rounded-md mb-4 ${
               status.includes("Solution found") 
-                ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200" 
-                : "bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200"
+                ? "bg-green-100 text-green-800" 
+                : "bg-amber-100 text-amber-800"
             }`}>
               {status}
             </div>
@@ -267,14 +277,14 @@ export default function PostCorrespondenceProblem() {
           
           {solutionPath.length > 0 && (
             <div className="mb-4">
-              <h3 className="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">
+              <h3 className="text-lg font-medium mb-2 text-black">
                 Solution Sequence:
               </h3>
               <div className="flex flex-wrap gap-2 mb-4">
                 {solutionPath.map((index, position) => (
                   <div 
                     key={position} 
-                    className="border rounded-md p-2 text-center text-gray-900 dark:text-white"
+                    className="border rounded-md p-2 text-center text-black"
                   >
                     <div className="font-medium">{position + 1}</div>
                     <div className="border-b border-dashed pb-1">{dominoPairs[index][0]}</div>
@@ -283,30 +293,30 @@ export default function PostCorrespondenceProblem() {
                 ))}
               </div>
               
-              <h3 className="text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">
+              <h3 className="text-lg font-medium mb-2 text-black">
                 Resulting Strings:
               </h3>
-              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="mb-2">
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Top: </span>
-                  <span className="text-gray-900 dark:text-white">{topString}</span>
+                  <span className="font-medium text-black">Top: </span>
+                  <span className="text-black">{topString}</span>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Bottom: </span>
-                  <span className="text-gray-900 dark:text-white">{bottomString}</span>
+                  <span className="font-medium text-black">Bottom: </span>
+                  <span className="text-black">{bottomString}</span>
                 </div>
               </div>
             </div>
           )}
           
           {!status && (
-            <div className="text-center py-10 text-gray-500 dark:text-gray-400">
-              Click "Solve PCP" to find a solution for the current domino pairs.
+            <div className="text-center py-10 text-black">
+              Click &quot;Solve PCP&quot; to find a solution for the current domino pairs.
             </div>
           )}
           
-          <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg mt-4">
-            <h3 className="font-medium mb-2 text-blue-800 dark:text-blue-200">
+          <div className="bg-blue-50 p-4 rounded-lg mt-4">
+            <h3 className="font-medium mb-2 text-blue-800">
               Remember:
             </h3>
             <p className="text-blue-700 dark:text-blue-300">
@@ -316,12 +326,12 @@ export default function PostCorrespondenceProblem() {
         </Card>
       </div>
       
-      <Card className="p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+      <Card className="p-6 mb-8 bg-white border border-gray-200">
+        <h2 className="text-xl font-semibold mb-4 text-black">
           PCP Examples and Variants
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-900 dark:text-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-black">
           <div>
             <h3 className="font-medium mb-2">Classic Example (Has Solution):</h3>
             <ul className="list-disc list-inside">
@@ -329,7 +339,7 @@ export default function PostCorrespondenceProblem() {
               <li>(b, ca)</li>
               <li>(ca, a)</li>
             </ul>
-            <p className="mt-2">Solution: [1, 2, 3] produces "abca" on both top and bottom.</p>
+            <p className="mt-2">Solution: [1, 2, 3] produces &quot;abca&quot; on both top and bottom.</p>
             
             <h3 className="font-medium mt-4 mb-2">Simple Unsolvable Instance:</h3>
             <ul className="list-disc list-inside">
@@ -337,14 +347,14 @@ export default function PostCorrespondenceProblem() {
               <li>(b, b)</li>
             </ul>
             <p className="mt-2">
-              No solution exists because any sequence will always have more a's on the bottom than on the top.
+              No solution exists because any sequence will always have more a&apos;s on the bottom than on the top.
             </p>
           </div>
           
           <div>
             <h3 className="font-medium mb-2">PCP Variants:</h3>
             <ol className="list-decimal list-inside space-y-2">
-              <li><strong>Bounded PCP</strong>: Ask if there's a solution with at most k dominoes.</li>
+              <li><strong>Bounded PCP</strong>: Ask if there&apos;s a solution with at most k dominoes.</li>
               <li><strong>Modified PCP</strong>: First and last dominoes are fixed.</li>
               <li><strong>Marked PCP</strong>: All dominoes have special markers at certain positions.</li>
               <li><strong>2-PCP</strong>: Only two domino pairs are allowed (decidable!).</li>

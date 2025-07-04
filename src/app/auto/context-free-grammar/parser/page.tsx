@@ -5,17 +5,18 @@ import { simulateCFG, ContextFreeGrammar, CFGProduction, CFGResult } from "../..
 import { EducationalInfo, ExamResult } from "../../../../components";
 
 export default function CFGParserPage() {
-  const [terminals, setTerminals] = useState(["a", "b"]);
-  const [nonTerminals, setNonTerminals] = useState(["S", "A", "B"]);
+  const [terminals, setTerminals] = useState(["id", "+", "*", "(", ")"]);
+  const [nonTerminals, setNonTerminals] = useState(["E", "T", "F"]);
   const [productions, setProductions] = useState<CFGProduction[]>([
-    { left: "S", right: ["A", "B"] },
-    { left: "A", right: ["a", "A"] },
-    { left: "A", right: ["a"] },
-    { left: "B", right: ["b", "B"] },
-    { left: "B", right: ["b"] }
+    { left: "E", right: ["T", "+", "E"] },
+    { left: "E", right: ["T"] },
+    { left: "T", right: ["F", "*", "T"] },
+    { left: "T", right: ["F"] },
+    { left: "F", right: ["(", "E", ")"] },
+    { left: "F", right: ["id"] }
   ]);
-  const [startSymbol, setStartSymbol] = useState("S");
-  const [targetString, setTargetString] = useState("aabb");
+  const [startSymbol, setStartSymbol] = useState("E");
+  const [targetString, setTargetString] = useState("id+id*id");
   const [result, setResult] = useState<CFGResult | null>(null);
 
   const handleParse = () => {

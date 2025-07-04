@@ -375,7 +375,7 @@ export interface PDAResult {
 export function simulatePDA(pda: PushdownAutomaton, input: string): PDAResult {
   const steps: PDASimulationStep[] = [];
   let currentState = pda.startState;
-  let stack: PDAStackSymbol[] = [{ value: pda.initialStackSymbol, index: 0 }];
+  const stack: PDAStackSymbol[] = [{ value: pda.initialStackSymbol, index: 0 }];
   let consumedInput = "";
   let stepCount = 0;
   
@@ -394,9 +394,54 @@ export function simulatePDA(pda: PushdownAutomaton, input: string): PDAResult {
   while (stepCount < maxSteps) {
     // Check if we're done processing input
     if (i >= input.length) {
-      // If we've consumed all input, check if we're in an accept state
+      // Try epsilon transitions after consuming all input
+      const topStack = stack.length > 0 ? stack[stack.length - 1].value : "ε";
+      
+      // Look for epsilon transitions
+      const epsilonTransitions = pda.transitions.filter(t => 
+        t.fromState === currentState && 
+        t.inputSymbol === "ε" &&
+        (t.popSymbol === topStack || t.popSymbol === "ε")
+      );
+      
+      if (epsilonTransitions.length > 0) {
+        // Take the first epsilon transition
+        const transition = epsilonTransitions[0];
+        currentState = transition.toState;
+        
+        // Update stack
+        if (transition.popSymbol !== "ε" && stack.length > 0) {
+          stack.pop();
+        }
+        
+        // Push new symbols
+        for (let j = transition.pushSymbols.length - 1; j >= 0; j--) {
+          if (transition.pushSymbols[j] !== "ε") {
+            stack.push({ 
+              value: transition.pushSymbols[j], 
+              index: stack.length > 0 ? stack[stack.length - 1].index + 1 : 0 
+            });
+          }
+        }
+        
+        // Record step
+        steps.push({
+          step: stepCount++,
+          state: currentState,
+          remainingInput: "",
+          consumedInput: input,
+          stack: [...stack],
+          transition
+        });
+        
+        continue; // Try more epsilon transitions
+      }
+      
+      // No more epsilon transitions, check if we're in an accept state
       const accepted = pda.acceptStates.includes(currentState);
-      steps[steps.length - 1].accepted = accepted;
+      if (steps.length > 0) {
+        steps[steps.length - 1].accepted = accepted;
+      }
       return {
         accepted,
         steps,
@@ -508,33 +553,52 @@ export interface CFGResult {
 export function simulateCFG(cfg: ContextFreeGrammar, target: string): CFGResult {
   const steps: CFGDerivationStep[] = [];
   
-  // Start with the start symbol
-  let current = [cfg.startSymbol];
-  steps.push({
-    step: 0,
-    sententialForm: [...current]
-  });
-
-  const maxSteps = 50;
-  let stepCount = 0;
-
-  while (stepCount < maxSteps) {
-    // Check if we've reached the target
-    if (current.join('') === target) {
+  // Use iterative deepening to find a derivation
+  for (let maxDepth = 1; maxDepth <= 20; maxDepth++) {
+    const result = tryDerive(cfg, target, maxDepth);
+    if (result.success) {
       return {
         canDerive: true,
-        derivation: steps
+        derivation: result.steps
       };
     }
+  }
+  
+  return {
+    canDerive: false,
+    derivation: steps
+  };
+}
 
-    // Find first non-terminal
+function tryDerive(cfg: ContextFreeGrammar, target: string, maxDepth: number): { success: boolean, steps: CFGDerivationStep[] } {
+  const steps: CFGDerivationStep[] = [];
+  
+  function derive(current: string[], depth: number): boolean {
+    // Add current step
+    steps.push({
+      step: steps.length,
+      sententialForm: [...current]
+    });
+
+    // Check if we've reached the target
+    const currentString = current.join('');
+    if (currentString === target) {
+      return true;
+    }
+
+    // If we've reached max depth or the string is too long, stop
+    if (depth >= maxDepth || currentString.length > target.length) {
+      return false;
+    }
+
+    // Find leftmost non-terminal
     const nonTerminalIndex = current.findIndex(symbol => 
       cfg.nonTerminals.includes(symbol)
     );
 
     if (nonTerminalIndex === -1) {
-      // No more non-terminals but haven't reached target
-      break;
+      // No more non-terminals, check if we match target
+      return currentString === target;
     }
 
     const nonTerminal = current[nonTerminalIndex];
@@ -542,32 +606,41 @@ export function simulateCFG(cfg: ContextFreeGrammar, target: string): CFGResult 
     // Find applicable productions
     const productions = cfg.productions.filter(p => p.left === nonTerminal);
     
-    if (productions.length === 0) {
-      break;
+    // Try each production
+    for (const production of productions) {
+      // Apply production
+      const newSententialForm = [
+        ...current.slice(0, nonTerminalIndex),
+        ...production.right.filter(symbol => symbol !== 'ε'), // Handle epsilon
+        ...current.slice(nonTerminalIndex + 1)
+      ];
+
+      // Save current steps length to backtrack if needed
+      const stepsBefore = steps.length;
+
+      // Add step for this production
+      steps.push({
+        step: steps.length,
+        sententialForm: [...newSententialForm],
+        productionUsed: production,
+        appliedAt: nonTerminalIndex
+      });
+
+      // Recursively try to derive
+      if (derive(newSententialForm, depth + 1)) {
+        return true;
+      }
+
+      // Backtrack - remove steps added in this branch
+      steps.splice(stepsBefore);
     }
 
-    // For simplicity, use the first applicable production
-    const production = productions[0];
-    
-    // Apply production
-    const newSententialForm = [
-      ...current.slice(0, nonTerminalIndex),
-      ...production.right,
-      ...current.slice(nonTerminalIndex + 1)
-    ];
-
-    current = newSententialForm;
-    
-    steps.push({
-      step: ++stepCount,
-      sententialForm: [...current],
-      productionUsed: production,
-      appliedAt: nonTerminalIndex
-    });
+    return false;
   }
 
-  return {
-    canDerive: false,
-    derivation: steps
-  };
+  // Start with the start symbol
+  const initialForm = [cfg.startSymbol];
+  const success = derive(initialForm, 0);
+
+  return { success, steps };
 }

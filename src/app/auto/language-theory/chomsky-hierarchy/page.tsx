@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { EducationalInfo } from "@/components";
-import { ArrowRight, BookOpen, ArrowDown, ArrowUp, CheckCircle2, Check } from "lucide-react";
+import { BookOpen, ArrowDown, ArrowUp, Check } from "lucide-react";
 
 export default function ChomskyHierarchyPage() {
   const [selectedType, setSelectedType] = useState<number | null>(null);
@@ -107,10 +107,6 @@ export default function ChomskyHierarchyPage() {
 
   const handleExampleClick = (language: string) => {
     setSelectedExample(selectedExample === language ? null : language);
-  };
-
-  const getExample = (language: string) => {
-    return examples.find(ex => ex.language === language);
   };
 
   return (
