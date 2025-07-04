@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Header, Footer } from "../../../components";
 
 export default function DivideConquerPage() {
   const divideConquerAlgorithms = [
@@ -12,6 +11,54 @@ export default function DivideConquerPage() {
       complexity: "O(n log n)",
       examImportance: "Very High",
       topics: ["Divide", "Conquer", "Merge", "Recursion", "Stability"]
+    },
+    {
+      title: "Quick Sort",
+      description: "Fast sorting algorithm with partitioning and recursion",
+      path: "/daa/divide-conquer/quick-sort",
+      complexity: "O(n log n) avg, O(n²) worst",
+      examImportance: "Very High",
+      topics: ["Partition", "Pivot", "In-place", "Randomization"]
+    },
+    {
+      title: "Binary Search",
+      description: "Efficient searching algorithm for sorted arrays",
+      path: "/daa/divide-conquer/binary-search",
+      complexity: "O(log n)",
+      examImportance: "Very High",
+      topics: ["Search", "Sorted Array", "Logarithmic", "Recursive"]
+    },
+    {
+      title: "Finding Min-Max",
+      description: "Find minimum and maximum elements using divide and conquer",
+      path: "/daa/divide-conquer/min-max",
+      complexity: "O(n)",
+      examImportance: "High",
+      topics: ["Linear Scan", "Comparison", "Optimization", "Pairs"]
+    },
+    {
+      title: "Maximum Subarray (Kadane's)",
+      description: "Find contiguous subarray with maximum sum efficiently",
+      path: "/daa/divide-conquer/kadane",
+      complexity: "O(n)",
+      examImportance: "Very High",
+      topics: ["Dynamic Programming", "Subarray", "Optimization", "Linear Time"]
+    },
+    {
+      title: "Strassen's Matrix Multiplication",
+      description: "Faster matrix multiplication using divide and conquer",
+      path: "/daa/divide-conquer/strassen",
+      complexity: "O(n^2.807)",
+      examImportance: "High",
+      topics: ["Matrix", "Multiplication", "Optimization", "Subproblems"]
+    },
+    {
+      title: "Closest Pair of Points",
+      description: "Find closest pair of points in 2D plane efficiently",
+      path: "/daa/divide-conquer/closest-pair",
+      complexity: "O(n log n)",
+      examImportance: "High",
+      topics: ["Geometry", "Distance", "Sorting", "Merging"]
     },
   ];
 
@@ -59,9 +106,7 @@ export default function DivideConquerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-      <Header />
-      
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">      
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
@@ -268,10 +313,7 @@ export default function DivideConquerPage() {
               </div>
             </div>
           </div>
-        </div>
-      </main>
-
-      <Footer />
+        </div>      </main>
     </div>
   );
 }

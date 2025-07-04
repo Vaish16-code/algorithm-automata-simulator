@@ -9,6 +9,7 @@ export default function DAAHomePage() {
       description: "Algorithms that make locally optimal choices at each step",
       color: "from-green-500 to-emerald-600",
       icon: "🎯",
+      categoryPath: "/daa/greedy",
       algorithms: [
         {
           name: "Fractional Knapsack",
@@ -32,6 +33,7 @@ export default function DAAHomePage() {
       description: "Solve complex problems by breaking them into subproblems",
       color: "from-blue-500 to-indigo-600",
       icon: "📊",
+      categoryPath: "/daa/dynamic",
       algorithms: [
         {
           name: "0/1 Knapsack",
@@ -60,6 +62,7 @@ export default function DAAHomePage() {
       description: "Break problems into smaller parts and combine solutions",
       color: "from-purple-500 to-violet-600",
       icon: "⚔️",
+      categoryPath: "/daa/divide-conquer",
       algorithms: [
         {
           name: "Merge Sort",
@@ -88,6 +91,7 @@ export default function DAAHomePage() {
       description: "Systematically search solution space with pruning",
       color: "from-red-500 to-pink-600",
       icon: "🔙",
+      categoryPath: "/daa/backtracking",
       algorithms: [
         {
           name: "N-Queens Problem",
@@ -95,14 +99,9 @@ export default function DAAHomePage() {
           description: "Place N queens on chessboard without conflicts"
         },
         {
-          name: "Graph Coloring",
-          path: "/daa/backtracking/graph-coloring",
-          description: "Color graph vertices with minimum colors"
-        },
-        {
-          name: "Subset Sum",
+          name: "Sum of Subsets",
           path: "/daa/backtracking/subset-sum",
-          description: "Find subset with given sum"
+          description: "Find subset with given target sum"
         }
       ]
     },
@@ -111,6 +110,7 @@ export default function DAAHomePage() {
       description: "Optimal solutions using systematic enumeration",
       color: "from-orange-500 to-red-600",
       icon: "🌳",
+      categoryPath: "/daa/branch-bound",
       algorithms: [
         {
           name: "Travelling Salesman",
@@ -121,24 +121,6 @@ export default function DAAHomePage() {
           name: "15-Puzzle",
           path: "/daa/branch-bound/fifteen-puzzle",
           description: "Solve sliding puzzle optimally"
-        }
-      ]
-    },
-    {
-      title: "String Matching",
-      description: "Efficient algorithms for pattern searching",
-      color: "from-teal-500 to-cyan-600",
-      icon: "🔍",
-      algorithms: [
-        {
-          name: "Naive String Matching",
-          path: "/daa/string-matching/naive",
-          description: "Simple brute-force pattern matching"
-        },
-        {
-          name: "KMP Algorithm",
-          path: "/daa/string-matching/kmp",
-          description: "Efficient pattern matching with preprocessing"
         }
       ]
     }
@@ -199,14 +181,22 @@ export default function DAAHomePage() {
         <div className="space-y-12">
           {algorithmCategories.map((category, categoryIndex) => (
             <div key={categoryIndex} className="bg-white rounded-2xl shadow-xl p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <div className={`w-16 h-16 bg-gradient-to-r ${category.color} rounded-xl flex items-center justify-center text-3xl`}>
-                  {category.icon}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className={`w-16 h-16 bg-gradient-to-r ${category.color} rounded-xl flex items-center justify-center text-3xl`}>
+                    {category.icon}
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-gray-800">{category.title}</h2>
+                    <p className="text-gray-600">{category.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-800">{category.title}</h2>
-                  <p className="text-gray-600">{category.description}</p>
-                </div>
+                <Link
+                  href={category.categoryPath}
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors font-semibold"
+                >
+                  View All →
+                </Link>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

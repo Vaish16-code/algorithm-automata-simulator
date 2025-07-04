@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Cpu, BookOpen, Database, ArrowRight, Play, Code, GitBranch, Layers, HardDrive, Brain, Shuffle, Globe, Network, Shield } from 'lucide-react';
+import { Cpu, BookOpen, Database, ArrowRight, Play, Code, GitBranch, Layers, HardDrive, Brain, Shuffle, Globe, Network, Shield, TreePine } from 'lucide-react';
 
 export default function SubjectsSection() {
   const subjects = [
@@ -21,17 +21,18 @@ export default function SubjectsSection() {
     },
     {
       title: 'Design & Analysis of Algorithms',
-      description: 'Master algorithmic paradigms including greedy, dynamic programming, divide & conquer, and backtracking approaches.',
+      description: 'Master algorithmic paradigms including greedy, dynamic programming, divide & conquer, backtracking and branch & bound approaches.',
       icon: BookOpen,
       color: 'from-purple-500 to-pink-500',
       href: '/daa',
       algorithms: [
         { name: 'Greedy Algorithms', href: '/daa/greedy', icon: Shuffle },
-        { name: 'Dynamic Programming', href: '/daa/dynamic/knapsack', icon: Brain },
-        { name: 'Divide & Conquer', href: '/daa/divide-conquer/merge-sort', icon: GitBranch },
-        { name: 'Backtracking', href: '/daa/backtracking/n-queens', icon: ArrowRight }
+        { name: 'Dynamic Programming', href: '/daa/dynamic', icon: Brain },
+        { name: 'Divide & Conquer', href: '/daa/divide-conquer', icon: GitBranch },
+        { name: 'Backtracking', href: '/daa/backtracking', icon: ArrowRight },
+        { name: 'Branch & Bound', href: '/daa/branch-bound', icon: TreePine }
       ],
-      stats: { algorithms: 7, problems: '20+' }
+      stats: { algorithms: 8, problems: '25+' }
     },
     {
       title: 'Operating Systems',

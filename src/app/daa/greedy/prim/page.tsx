@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { PrimChart } from "../../../components/PrimChart";
 import { primMST, PrimResult, Graph } from "../../../utils/greedyAlgorithms";
-import Header from "../../../../components/Header";
-import Footer from "../../../../components/Footer";
 
 export default function PrimPage() {
   const [vertices, setVertices] = useState(5);
@@ -90,8 +88,6 @@ export default function PrimPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-      <Header />
-      
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-8">
@@ -313,8 +309,6 @@ export default function PrimPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

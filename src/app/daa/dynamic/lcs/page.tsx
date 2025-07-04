@@ -194,13 +194,13 @@ export default function LCSPage() {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-gray-800 mb-3">Dynamic Programming Table:</h3>
                   <div className="overflow-x-auto">
-                    <table className="text-sm border-collapse">
+                    <table className="text-sm border-collapse border-2 border-gray-800">
                       <thead>
                         <tr>
-                          <th className="border border-gray-300 px-2 py-1 bg-gray-200"></th>
-                          <th className="border border-gray-300 px-2 py-1 bg-gray-200">ε</th>
+                          <th className="border-2 border-gray-800 px-4 py-2 bg-gray-300 font-bold"></th>
+                          <th className="border-2 border-gray-800 px-4 py-2 bg-gray-300 font-bold">ε</th>
                           {string2.split('').map((char, index) => (
-                            <th key={index} className="border border-gray-300 px-2 py-1 bg-green-100 font-mono">
+                            <th key={index} className="border-2 border-gray-800 px-4 py-2 bg-green-200 font-mono font-bold text-green-800">
                               {char}
                             </th>
                           ))}
@@ -208,23 +208,23 @@ export default function LCSPage() {
                       </thead>
                       <tbody>
                         <tr>
-                          <th className="border border-gray-300 px-2 py-1 bg-gray-200">ε</th>
+                          <th className="border-2 border-gray-800 px-4 py-2 bg-gray-300 font-bold">ε</th>
                           {result.dpTable[0].map((value, index) => (
-                            <td key={index} className="border border-gray-300 px-2 py-1 text-center font-mono">
+                            <td key={index} className="border-2 border-gray-800 px-4 py-2 text-center font-mono font-bold bg-white">
                               {value}
                             </td>
                           ))}
                         </tr>
                         {string1.split('').map((char, i) => (
                           <tr key={i}>
-                            <th className="border border-gray-300 px-2 py-1 bg-blue-100 font-mono">{char}</th>
+                            <th className="border-2 border-gray-800 px-4 py-2 bg-blue-200 font-mono font-bold text-blue-800">{char}</th>
                             {result.dpTable[i + 1].map((value, j) => (
                               <td
                                 key={j}
-                                className={`border border-gray-300 px-2 py-1 text-center font-mono ${
+                                className={`border-2 border-gray-800 px-4 py-2 text-center font-mono font-bold ${
                                   j > 0 && string1[i] === string2[j - 1]
-                                    ? 'bg-yellow-100 font-bold'
-                                    : ''
+                                    ? 'bg-yellow-200 text-yellow-800'
+                                    : 'bg-white text-gray-800'
                                 }`}
                               >
                                 {value}
@@ -237,17 +237,20 @@ export default function LCSPage() {
                   </div>
                 </div>
 
-                <div className="bg-green-50 p-4 rounded-lg">
+                <div className="bg-green-50 p-4 rounded-lg border-2 border-green-300">
                   <h3 className="text-lg font-semibold text-green-800 mb-2">Algorithm Steps:</h3>
-                  <div className="space-y-1 max-h-32 overflow-y-auto">
-                    {result.steps.slice(0, 10).map((step, index) => (
-                      <div key={index} className="text-sm text-green-700">
-                        {index + 1}. {step}
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {result.steps.slice(0, 15).map((step, index) => (
+                      <div key={index} className="p-2 bg-white rounded border-2 border-green-200">
+                        <span className="bg-green-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-xs font-bold mr-2">
+                          {index + 1}
+                        </span>
+                        <span className="text-green-800 font-medium">{step}</span>
                       </div>
                     ))}
-                    {result.steps.length > 10 && (
-                      <div className="text-sm text-green-600 italic">
-                        ... and {result.steps.length - 10} more steps
+                    {result.steps.length > 15 && (
+                      <div className="text-sm text-green-600 italic font-medium">
+                        ... and {result.steps.length - 15} more steps
                       </div>
                     )}
                   </div>

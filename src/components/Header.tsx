@@ -25,9 +25,10 @@ export default function Header() {
       icon: BookOpen,
       submenu: [
         { name: 'Greedy Algorithms', href: '/daa/greedy' },
-        { name: 'Dynamic Programming', href: '/daa/dynamic/knapsack' },
-        { name: 'Divide & Conquer', href: '/daa/divide-conquer/merge-sort' },
-        { name: 'Backtracking', href: '/daa/backtracking/n-queens' },
+        { name: 'Dynamic Programming', href: '/daa/dynamic' },
+        { name: 'Divide & Conquer', href: '/daa/divide-conquer' },
+        { name: 'Backtracking', href: '/daa/backtracking' },
+        { name: 'Branch & Bound', href: '/daa/branch-bound' },
       ]
     },
     {

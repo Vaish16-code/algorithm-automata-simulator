@@ -265,3 +265,136 @@ export function kruskalMST(graph: Graph): KruskalResult {
 
   return { totalWeight, mstEdges, steps };
 }
+
+// Dijkstra's Algorithm interfaces and implementation
+export interface DijkstraStep {
+  step: number;
+  currentNode: number | null;
+  description: string;
+  action: string;
+  distances: number[];
+  visited: number[];
+  previous: (number | null)[];
+  edgesInPath?: { from: number; to: number }[];
+}
+
+export interface DijkstraResult {
+  distances: number[];
+  previous: (number | null)[];
+  steps: DijkstraStep[];
+  shortestPaths: number[][];
+}
+
+export function dijkstraAlgorithm(graph: number[][], source: number): DijkstraResult {
+  const n = graph.length;
+  const distances = new Array(n).fill(Infinity);
+  const visited = new Array(n).fill(false);
+  const previous = new Array(n).fill(null);
+  const steps: DijkstraStep[] = [];
+  const visitedNodes: number[] = [];
+
+  // Initialize source distance
+  distances[source] = 0;
+
+  // Add initial step
+  steps.push({
+    step: 0,
+    currentNode: null,
+    description: "Initialize distances",
+    action: `Set distance to source vertex ${source} = 0, all others = ∞`,
+    distances: [...distances],
+    visited: [...visitedNodes],
+    previous: [...previous]
+  });
+
+  for (let count = 0; count < n; count++) {
+    // Find the unvisited vertex with minimum distance
+    let minDistance = Infinity;
+    let currentNode = -1;
+
+    for (let v = 0; v < n; v++) {
+      if (!visited[v] && distances[v] < minDistance) {
+        minDistance = distances[v];
+        currentNode = v;
+      }
+    }
+
+    // If no unvisited vertex is reachable, break
+    if (currentNode === -1) break;
+
+    // Mark the current vertex as visited
+    visited[currentNode] = true;
+    visitedNodes.push(currentNode);
+
+    steps.push({
+      step: steps.length,
+      currentNode,
+      description: `Select vertex ${currentNode} with minimum distance ${distances[currentNode]}`,
+      action: `Mark vertex ${currentNode} as visited`,
+      distances: [...distances],
+      visited: [...visitedNodes],
+      previous: [...previous]
+    });
+
+    // Update distances to adjacent vertices
+    let updatedAny = false;
+    for (let v = 0; v < n; v++) {
+      if (!visited[v] && graph[currentNode][v] !== Infinity && graph[currentNode][v] > 0) {
+        const newDistance = distances[currentNode] + graph[currentNode][v];
+        if (newDistance < distances[v]) {
+          distances[v] = newDistance;
+          previous[v] = currentNode;
+          updatedAny = true;
+        }
+      }
+    }
+
+    if (updatedAny) {
+      steps.push({
+        step: steps.length,
+        currentNode,
+        description: `Update distances to neighbors of vertex ${currentNode}`,
+        action: `Relax edges from vertex ${currentNode}`,
+        distances: [...distances],
+        visited: [...visitedNodes],
+        previous: [...previous]
+      });
+    }
+  }
+
+  // Generate shortest paths
+  const shortestPaths: number[][] = [];
+  for (let v = 0; v < n; v++) {
+    const path: number[] = [];
+    let current = v;
+    
+    if (distances[v] === Infinity) {
+      shortestPaths[v] = [];
+      continue;
+    }
+
+    while (current !== null) {
+      path.unshift(current);
+      current = previous[current];
+    }
+    shortestPaths[v] = path;
+  }
+
+  // Add final step
+  steps.push({
+    step: steps.length,
+    currentNode: null,
+    description: "Algorithm completed",
+    action: "All vertices processed, shortest paths found",
+    distances: [...distances],
+    visited: [...visitedNodes],
+    previous: [...previous]
+  });
+
+  return {
+    distances,
+    previous,
+    steps,
+    shortestPaths
+  };
+}
