@@ -2,104 +2,85 @@
 
 import Link from "next/link";
 
-export default function GreedyAlgorithmsPage() {
-  const greedyAlgorithms = [
+export default function BranchBoundPage() {
+  const branchBoundAlgorithms = [
     {
-      title: "Fractional Knapsack",
-      description: "Solve the fractional knapsack problem using greedy approach",
-      path: "/daa/greedy/fractional-knapsack",
-      complexity: "O(n log n)",
+      title: "Travelling Salesman Problem",
+      description: "Find shortest Hamiltonian cycle using branch and bound",
+      path: "/daa/branch-bound/tsp",
+      complexity: "O(n!)",
+      examImportance: "Very High",
+      topics: ["Graph Theory", "Optimization", "Bounds", "Hamiltonian Cycle"]
+    },
+    {
+      title: "15-Puzzle Problem",
+      description: "Solve sliding puzzle using branch and bound with heuristics",
+      path: "/daa/branch-bound/fifteen-puzzle",
+      complexity: "O(b^d)",
       examImportance: "High",
-    },
-    {
-      title: "Job Sequencing with Deadlines",
-      description: "Maximize profit by scheduling jobs within deadlines",
-      path: "/daa/greedy/job-sequencing", 
-      complexity: "O(n²)",
-      examImportance: "High",
-    },
-    {
-      title: "Kruskal's MST Algorithm",
-      description: "Find minimum spanning tree using edge-based greedy approach",
-      path: "/daa/greedy/kruskal",
-      complexity: "O(E log E)",
-      examImportance: "Very High",
-    },
-    {
-      title: "Prim's MST Algorithm", 
-      description: "Find minimum spanning tree using vertex-based greedy approach",
-      path: "/daa/greedy/prim",
-      complexity: "O(V²) or O(E log V)",
-      examImportance: "Very High",
-    },
-    {
-      title: "Dijkstra's Shortest Path",
-      description: "Find shortest paths from source to all vertices using greedy approach",
-      path: "/daa/greedy/dijkstra",
-      complexity: "O(V²) or O((V + E) log V)",
-      examImportance: "Very High",
+      topics: ["State Space Search", "Heuristics", "Manhattan Distance", "A* Algorithm"]
     },
   ];
 
   const educationalContent = {
-    overview: "Greedy algorithms make locally optimal choices at each step, hoping to find a global optimum. They are efficient for problems where local optimization leads to global optimization.",
+    overview: "Branch and Bound is an algorithmic paradigm for solving optimization problems by systematically exploring the solution space while using bounds to prune branches that cannot lead to optimal solutions.",
     keyCharacteristics: [
-      "Make the best choice at each step",
-      "Never reconsider previous choices",
-      "Often used for optimization problems", 
-      "Greedy choice property must hold",
-      "Optimal substructure required"
+      "Systematic exploration of solution space",
+      "Uses upper and lower bounds for pruning",
+      "Maintains best solution found so far",
+      "Prunes branches that cannot improve",
+      "Often uses priority queue for node selection"
     ],
     applications: [
-      "Network routing algorithms",
-      "Activity selection problems",
-      "Huffman coding for data compression",
-      "Currency change problems",
-      "Task scheduling systems"
+      "Combinatorial optimization problems",
+      "Integer linear programming",
+      "Scheduling and resource allocation",
+      "Network design and routing",
+      "Game playing and decision making"
     ],
     examTips: [
-      "Understand when greedy approach gives optimal solution",
-      "Know the difference between greedy and dynamic programming",
-      "Practice proving greedy choice property",
-      "Learn time complexity analysis",
-      "Study counter-examples where greedy fails"
+      "Understand bounding function design",
+      "Learn different node selection strategies",
+      "Practice pruning condition analysis",
+      "Master complexity analysis",
+      "Understand best-first vs depth-first search"
     ]
   };
 
   const examPrep = {
     questionTypes: [
-      "Prove that greedy choice leads to optimal solution",
-      "Analyze time and space complexity", 
-      "Compare greedy vs dynamic programming approaches",
-      "Design greedy algorithms for given problems",
-      "Find counter-examples where greedy fails"
+      "Design branch and bound algorithm",
+      "Analyze pruning effectiveness",
+      "Compare with backtracking approach",
+      "Calculate bounds for given problems",
+      "Trace algorithm execution with examples"
     ],
     practiceProblems: [
-      "Activity Selection Problem",
-      "Fractional vs 0/1 Knapsack comparison",
-      "Minimum number of coins problem",
-      "Job scheduling with profits and deadlines",
-      "Graph algorithms (MST, shortest path)"
+      "TSP with different bound functions",
+      "Knapsack with fractional bounds",
+      "Job assignment with cost matrix",
+      "Graph coloring with chromatic bounds",
+      "Puzzle solving with heuristic bounds"
     ],
-    examPattern: "Mumbai University typically asks 1-2 questions on greedy algorithms worth 10-15 marks total, focusing on algorithm design and complexity analysis."
+    examPattern: "Mumbai University typically asks 1-2 questions on branch and bound worth 10-15 marks total, focusing on algorithm design, bounding functions, and optimization."
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">      
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50">      
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Greedy Algorithms
+            Branch & Bound
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Master greedy algorithmic techniques with interactive simulators designed for Mumbai University curriculum
+            Master branch and bound optimization techniques with interactive simulators designed for Mumbai University curriculum
           </p>
         </div>
 
         {/* Algorithms Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {greedyAlgorithms.map((algorithm, index) => (
+          {branchBoundAlgorithms.map((algorithm, index) => (
             <Link
               key={index}
               href={algorithm.path}
@@ -107,10 +88,14 @@ export default function GreedyAlgorithmsPage() {
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">
+                  <h3 className="text-xl font-bold text-gray-800 group-hover:text-teal-600 transition-colors">
                     {algorithm.title}
                   </h3>
-                  <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    algorithm.examImportance === 'Very High' 
+                      ? 'bg-red-100 text-red-700' 
+                      : 'bg-teal-100 text-teal-700'
+                  }`}>
                     {algorithm.examImportance}
                   </div>
                 </div>
@@ -121,9 +106,9 @@ export default function GreedyAlgorithmsPage() {
                 
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">
-                    Complexity: <code className="bg-gray-100 px-2 py-1 rounded text-green-600 font-mono">{algorithm.complexity}</code>
+                    Complexity: <code className="bg-gray-100 px-2 py-1 rounded text-teal-600 font-mono">{algorithm.complexity}</code>
                   </span>
-                  <svg className="w-5 h-5 text-green-500 group-hover:text-green-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-teal-500 group-hover:text-teal-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
@@ -134,7 +119,7 @@ export default function GreedyAlgorithmsPage() {
 
         {/* Educational Content */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Understanding Greedy Algorithms</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Understanding Branch & Bound</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Overview</h3>
@@ -144,7 +129,7 @@ export default function GreedyAlgorithmsPage() {
               <ul className="space-y-2 text-gray-600">
                 {educationalContent.keyCharacteristics.map((char, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">•</span>
+                    <span className="text-teal-500 mt-1">•</span>
                     {char}
                   </li>
                 ))}
@@ -155,7 +140,7 @@ export default function GreedyAlgorithmsPage() {
               <ul className="space-y-2 text-gray-600 mb-6">
                 {educationalContent.applications.map((app, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-blue-500 mt-1">•</span>
+                    <span className="text-cyan-500 mt-1">•</span>
                     {app}
                   </li>
                 ))}
@@ -165,7 +150,7 @@ export default function GreedyAlgorithmsPage() {
               <ul className="space-y-2 text-gray-600">
                 {educationalContent.examTips.map((tip, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-purple-500 mt-1">•</span>
+                    <span className="text-blue-500 mt-1">•</span>
                     {tip}
                   </li>
                 ))}
@@ -183,7 +168,7 @@ export default function GreedyAlgorithmsPage() {
               <ul className="space-y-2 text-gray-600 mb-6">
                 {examPrep.questionTypes.map((type, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-blue-500 mt-1">•</span>
+                    <span className="text-teal-500 mt-1">•</span>
                     {type}
                   </li>
                 ))}
@@ -193,7 +178,7 @@ export default function GreedyAlgorithmsPage() {
               <ul className="space-y-2 text-gray-600">
                 {examPrep.practiceProblems.map((problem, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">•</span>
+                    <span className="text-cyan-500 mt-1">•</span>
                     {problem}
                   </li>
                 ))}
@@ -206,13 +191,13 @@ export default function GreedyAlgorithmsPage() {
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Key Tips</h3>
               <ul className="space-y-2 text-gray-600">
                 {[
-                  "Focus on understanding the greedy choice property",
-                  "Practice algorithm design and complexity analysis", 
-                  "Study graph algorithms (MST) thoroughly",
-                  "Learn to identify when greedy approach works"
+                  "Design effective bounding functions",
+                  "Understand pruning strategies",
+                  "Practice tree construction and traversal",
+                  "Learn to analyze optimization effectiveness"
                 ].map((tip, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-purple-500 mt-1">•</span>
+                    <span className="text-blue-500 mt-1">•</span>
                     {tip}
                   </li>
                 ))}
@@ -226,21 +211,21 @@ export default function GreedyAlgorithmsPage() {
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Quick Algorithm Reference</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-3">When Greedy Works</h3>
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">Algorithm Components</h3>
               <ul className="space-y-2 text-gray-600">
-                <li>• Greedy choice property holds</li>
-                <li>• Optimal substructure exists</li>
-                <li>• Local optimum = Global optimum</li>
-                <li>• No need to reconsider choices</li>
+                <li>• <strong>Branching:</strong> Generate child nodes</li>
+                <li>• <strong>Bounding:</strong> Calculate upper/lower bounds</li>
+                <li>• <strong>Pruning:</strong> Eliminate infeasible nodes</li>
+                <li>• <strong>Selection:</strong> Choose next node to explore</li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-3">Common Patterns</h3>
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">Search Strategies</h3>
               <ul className="space-y-2 text-gray-600">
-                <li>• Sort by some criteria first</li>
-                <li>• Make greedy choice at each step</li>
-                <li>• Prove choice leads to optimal solution</li>
-                <li>• Analyze time complexity</li>
+                <li>• Best-first search (priority queue)</li>
+                <li>• Depth-first search (stack)</li>
+                <li>• Breadth-first search (queue)</li>
+                <li>• Least-cost search (cost-based)</li>
               </ul>
             </div>
           </div>

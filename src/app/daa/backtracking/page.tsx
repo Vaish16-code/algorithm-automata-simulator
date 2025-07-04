@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Header, Footer } from "../../../components";
 
 export default function BacktrackingAlgorithmsPage() {
   const backtrackingAlgorithms = [
@@ -12,6 +11,14 @@ export default function BacktrackingAlgorithmsPage() {
       complexity: "O(N!)",
       examImportance: "Very High",
       topics: ["Constraint Satisfaction", "Backtracking", "Pruning", "State Space Tree"]
+    },
+    {
+      title: "Sum of Subsets",
+      description: "Find all subsets of a given set that sum to a target value",
+      path: "/daa/backtracking/subset-sum",
+      complexity: "O(2^n)",
+      examImportance: "Very High",
+      topics: ["Subset Generation", "Target Sum", "Pruning", "Combinatorial Search"]
     },
   ];
 
@@ -50,7 +57,7 @@ export default function BacktrackingAlgorithmsPage() {
     ],
     practiceProblems: [
       "N-Queens problem variants",
-      "Graph coloring problem",
+      "Sum of subsets problem",
       "Subset sum with backtracking",
       "Hamiltonian path problem",
       "Knight's tour problem"
@@ -60,8 +67,6 @@ export default function BacktrackingAlgorithmsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      <Header />
-      
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
@@ -292,8 +297,6 @@ export default function BacktrackingAlgorithmsPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
