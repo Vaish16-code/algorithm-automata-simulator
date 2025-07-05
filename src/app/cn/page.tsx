@@ -18,79 +18,231 @@ export default function ComputerNetworksPage() {
 
   const topics = [
     {
-      title: "Routing Algorithms",
-      description: "Shortest path algorithms for network routing",
-      icon: "Network",
+      title: "Introduction to Networking",
+      description: "Network fundamentals, applications, and architecture",
+      icon: "Globe",
+      color: "from-green-500 to-emerald-500",
+      difficulty: "Beginner",
+      examWeight: "High",
+      categories: [
+        {
+          name: "Network Architecture & Types",
+          href: "/cn/introduction",
+          description: "Network types, topology, and applications overview",
+          examTips: "Understand different network types: LAN, WAN, MAN and their characteristics"
+        },
+        {
+          name: "OSI & TCP/IP Models",
+          href: "/cn/introduction",
+          description: "Protocol stack comparison and layer functions",
+          examTips: "Memorize all 7 OSI layers and TCP/IP 4-layer model functions"
+        },
+        {
+          name: "Performance Metrics",
+          href: "/cn/introduction",
+          description: "Bandwidth, latency, throughput calculations",
+          examTips: "Practice bandwidth-delay product and utilization calculations"
+        }
+      ],
+      applications: [
+        "Network Design and Planning",
+        "Internet Applications",
+        "Performance Optimization"
+      ],
+      examInfo: {
+        marks: "10-15",
+        topics: ["Network Types", "OSI Model", "TCP/IP Model"],
+        questions: "Compare OSI vs TCP/IP, Calculate network performance metrics"
+      }
+    },
+    {
+      title: "Physical Layer",
+      description: "Transmission media and communication fundamentals",
+      icon: "Cpu",
+      color: "from-orange-500 to-red-500",
+      difficulty: "Intermediate",
+      examWeight: "Medium",
+      categories: [
+        {
+          name: "Transmission Media",
+          href: "/cn/physical-layer",
+          description: "Guided and unguided transmission media characteristics",
+          examTips: "Know properties of copper, fiber optic, and wireless media"
+        },
+        {
+          name: "Signal Encoding",
+          href: "/cn/physical-layer",
+          description: "Digital and analog signal encoding techniques",
+          examTips: "Understand NRZ, Manchester, and differential encoding"
+        },
+        {
+          name: "Multiplexing Techniques",
+          href: "/cn/physical-layer",
+          description: "FDM, TDM, and WDM techniques",
+          examTips: "Calculate channel capacity and multiplexing efficiency"
+        }
+      ],
+      applications: [
+        "Cable and Wireless Networks",
+        "Telecommunication Systems",
+        "Data Center Connectivity"
+      ],
+      examInfo: {
+        marks: "8-12",
+        topics: ["Transmission Media", "Signal Encoding", "Multiplexing"],
+        questions: "Compare transmission media, Analyze encoding schemes"
+      }
+    },
+    {
+      title: "Data Link Layer",
+      description: "Error detection, correction, and framing techniques",
+      icon: "Shield",
       color: "from-blue-500 to-cyan-500",
       difficulty: "Intermediate",
       examWeight: "High",
       categories: [
         {
-          name: "Dijkstra's Algorithm",
-          href: "/cn/routing/dijkstra",
-          description: "Find shortest path using greedy approach with priority queue",
+          name: "Error Detection & CRC",
+          href: "/cn/data-link-layer",
+          description: "Parity, CRC, and checksum algorithms with interactive tools",
+          examTips: "Practice CRC division and polynomial calculations"
+        },
+        {
+          name: "Error Correction & Hamming",
+          href: "/cn/data-link-layer",
+          description: "Hamming code and forward error correction with simulator",
+          examTips: "Master Hamming code encoding and single-bit error correction"
+        },
+        {
+          name: "Flow Control Protocols",
+          href: "/cn/data-link-layer",
+          description: "Stop-and-wait, sliding window protocols",
+          examTips: "Understand window size and sequence number calculations"
+        }
+      ],
+      applications: [
+        "Ethernet and Wi-Fi Networks",
+        "Error-Prone Communication",
+        "Reliable Data Transfer"
+      ],
+      examInfo: {
+        marks: "12-18",
+        topics: ["CRC", "Hamming Code", "Sliding Window"],
+        questions: "Calculate CRC remainder, Design Hamming code"
+      }
+    },
+    {
+      title: "Medium Access Control",
+      description: "Channel access methods and collision protocols",
+      icon: "Network",
+      color: "from-purple-500 to-pink-500",
+      difficulty: "Intermediate",
+      examWeight: "Medium",
+      categories: [
+        {
+          name: "ALOHA Protocols",
+          href: "/cn/medium-access-control",
+          description: "Pure and Slotted ALOHA performance analysis with simulator",
+          examTips: "Calculate throughput and efficiency for ALOHA variants"
+        },
+        {
+          name: "CSMA/CD Protocols",
+          href: "/cn/medium-access-control",
+          description: "Carrier sense multiple access with collision detection",
+          examTips: "Understand CSMA/CD operation and binary exponential backoff"
+        },
+        {
+          name: "Token Ring Protocol",
+          href: "/cn/medium-access-control",
+          description: "Token passing protocol and ring topology",
+          examTips: "Know token passing mechanism and ring maintenance"
+        }
+      ],
+      applications: [
+        "Ethernet Networks",
+        "Wireless LANs",
+        "Token Ring Networks"
+      ],
+      examInfo: {
+        marks: "8-12",
+        topics: ["ALOHA", "CSMA/CD", "Token Passing"],
+        questions: "Calculate ALOHA throughput, Explain CSMA operation"
+      }
+    },
+    {
+      title: "Network Layer",
+      description: "Routing algorithms and IP addressing",
+      icon: "Network",
+      color: "from-blue-500 to-cyan-500",
+      difficulty: "Intermediate",
+      examWeight: "Very High",
+      categories: [
+        {
+          name: "Routing Algorithms",
+          href: "/cn/network-layer",
+          description: "Dijkstra's shortest path and distance vector routing",
           examTips: "Focus on step-by-step execution and time complexity O(V²) or O(V log V)"
         },
         {
-          name: "Bellman-Ford Algorithm", 
-          href: "/cn/routing/bellman-ford",
-          description: "Handle negative weights and detect negative cycles",
-          examTips: "Understand relaxation process and negative cycle detection"
+          name: "IP Addressing & Subnetting",
+          href: "/cn/network-layer/ip-addressing",
+          description: "IPv4/IPv6 addressing and subnet calculations with calculator",
+          examTips: "Master binary conversion and CIDR notation"
         },
         {
-          name: "Distance Vector Routing",
-          href: "/cn/routing/distance-vector",
-          description: "Distributed routing using Bellman-Ford principle",
+          name: "Network Forwarding",
+          href: "/cn/network-layer",
+          description: "Packet forwarding and routing table operations",
           examTips: "Know count-to-infinity problem and split horizon solution"
         }
       ],
       applications: [
         "Internet Routing Protocols (OSPF, RIP)",
         "Network Path Selection",
-        "Traffic Engineering"
+        "IP Address Management"
       ],
       examInfo: {
         marks: "15-20",
-        topics: ["Shortest Path", "Routing Tables", "Network Topology"],
-        questions: "Apply Dijkstra on given graph, Compare routing algorithms"
+        topics: ["Shortest Path", "Routing Tables", "IP Addressing"],
+        questions: "Apply Dijkstra on given graph, Calculate subnet addresses"
       }
     },
     {
-      title: "IP Addressing & Subnetting",
-      description: "IPv4/IPv6 addressing and subnet calculations",
+      title: "Transport Layer",
+      description: "TCP/UDP protocols and connection management",
       icon: "Globe",
-      color: "from-green-500 to-emerald-500",
-      difficulty: "Beginner",
-      examWeight: "Very High",
+      color: "from-indigo-500 to-purple-500",
+      difficulty: "Advanced",
+      examWeight: "High",
       categories: [
         {
-          name: "IP Address Calculator",
-          href: "/cn/ip-addressing/calculator",
-          description: "Calculate network, broadcast, and host addresses",
-          examTips: "Master binary conversion and CIDR notation"
+          name: "TCP Protocol & Flow Control",
+          href: "/cn/transport-layer/tcp",
+          description: "TCP connection management and flow control with simulator",
+          examTips: "Understand 3-way handshake and window size calculations"
         },
         {
-          name: "Subnetting Solver",
-          href: "/cn/ip-addressing/subnetting",
-          description: "Divide networks into smaller subnets efficiently",
-          examTips: "Practice VLSM and subnet mask calculations"
+          name: "UDP Protocol",
+          href: "/cn/transport-layer/udp",
+          description: "Connectionless transport protocol with packet simulator",
+          examTips: "Know UDP header structure and compare with TCP"
         },
         {
-          name: "IPv6 Addressing",
-          href: "/cn/ip-addressing/ipv6",
-          description: "IPv6 format, types and address configuration",
-          examTips: "Understand IPv6 notation and address types"
+          name: "Reliability & Congestion",
+          href: "/cn/transport-layer",
+          description: "Congestion control and reliability mechanisms",
+          examTips: "Understand congestion window dynamics and algorithms"
         }
       ],
       applications: [
-        "Network Design and Planning",
-        "DHCP Configuration",
-        "Network Security Implementation"
+        "Web Applications (HTTP)",
+        "File Transfer (FTP)",
+        "Real-time Communication"
       ],
       examInfo: {
-        marks: "10-15",
-        topics: ["CIDR", "VLSM", "Address Classes"],
-        questions: "Calculate subnet addresses, Find number of hosts"
+        marks: "12-15",
+        topics: ["TCP Protocol", "Flow Control", "Congestion Control"],
+        questions: "Analyze TCP handshake, Calculate window sizes"
       }
     },
     {
@@ -132,68 +284,30 @@ export default function ComputerNetworksPage() {
       }
     },
     {
-      title: "Network Protocols",
-      description: "TCP/IP, HTTP, and protocol analysis",
-      icon: "Shield",
-      color: "from-red-500 to-orange-500",
-      difficulty: "Intermediate",
-      examWeight: "High",
-      categories: [
-        {
-          name: "TCP Flow Control",
-          href: "/cn/protocols/tcp-flow",
-          description: "Sliding window and congestion control mechanisms",
-          examTips: "Understand window size calculations and timeout handling"
-        },
-        {
-          name: "HTTP Protocol Analyzer",
-          href: "/cn/protocols/http",
-          description: "Request/response analysis and status codes",
-          examTips: "Know HTTP methods, headers, and response codes"
-        },
-        {
-          name: "DNS Resolution",
-          href: "/cn/protocols/dns",
-          description: "Domain name system hierarchy and resolution process",
-          examTips: "Understand iterative vs recursive queries"
-        }
-      ],
-      applications: [
-        "Web Development",
-        "Network Troubleshooting",
-        "Performance Optimization"
-      ],
-      examInfo: {
-        marks: "12-15",
-        topics: ["Protocol Stack", "Header Analysis", "Flow Control"],
-        questions: "Analyze protocol headers, Explain TCP handshake"
-      }
-    },
-    {
       title: "Network Security",
       description: "Cryptography and network security algorithms",
       icon: "Shield",
-      color: "from-indigo-500 to-purple-500",
+      color: "from-red-500 to-orange-500",
       difficulty: "Advanced",
       examWeight: "Medium",
       categories: [
         {
-          name: "RSA Encryption",
-          href: "/cn/security/rsa",
-          description: "Public key cryptography implementation",
-          examTips: "Practice key generation and encryption/decryption steps"
+          name: "Cryptography Fundamentals",
+          href: "/cn/security",
+          description: "Symmetric/asymmetric encryption, RSA, hash functions",
+          examTips: "Practice RSA key generation and encryption/decryption steps"
         },
         {
-          name: "DES Algorithm",
-          href: "/cn/security/des",
-          description: "Symmetric encryption with substitution and permutation",
-          examTips: "Understand round function and key scheduling"
+          name: "Network Security Protocols",
+          href: "/cn/security",
+          description: "SSL/TLS, VPNs, firewalls, and authentication",
+          examTips: "Understand SSL handshake and firewall operations"
         },
         {
-          name: "Digital Signatures",
-          href: "/cn/security/digital-signature",
-          description: "Authentication and non-repudiation mechanisms",
-          examTips: "Know hash functions and signature verification process"
+          name: "Security Threats & Defense",
+          href: "/cn/security",
+          description: "Common attacks, vulnerabilities, and countermeasures",
+          examTips: "Know DoS, MITM attacks and defense strategies"
         }
       ],
       applications: [
@@ -210,11 +324,13 @@ export default function ComputerNetworksPage() {
   ];
 
   const learningPath = [
-    { step: 1, title: "Start with IP Addressing", description: "Master basic networking concepts", duration: "2-3 hours" },
-    { step: 2, title: "Learn Routing Algorithms", description: "Understand path finding in networks", duration: "3-4 hours" },
-    { step: 3, title: "Study Network Protocols", description: "Explore TCP/IP and HTTP protocols", duration: "2-3 hours" },
-    { step: 4, title: "Practice Data Compression", description: "Learn Huffman and other algorithms", duration: "2-3 hours" },
-    { step: 5, title: "Explore Network Security", description: "Understand cryptographic algorithms", duration: "3-4 hours" }
+    { step: 1, title: "Introduction to Networking", description: "Learn network fundamentals, models, and performance", duration: "2-3 hours" },
+    { step: 2, title: "Physical Layer", description: "Understand transmission media and signal encoding", duration: "2-3 hours" },
+    { step: 3, title: "Data Link Layer", description: "Master error detection, CRC, and Hamming codes", duration: "3-4 hours" },
+    { step: 4, title: "Medium Access Control", description: "Study ALOHA, CSMA/CD, and token protocols", duration: "2-3 hours" },
+    { step: 5, title: "Network Layer", description: "Learn routing algorithms and IP addressing", duration: "3-4 hours" },
+    { step: 6, title: "Transport Layer", description: "Explore TCP/UDP and connection management", duration: "3-4 hours" },
+    { step: 7, title: "Network Security", description: "Understand cryptography and security protocols", duration: "2-3 hours" }
   ];
 
   return (
@@ -240,21 +356,84 @@ export default function ComputerNetworksPage() {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto mb-12">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-400">15+</div>
+              <div className="text-2xl font-bold text-blue-400">25+</div>
               <div className="text-sm text-gray-300">Interactive Tools</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-400">5</div>
+              <div className="text-2xl font-bold text-purple-400">15</div>
               <div className="text-sm text-gray-300">Core Topics</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-400">100+</div>
-              <div className="text-sm text-gray-300">Practice Problems</div>
+              <div className="text-2xl font-bold text-green-400">6</div>
+              <div className="text-sm text-gray-300">Syllabus Modules</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-orange-400">50+</div>
+              <div className="text-2xl font-bold text-orange-400">120+</div>
               <div className="text-sm text-gray-300">Exam Questions</div>
             </div>
+          </div>          </div>
+
+        {/* Quick Module Navigation */}
+        <div className="mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-white mb-4">Quick Module Access</h2>
+            <p className="text-gray-300 max-w-2xl mx-auto">
+              Jump directly to any module for focused learning
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <Link href="/cn/introduction">
+              <Button className="w-full bg-green-600 hover:bg-green-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
+                <Globe className="h-6 w-6" />
+                <span className="text-xs font-medium">Introduction</span>
+              </Button>
+            </Link>
+            <Link href="/cn/physical-layer">
+              <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
+                <Cpu className="h-6 w-6" />
+                <span className="text-xs font-medium">Physical Layer</span>
+              </Button>
+            </Link>
+            <Link href="/cn/data-link-layer">
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
+                <Shield className="h-6 w-6" />
+                <span className="text-xs font-medium">Data Link</span>
+              </Button>
+            </Link>
+            <Link href="/cn/medium-access-control">
+              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
+                <Network className="h-6 w-6" />
+                <span className="text-xs font-medium">MAC Layer</span>
+              </Button>
+            </Link>
+            <Link href="/cn/network-layer">
+              <Button className="w-full bg-cyan-600 hover:bg-cyan-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
+                <Network className="h-6 w-6" />
+                <span className="text-xs font-medium">Network Layer</span>
+              </Button>
+            </Link>
+            <Link href="/cn/transport-layer">
+              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
+                <Globe className="h-6 w-6" />
+                <span className="text-xs font-medium">Transport</span>
+              </Button>
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 max-w-md mx-auto">
+            <Link href="/cn/security">
+              <Button className="w-full bg-red-600 hover:bg-red-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
+                <Shield className="h-6 w-6" />
+                <span className="text-xs font-medium">Security</span>
+              </Button>
+            </Link>
+            <Link href="/cn/compression">
+              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
+                <Cpu className="h-6 w-6" />
+                <span className="text-xs font-medium">Compression</span>
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -375,21 +554,27 @@ export default function ComputerNetworksPage() {
               <BookOpen className="h-8 w-8 mb-4" />
               <h3 className="text-xl font-bold mb-3">Theory Concepts</h3>
               <ul className="space-y-2 text-sm text-blue-100">
-                <li>• OSI and TCP/IP Models</li>
-                <li>• Network Topologies</li>
-                <li>• Error Detection & Correction</li>
-                <li>• Flow Control Mechanisms</li>
+                <li>• OSI and TCP/IP Models (7 layers)</li>
+                <li>• Network Topologies & Types</li>
+                <li>• Error Detection & Correction (CRC, Hamming)</li>
+                <li>• Flow Control & MAC Protocols</li>
+                <li>• Routing Algorithms (Dijkstra)</li>
+                <li>• TCP/UDP Protocol Operations</li>
+                <li>• Security & Cryptography</li>
               </ul>
             </div>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
               <Cpu className="h-8 w-8 mb-4" />
-              <h3 className="text-xl font-bold mb-3">Practical Skills</h3>
+              <h3 className="text-xl font-bold mb-3">Interactive Tools</h3>
               <ul className="space-y-2 text-sm text-blue-100">
-                <li>• IP Address Calculations</li>
-                <li>• Routing Algorithm Implementation</li>
-                <li>• Protocol Analysis</li>
-                <li>• Network Security Applications</li>
+                <li>• IP Address & Subnet Calculator</li>
+                <li>• CRC & Hamming Code Generators</li>
+                <li>• TCP Flow Control Simulator</li>
+                <li>• ALOHA Throughput Calculator</li>
+                <li>• Dijkstra Algorithm Visualizer</li>
+                <li>• RSA Encryption Tool</li>
+                <li>• Network Performance Calculator</li>
               </ul>
             </div>
             
@@ -398,6 +583,8 @@ export default function ComputerNetworksPage() {
               <h3 className="text-xl font-bold mb-3">Exam Strategy</h3>
               <ul className="space-y-2 text-sm text-blue-100">
                 <li>• Practice numerical problems daily</li>
+                <li>• Master CRC & Hamming calculations</li>
+                <li>• Memorize all protocol headers</li>
                 <li>• Draw network diagrams clearly</li>
                 <li>• Memorize protocol formats</li>
                 <li>• Understand algorithm complexities</li>

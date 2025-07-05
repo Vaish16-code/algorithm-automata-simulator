@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Cpu, HardDrive, Shield, Clock, MemoryStick, Users, Play, Star, CheckCircle2, Award, BookOpen } from "lucide-react";
+import { Cpu, HardDrive, Clock, MemoryStick, Users, Play, Star, CheckCircle2, Award, BookOpen } from "lucide-react";
 
 export default function OperatingSystemsPage() {
   const getTopicIcon = (iconName: string) => {
@@ -9,8 +9,7 @@ export default function OperatingSystemsPage() {
       Cpu,
       Memory: MemoryStick,
       HardDrive,
-      Clock,
-      Shield
+      Clock
     };
     return iconMap[iconName];
   };
@@ -169,41 +168,41 @@ export default function OperatingSystemsPage() {
       }
     },
     {
-      title: "Security & Protection",
-      description: "Access control and security mechanisms",
-      icon: "Shield",
-      color: "from-red-500 to-pink-500",
-      difficulty: "Advanced",
-      examWeight: "Low",
+      title: "System Calls & API",
+      description: "Interface between user programs and operating system",
+      icon: "Clock",
+      color: "from-teal-500 to-blue-500",
+      difficulty: "Intermediate",
+      examWeight: "Medium",
       categories: [
         {
-          name: "Access Control",
-          href: "/os/access-control",
-          description: "Access control matrix, capability lists, ACLs",
-          examTips: "Understand protection domains and access rights"
+          name: "System Call Interface",
+          href: "/os/system-calls",
+          description: "File, process, memory, and communication system calls",
+          examTips: "Understand system call mechanism and parameter passing methods"
         },
         {
-          name: "Authentication",
-          href: "/os/authentication",
-          description: "Password systems, biometric authentication",
-          examTips: "Focus on authentication methods and security policies"
+          name: "User-Kernel Interface",
+          href: "/os/system-calls",
+          description: "Mode switching, kernel entry, and system call handling",
+          examTips: "Focus on execution mechanism and context switching"
         },
         {
-          name: "Cryptography",
-          href: "/os/cryptography",
-          description: "Encryption, digital signatures, key management",
-          examTips: "Understand basic cryptographic concepts and their OS applications"
+          name: "API Design",
+          href: "/os/system-calls",
+          description: "System call categories and programming interfaces",
+          examTips: "Know different types of system calls and their applications"
         }
       ],
       applications: [
-        "System Security",
-        "Network Security",
-        "Access Control Systems"
+        "System Programming",
+        "Application Development",
+        "Operating System Design"
       ],
       examInfo: {
-        marks: "5-10",
-        topics: ["Security Models", "Access Control", "Authentication"],
-        questions: "Design security systems, Explain authentication methods, Analyze security threats"
+        marks: "8-10",
+        topics: ["System Call Types", "Execution Mechanism", "Parameter Passing"],
+        questions: "Explain system call mechanism, Compare with function calls, Design system call interface"
       }
     }
   ];
@@ -409,7 +408,7 @@ export default function OperatingSystemsPage() {
         {/* Quick Reference */}
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Operating Systems Quick Reference</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             <div className="text-center">
               <div className="bg-blue-100 p-4 rounded-xl mb-3">
                 <h3 className="font-semibold text-blue-800">Process Management</h3>
@@ -442,12 +441,22 @@ export default function OperatingSystemsPage() {
             </div>
             <div className="text-center">
               <div className="bg-orange-100 p-4 rounded-xl mb-3">
-                <h3 className="font-semibold text-orange-800">System Security</h3>
+                <h3 className="font-semibold text-orange-800">I/O Management</h3>
               </div>
               <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Access Control</li>
-                <li>• Authentication</li>
-                <li>• Security Models</li>
+                <li>• I/O Scheduling</li>
+                <li>• Buffer Management</li>
+                <li>• Device Management</li>
+              </ul>
+            </div>
+            <div className="text-center">
+              <div className="bg-teal-100 p-4 rounded-xl mb-3">
+                <h3 className="font-semibold text-teal-800">System Calls</h3>
+              </div>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• System Call Interface</li>
+                <li>• User-Kernel Mode</li>
+                <li>• Parameter Passing</li>
               </ul>
             </div>
           </div>
