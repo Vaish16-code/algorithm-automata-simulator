@@ -50,7 +50,7 @@ export function fractionalKnapsack(
       });
       totalProfit += item.profit;
       remainingCapacity -= item.weight;
-    } else {
+    } else if (remainingCapacity > 0) {
       // Take a fraction of the item
       const fraction = remainingCapacity / item.weight;
       const fractionalProfit = item.profit * fraction;
@@ -66,7 +66,7 @@ export function fractionalKnapsack(
   }
 
   return {
-    totalProfit,
+    totalProfit: Math.round(totalProfit * 100) / 100, // Round to 2 decimal places
     selectedItems
   };
 }

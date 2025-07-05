@@ -192,6 +192,68 @@ export function fifteenPuzzle(initialBoard: number[][], targetBoard: number[][])
   let stepCount = 0;
   let nodesExplored = 0;
 
+  // Check if puzzle is solvable
+  function isSolvable(board: number[][]): boolean {
+    const size = board.length;
+    const flatBoard = board.flat();
+    
+    // Count inversions (pairs where larger number appears before smaller number)
+    let inversions = 0;
+    for (let i = 0; i < flatBoard.length - 1; i++) {
+      for (let j = i + 1; j < flatBoard.length; j++) {
+        if (flatBoard[i] !== 0 && flatBoard[j] !== 0 && flatBoard[i] > flatBoard[j]) {
+          inversions++;
+        }
+      }
+    }
+    
+    // Find row of empty space (counting from bottom)
+    let emptyRow = 0;
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
+        if (board[i][j] === 0) {
+          emptyRow = size - i; // Count from bottom (1-indexed)
+          break;
+        }
+      }
+    }
+    
+    // For 4x4 grid (15-puzzle):
+    // - If empty space is on even row (counting from bottom), then inversions must be odd
+    // - If empty space is on odd row (counting from bottom), then inversions must be even
+    if (size === 4) {
+      if (emptyRow % 2 === 0) {
+        return inversions % 2 === 1;
+      } else {
+        return inversions % 2 === 0;
+      }
+    }
+    
+    // For odd grid sizes (like 3x3), inversions must be even
+    return inversions % 2 === 0;
+  }
+
+  // Early solvability check
+  if (!isSolvable(initialBoard)) {
+    steps.push({
+      step: stepCount++,
+      description: `Puzzle is mathematically unsolvable. The initial configuration cannot reach the target state.`,
+      board: initialBoard.map(row => [...row]),
+      move: 'UNSOLVABLE',
+      cost: 0,
+      heuristic: 0,
+      total: 0
+    });
+    
+    return {
+      solved: false,
+      solution: [],
+      steps,
+      totalMoves: 0,
+      nodesExplored: 0
+    };
+  }
+
   // Calculate Manhattan distance heuristic
   function calculateHeuristic(board: number[][]): number {
     let distance = 0;

@@ -14,6 +14,9 @@ export default function KruskalPage() {
     { from: 2, to: 3, weight: 4 }
   ]);
   const [result, setResult] = useState<KruskalResult | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationStep, setAnimationStep] = useState(0);
+  const [animationSteps, setAnimationSteps] = useState<any[]>([]);
 
   const educationalContent = {
     overview: "Kruskal&apos;s algorithm is a greedy algorithm for finding the Minimum Spanning Tree (MST) of a weighted undirected graph. It builds the MST by sorting all edges by weight and adding them one by one, ensuring no cycles are formed using Union-Find data structure.",
@@ -62,6 +65,109 @@ export default function KruskalPage() {
     const graph: Graph = { vertices, edges };
     const output = kruskalMST(graph);
     setResult(output);
+  };
+
+  const handleAnimate = () => {
+    const graph: Graph = { vertices, edges };
+    const output = kruskalMST(graph);
+    setResult(output);
+    
+    // Generate animation steps
+    const steps = generateKruskalAnimationSteps(graph);
+    setAnimationSteps(steps);
+    setAnimationStep(0);
+    setIsAnimating(true);
+  };
+
+  const generateKruskalAnimationSteps = (graph: Graph) => {
+    const steps = [];
+    const sortedEdges = [...graph.edges].sort((a, b) => a.weight - b.weight);
+    const parent = Array.from({ length: graph.vertices }, (_, i) => i);
+    const mstEdges: any[] = [];
+
+    const find = (x: number): number => {
+      if (parent[x] !== x) {
+        parent[x] = find(parent[x]);
+      }
+      return parent[x];
+    };
+
+    const union = (x: number, y: number) => {
+      const rootX = find(x);
+      const rootY = find(y);
+      if (rootX !== rootY) {
+        parent[rootX] = rootY;
+        return true;
+      }
+      return false;
+    };
+
+    // Step 1: Show sorted edges
+    steps.push({
+      type: 'sort',
+      sortedEdges: [...sortedEdges],
+      mstEdges: [],
+      currentEdge: null,
+      message: 'Step 1: Sort all edges by weight'
+    });
+
+    // Process each edge
+    for (let i = 0; i < sortedEdges.length; i++) {
+      const edge = sortedEdges[i];
+      const canAdd = find(edge.from) !== find(edge.to);
+      
+      if (canAdd) {
+        union(edge.from, edge.to);
+        mstEdges.push(edge);
+        steps.push({
+          type: 'add_edge',
+          sortedEdges: [...sortedEdges],
+          mstEdges: [...mstEdges],
+          currentEdge: edge,
+          message: `Added edge (${edge.from}, ${edge.to}) with weight ${edge.weight} - No cycle formed`
+        });
+      } else {
+        steps.push({
+          type: 'reject_edge',
+          sortedEdges: [...sortedEdges],
+          mstEdges: [...mstEdges],
+          currentEdge: edge,
+          message: `Rejected edge (${edge.from}, ${edge.to}) with weight ${edge.weight} - Would create cycle`
+        });
+      }
+
+      if (mstEdges.length === graph.vertices - 1) {
+        break;
+      }
+    }
+
+    steps.push({
+      type: 'complete',
+      sortedEdges: [...sortedEdges],
+      mstEdges: [...mstEdges],
+      currentEdge: null,
+      message: 'MST construction complete!'
+    });
+
+    return steps;
+  };
+
+  const nextAnimationStep = () => {
+    if (animationStep < animationSteps.length - 1) {
+      setAnimationStep(animationStep + 1);
+    }
+  };
+
+  const prevAnimationStep = () => {
+    if (animationStep > 0) {
+      setAnimationStep(animationStep - 1);
+    }
+  };
+
+  const resetAnimation = () => {
+    setIsAnimating(false);
+    setAnimationStep(0);
+    setAnimationSteps([]);
   };
 
   const addEdge = () => {
@@ -165,19 +271,30 @@ export default function KruskalPage() {
                   ))}
                 </div>
                 
-                <div className="flex gap-4 mt-4">
-                  <button
-                    onClick={addEdge}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Add Edge
-                  </button>
-                  <button
-                    onClick={handleSolve}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Find MST using Kruskal&apos;s
-                  </button>
+                <div className="space-y-4 mt-4">
+                  <div className="flex flex-wrap gap-4">
+                    <button
+                      onClick={addEdge}
+                      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                    >
+                      Add Edge
+                    </button>
+                    <button
+                      onClick={handleSolve}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                    >
+                      Find MST using Kruskal&apos;s
+                    </button>
+                  </div>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={handleAnimate}
+                      className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-lg flex items-center gap-2 text-lg shadow-lg"
+                    >
+                      <span>🎬</span>
+                      Animate Algorithm Step-by-Step
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -201,8 +318,101 @@ export default function KruskalPage() {
           </div>
         </div>
 
+        {/* Animation Controls */}
+        {isAnimating && animationSteps.length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8 border-2 border-purple-200">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <span>🎬</span>
+              Kruskal's Algorithm Animation
+            </h2>
+            
+            {/* Current Step Info */}
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold text-purple-800">
+                  Step {animationStep + 1} of {animationSteps.length}
+                </h3>
+                <div className="text-sm text-purple-600">
+                  {animationSteps[animationStep]?.type === 'sort' && '📊 Sorting Edges'}
+                  {animationSteps[animationStep]?.type === 'add_edge' && '✅ Adding Edge'}
+                  {animationSteps[animationStep]?.type === 'reject_edge' && '❌ Rejecting Edge'}
+                  {animationSteps[animationStep]?.type === 'complete' && '🎉 Complete'}
+                </div>
+              </div>
+              <p className="text-purple-700 font-medium">
+                {animationSteps[animationStep]?.message}
+              </p>
+            </div>
+
+            {/* Animation Controls */}
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <button
+                onClick={prevAnimationStep}
+                disabled={animationStep === 0}
+                className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-md flex items-center gap-2"
+              >
+                ⏮️ Previous
+              </button>
+              
+              <div className="bg-gray-100 px-4 py-2 rounded-lg">
+                <span className="text-sm font-medium text-gray-600">
+                  {animationStep + 1} / {animationSteps.length}
+                </span>
+              </div>
+              
+              <button
+                onClick={nextAnimationStep}
+                disabled={animationStep >= animationSteps.length - 1}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white px-4 py-2 rounded-md flex items-center gap-2"
+              >
+                Next ⏭️
+              </button>
+              
+              <button
+                onClick={resetAnimation}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
+              >
+                🔄 Reset
+              </button>
+            </div>
+
+            {/* Current State Visualization */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-blue-50 rounded-lg p-4">
+                <h4 className="font-semibold text-blue-800 mb-2">Sorted Edges</h4>
+                <div className="space-y-1 max-h-32 overflow-y-auto">
+                  {(animationSteps[animationStep]?.sortedEdges || []).map((edge: any, idx: number) => (
+                    <div 
+                      key={idx} 
+                      className={`text-sm p-2 rounded ${
+                        animationSteps[animationStep]?.currentEdge?.from === edge.from && 
+                        animationSteps[animationStep]?.currentEdge?.to === edge.to
+                          ? 'bg-yellow-200 text-yellow-800 font-bold'
+                          : 'text-blue-700'
+                      }`}
+                    >
+                      ({edge.from}, {edge.to}) - Weight: {edge.weight}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-green-50 rounded-lg p-4">
+                <h4 className="font-semibold text-green-800 mb-2">MST Edges</h4>
+                <div className="space-y-1">
+                  {(animationSteps[animationStep]?.mstEdges || []).map((edge: any, idx: number) => (
+                    <div key={idx} className="text-sm text-green-700">
+                      ({edge.from}, {edge.to}) - Weight: {edge.weight}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Results Section */}
-        {result && (
+        {result && !isAnimating && (
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Algorithm Result</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

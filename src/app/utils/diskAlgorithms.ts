@@ -37,13 +37,43 @@ export function scan(queue: number[], head: number, direction: "left" | "right",
   let seekTime = 0;
 
   if (direction === "left") {
-    left.forEach(p => { seekTime += Math.abs(head - p); head = p; sequence.push(p); });
-    if (head !== 0) { seekTime += head; head = 0; sequence.push(0); }
-    right.forEach(p => { seekTime += Math.abs(head - p); head = p; sequence.push(p); });
+    // Service all requests to the left first
+    left.forEach(p => { 
+      seekTime += Math.abs(head - p); 
+      head = p; 
+      sequence.push(p); 
+    });
+    // Go to the beginning of disk if there are requests on the right
+    if (right.length > 0 && head !== 0) { 
+      seekTime += head; 
+      head = 0; 
+      sequence.push(0); 
+    }
+    // Service requests to the right
+    right.forEach(p => { 
+      seekTime += Math.abs(head - p); 
+      head = p; 
+      sequence.push(p); 
+    });
   } else {
-    right.forEach(p => { seekTime += Math.abs(head - p); head = p; sequence.push(p); });
-    if (head !== diskSize - 1) { seekTime += (diskSize - 1 - head); head = diskSize - 1; sequence.push(diskSize - 1); }
-    left.forEach(p => { seekTime += Math.abs(head - p); head = p; sequence.push(p); });
+    // Service all requests to the right first
+    right.forEach(p => { 
+      seekTime += Math.abs(head - p); 
+      head = p; 
+      sequence.push(p); 
+    });
+    // Go to the end of disk if there are requests on the left
+    if (left.length > 0 && head !== diskSize - 1) { 
+      seekTime += (diskSize - 1 - head); 
+      head = diskSize - 1; 
+      sequence.push(diskSize - 1); 
+    }
+    // Service requests to the left (reverse order)
+    left.reverse().forEach(p => { 
+      seekTime += Math.abs(head - p); 
+      head = p; 
+      sequence.push(p); 
+    });
   }
 
   return { sequence, seekTime };
@@ -55,17 +85,33 @@ export function cscan(queue: number[], head: number, diskSize = 200): DiskResult
   const sequence: number[] = [head];
   let seekTime = 0;
 
-  right.forEach(p => { seekTime += Math.abs(head - p); head = p; sequence.push(p); });
-  if (head !== diskSize - 1) {
-    seekTime += diskSize - 1 - head;
-    head = 0;
-    sequence.push(diskSize - 1, 0);
-  } else {
+  // Service all requests to the right first
+  right.forEach(p => { 
+    seekTime += Math.abs(head - p); 
+    head = p; 
+    sequence.push(p); 
+  });
+  
+  // If there are requests to the left, go to end then beginning
+  if (left.length > 0) {
+    if (head !== diskSize - 1) {
+      seekTime += diskSize - 1 - head;
+      head = diskSize - 1;
+      sequence.push(diskSize - 1);
+    }
+    
+    // Jump to beginning
+    seekTime += diskSize - 1;  // Distance from end to beginning
     head = 0;
     sequence.push(0);
+    
+    // Service requests from beginning
+    left.forEach(p => { 
+      seekTime += Math.abs(head - p); 
+      head = p; 
+      sequence.push(p); 
+    });
   }
-
-  left.forEach(p => { seekTime += Math.abs(head - p); head = p; sequence.push(p); });
 
   return { sequence, seekTime };
 }

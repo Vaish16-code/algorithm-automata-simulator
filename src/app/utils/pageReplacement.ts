@@ -98,16 +98,9 @@ export function lruPageReplacement(sequence: number[], frameSize: number): PageR
         replacedIndex = emptyIndex;
       } else {
         // Find least recently used page
-        let lruPage = recentlyUsed[0];
-        for (let i = 0; i < recentlyUsed.length; i++) {
-          const frameIndex = frames.indexOf(recentlyUsed[i]);
-          if (frameIndex !== -1) {
-            lruPage = recentlyUsed[i];
-            replacedIndex = frameIndex;
-            break;
-          }
-        }
-        replacedPage = frames[replacedIndex];
+        const lruPage = recentlyUsed.length > 0 ? recentlyUsed[0] : frames[0]!;
+        replacedIndex = frames.indexOf(lruPage);
+        replacedPage = lruPage;
         
         // Remove from recently used list
         const recentIndex = recentlyUsed.indexOf(lruPage);

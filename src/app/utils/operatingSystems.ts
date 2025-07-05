@@ -289,14 +289,13 @@ export function firstFit(blocks: MemoryBlock[], request: AllocationRequest): Mem
   const totalMemory = updatedBlocks.reduce((sum, block) => sum + block.size, 0);
   const allocatedMemory = updatedBlocks.filter(b => b.allocated).reduce((sum, block) => sum + block.size, 0);
   const freeMemory = totalMemory - allocatedMemory;
-  const largestFreeBlock = Math.max(...updatedBlocks.filter(b => !b.allocated).map(b => b.size), 0);
 
   return {
     blocks: updatedBlocks,
     allocated: !!allocatedBlock,
     processId: request.processId,
     allocatedBlock,
-    externalFragmentation: freeMemory - largestFreeBlock,
+    externalFragmentation: freeMemory,
     internalFragmentation: allocatedBlock ? allocatedBlock.size - request.size : 0
   };
 }
@@ -337,14 +336,13 @@ export function bestFit(blocks: MemoryBlock[], request: AllocationRequest): Memo
   const totalMemory = updatedBlocks.reduce((sum, block) => sum + block.size, 0);
   const allocatedMemory = updatedBlocks.filter(b => b.allocated).reduce((sum, block) => sum + block.size, 0);
   const freeMemory = totalMemory - allocatedMemory;
-  const largestFreeBlock = Math.max(...updatedBlocks.filter(b => !b.allocated).map(b => b.size), 0);
 
   return {
     blocks: updatedBlocks,
     allocated: !!bestBlock,
     processId: request.processId,
     allocatedBlock: bestBlock,
-    externalFragmentation: freeMemory - largestFreeBlock,
+    externalFragmentation: freeMemory,
     internalFragmentation: bestBlock ? bestBlock.size - request.size : 0
   };
 }
@@ -385,14 +383,13 @@ export function worstFit(blocks: MemoryBlock[], request: AllocationRequest): Mem
   const totalMemory = updatedBlocks.reduce((sum, block) => sum + block.size, 0);
   const allocatedMemory = updatedBlocks.filter(b => b.allocated).reduce((sum, block) => sum + block.size, 0);
   const freeMemory = totalMemory - allocatedMemory;
-  const largestFreeBlock = Math.max(...updatedBlocks.filter(b => !b.allocated).map(b => b.size), 0);
 
   return {
     blocks: updatedBlocks,
     allocated: !!worstBlock,
     processId: request.processId,
     allocatedBlock: worstBlock,
-    externalFragmentation: freeMemory - largestFreeBlock,
+    externalFragmentation: freeMemory,
     internalFragmentation: worstBlock ? worstBlock.size - request.size : 0
   };
 }

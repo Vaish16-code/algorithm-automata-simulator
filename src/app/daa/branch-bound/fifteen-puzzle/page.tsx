@@ -5,11 +5,12 @@ import { fifteenPuzzle, FifteenPuzzleResult } from "@/app/utils/branchAndBound";
 import EducationalInfo from "@/components/EducationalInfo";
 
 export default function FifteenPuzzlePage() {
+  // Easy solvable puzzle (just one move away)
   const [initialBoard, setInitialBoard] = useState([
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     [9, 10, 11, 12],
-    [13, 15, 14, 0]
+    [13, 14, 0, 15]
   ]);
   
   const targetBoard = [
@@ -59,14 +60,99 @@ export default function FifteenPuzzlePage() {
   };
 
   const shuffleBoard = () => {
-    const numbers = Array.from({ length: 16 }, (_, i) => i);
-    const shuffled = [...numbers].sort(() => Math.random() - 0.5);
+    generateSolvablePuzzle();
+  };
+
+  // Preset solvable puzzles
+  const presetPuzzles = {
+    easy: [
+      [1, 2, 3, 4],
+      [5, 6, 7, 8],
+      [9, 10, 11, 12],
+      [13, 14, 0, 15]
+    ],
+    medium: [
+      [1, 2, 3, 4],
+      [5, 6, 7, 8],
+      [9, 10, 0, 11],
+      [13, 14, 15, 12]
+    ],
+    hard: [
+      [5, 1, 3, 4],
+      [2, 6, 7, 8],
+      [9, 10, 11, 12],
+      [13, 14, 15, 0]
+    ],
+    expert: [
+      [2, 3, 4, 8],
+      [1, 6, 0, 12],
+      [5, 10, 7, 11],
+      [9, 13, 14, 15]
+    ]
+  };
+
+  // Check if puzzle is solvable (same logic as in branchAndBound.ts)
+  const isSolvable = (board: number[][]) => {
+    const size = board.length;
+    const flatBoard = board.flat();
     
-    const newBoard = [];
-    for (let i = 0; i < 4; i++) {
-      newBoard.push(shuffled.slice(i * 4, (i + 1) * 4));
+    let inversions = 0;
+    for (let i = 0; i < flatBoard.length - 1; i++) {
+      for (let j = i + 1; j < flatBoard.length; j++) {
+        if (flatBoard[i] !== 0 && flatBoard[j] !== 0 && flatBoard[i] > flatBoard[j]) {
+          inversions++;
+        }
+      }
     }
-    setInitialBoard(newBoard);
+    
+    let emptyRow = 0;
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
+        if (board[i][j] === 0) {
+          emptyRow = size - i;
+          break;
+        }
+      }
+    }
+    
+    if (size === 4) {
+      if (emptyRow % 2 === 0) {
+        return inversions % 2 === 1;
+      } else {
+        return inversions % 2 === 0;
+      }
+    }
+    
+    return inversions % 2 === 0;
+  };
+
+  // Generate random solvable puzzle
+  const generateSolvablePuzzle = () => {
+    let attempts = 0;
+    let newBoard;
+    
+    do {
+      const numbers = Array.from({ length: 16 }, (_, i) => i);
+      const shuffled = [...numbers].sort(() => Math.random() - 0.5);
+      
+      newBoard = [];
+      for (let i = 0; i < 4; i++) {
+        newBoard.push(shuffled.slice(i * 4, (i + 1) * 4));
+      }
+      attempts++;
+    } while (!isSolvable(newBoard) && attempts < 100);
+    
+    if (isSolvable(newBoard)) {
+      setInitialBoard(newBoard);
+    } else {
+      // Fallback to preset easy puzzle
+      setInitialBoard(presetPuzzles.easy);
+    }
+  };
+
+  // Load preset puzzle
+  const loadPreset = (difficulty: keyof typeof presetPuzzles) => {
+    setInitialBoard(presetPuzzles[difficulty].map(row => [...row]));
   };
 
   const renderBoard = (board: number[][], title: string, editable: boolean = false) => {
@@ -201,13 +287,42 @@ export default function FifteenPuzzlePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
             <div>
               {renderBoard(initialBoard, "Initial State", true)}
-              <div className="text-center mt-4">
+              <div className="text-center mt-4 space-y-2">
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <button
+                    onClick={() => loadPreset('easy')}
+                    className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-colors"
+                  >
+                    Easy
+                  </button>
+                  <button
+                    onClick={() => loadPreset('medium')}
+                    className="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600 transition-colors"
+                  >
+                    Medium
+                  </button>
+                  <button
+                    onClick={() => loadPreset('hard')}
+                    className="px-3 py-1 bg-orange-500 text-white rounded text-sm hover:bg-orange-600 transition-colors"
+                  >
+                    Hard
+                  </button>
+                  <button
+                    onClick={() => loadPreset('expert')}
+                    className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-colors"
+                  >
+                    Expert
+                  </button>
+                </div>
                 <button
                   onClick={shuffleBoard}
                   className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                 >
-                  Shuffle Board
+                  Random Solvable
                 </button>
+                <div className="text-xs text-gray-500 mt-2">
+                  Solvable: {isSolvable(initialBoard) ? '✅ Yes' : '❌ No'}
+                </div>
               </div>
             </div>
             

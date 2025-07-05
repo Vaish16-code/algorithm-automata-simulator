@@ -16,11 +16,99 @@ export default function PrimPage() {
     { from: 3, to: 4, weight: 9 }
   ]);
   const [result, setResult] = useState<PrimResult | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationStep, setAnimationStep] = useState(0);
+  const [animationSteps, setAnimationSteps] = useState<any[]>([]);
 
   const handleSolve = () => {
     const graph: Graph = { vertices, edges };
     const output = primMST(graph);
     setResult(output);
+  };
+
+  const handleAnimate = () => {
+    const graph: Graph = { vertices, edges };
+    const output = primMST(graph);
+    setResult(output);
+    
+    // Generate animation steps
+    const steps = generatePrimAnimationSteps(graph);
+    setAnimationSteps(steps);
+    setAnimationStep(0);
+    setIsAnimating(true);
+  };
+
+  const generatePrimAnimationSteps = (graph: Graph) => {
+    const steps = [];
+    const visited = new Set<number>();
+    const mstEdges: any[] = [];
+    
+    // Step 1: Start with vertex 0
+    visited.add(0);
+    steps.push({
+      type: 'start',
+      visited: new Set([0]),
+      mstEdges: [],
+      message: 'Starting with vertex 0'
+    });
+
+    while (visited.size < graph.vertices) {
+      let minEdge = null;
+      let minWeight = Infinity;
+
+      // Find minimum weight edge connecting visited to unvisited vertex
+      for (const edge of graph.edges) {
+        const { from, to, weight } = edge;
+        if ((visited.has(from) && !visited.has(to)) || 
+            (visited.has(to) && !visited.has(from))) {
+          if (weight < minWeight) {
+            minWeight = weight;
+            minEdge = edge;
+          }
+        }
+      }
+
+      if (minEdge) {
+        const newVertex = visited.has(minEdge.from) ? minEdge.to : minEdge.from;
+        visited.add(newVertex);
+        mstEdges.push(minEdge);
+        
+        steps.push({
+          type: 'add_edge',
+          visited: new Set(visited),
+          mstEdges: [...mstEdges],
+          currentEdge: minEdge,
+          message: `Adding edge (${minEdge.from}, ${minEdge.to}) with weight ${minEdge.weight}`
+        });
+      }
+    }
+
+    steps.push({
+      type: 'complete',
+      visited: new Set(visited),
+      mstEdges: [...mstEdges],
+      message: 'MST construction complete!'
+    });
+
+    return steps;
+  };
+
+  const nextAnimationStep = () => {
+    if (animationStep < animationSteps.length - 1) {
+      setAnimationStep(animationStep + 1);
+    }
+  };
+
+  const prevAnimationStep = () => {
+    if (animationStep > 0) {
+      setAnimationStep(animationStep - 1);
+    }
+  };
+
+  const resetAnimation = () => {
+    setIsAnimating(false);
+    setAnimationStep(0);
+    setAnimationSteps([]);
   };
 
   const addEdge = () => {
@@ -164,23 +252,118 @@ export default function PrimPage() {
             ))}
           </div>
 
-          <div className="flex gap-4">
-            <button
-              onClick={addEdge}
-              className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md"
-            >
-              Add Edge
-            </button>
-            <button
-              onClick={handleSolve}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md"
-            >
-              Find MST using Prim&apos;s
-            </button>
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={addEdge}
+                className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md"
+              >
+                Add Edge
+              </button>
+              <button
+                onClick={handleSolve}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md"
+              >
+                Find MST using Prim&apos;s
+              </button>
+            </div>
+            <div className="flex justify-center">
+              <button
+                onClick={handleAnimate}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-lg flex items-center gap-2 text-lg shadow-lg"
+              >
+                <span>🎬</span>
+                Animate Algorithm Step-by-Step
+              </button>
+            </div>
           </div>
         </div>
 
-        {result && (
+        {/* Animation Controls */}
+        {isAnimating && animationSteps.length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8 border-2 border-purple-200">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <span>🎬</span>
+              Algorithm Animation
+            </h2>
+            
+            {/* Current Step Info */}
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold text-purple-800">
+                  Step {animationStep + 1} of {animationSteps.length}
+                </h3>
+                <div className="text-sm text-purple-600">
+                  {animationSteps[animationStep]?.type === 'start' && '🟢 Starting'}
+                  {animationSteps[animationStep]?.type === 'add_edge' && '➕ Adding Edge'}
+                  {animationSteps[animationStep]?.type === 'complete' && '✅ Complete'}
+                </div>
+              </div>
+              <p className="text-purple-700 font-medium">
+                {animationSteps[animationStep]?.message}
+              </p>
+            </div>
+
+            {/* Animation Controls */}
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <button
+                onClick={prevAnimationStep}
+                disabled={animationStep === 0}
+                className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 text-white px-4 py-2 rounded-md flex items-center gap-2"
+              >
+                ⏮️ Previous
+              </button>
+              
+              <div className="bg-gray-100 px-4 py-2 rounded-lg">
+                <span className="text-sm font-medium text-gray-600">
+                  {animationStep + 1} / {animationSteps.length}
+                </span>
+              </div>
+              
+              <button
+                onClick={nextAnimationStep}
+                disabled={animationStep >= animationSteps.length - 1}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white px-4 py-2 rounded-md flex items-center gap-2"
+              >
+                Next ⏭️
+              </button>
+              
+              <button
+                onClick={resetAnimation}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
+              >
+                🔄 Reset
+              </button>
+            </div>
+
+            {/* Current State Visualization */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-green-50 rounded-lg p-4">
+                <h4 className="font-semibold text-green-800 mb-2">Visited Vertices</h4>
+                <div className="flex flex-wrap gap-2">
+                  {Array.from(animationSteps[animationStep]?.visited || []).map((vertex, index) => (
+                    <span key={index} className="bg-green-200 text-green-800 px-2 py-1 rounded text-sm font-medium">
+                      {vertex as number}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-blue-50 rounded-lg p-4">
+                <h4 className="font-semibold text-blue-800 mb-2">MST Edges</h4>
+                <div className="space-y-1">
+                  {(animationSteps[animationStep]?.mstEdges || []).map((edge: any, idx: number) => (
+                    <div key={idx} className="text-sm text-blue-700">
+                      ({edge.from}, {edge.to}) - Weight: {edge.weight}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {result && !isAnimating && (
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Algorithm Result</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
