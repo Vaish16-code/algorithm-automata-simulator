@@ -6,23 +6,67 @@ import { EducationalInfo, ExamResult } from "../../../../components";
 
 export default function BinarySearchPage() {
   const [inputArray, setInputArray] = useState([1, 3, 5, 7, 9, 11, 13, 15, 17, 19]);
+  const [inputText, setInputText] = useState("1, 3, 5, 7, 9, 11, 13, 15, 17, 19");
   const [target, setTarget] = useState(7);
   const [result, setResult] = useState<BinarySearchResult | null>(null);
+  const [inputError, setInputError] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSearch = () => {
-    // Ensure array is sorted for binary search
-    const sortedArray = [...inputArray].sort((a, b) => a - b);
-    const output = binarySearch(sortedArray, target);
-    setResult(output);
+    if (inputArray.length === 0) {
+      setInputError("Please enter a valid array with at least one element.");
+      return;
+    }
+    if (inputArray.length > 50) {
+      setInputError("Please enter an array with maximum 50 elements for better visualization.");
+      return;
+    }
+    
+    setInputError("");
+    setIsProcessing(true);
+    setResult(null); // Clear previous result
+    
+    try {
+      // Ensure array is sorted for binary search
+      const sortedArray = [...inputArray].sort((a, b) => a - b);
+      const output = binarySearch(sortedArray, target);
+      setResult(output);
+    } catch (error) {
+      console.error("Error during search:", error);
+      setInputError("An error occurred during search. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleArrayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const newArray = value
-      .split(',')
-      .map(n => parseInt(n.trim()))
-      .filter(n => !isNaN(n));
-    setInputArray(newArray);
+    setInputText(value);
+    setInputError("");
+    setResult(null); // Clear previous result when input changes
+    
+    try {
+      const newArray = value
+        .split(',')
+        .map(n => {
+          const trimmed = n.trim();
+          if (trimmed === '') return null;
+          const num = parseInt(trimmed);
+          if (isNaN(num)) {
+            throw new Error(`Invalid number: ${trimmed}`);
+          }
+          return num;
+        })
+        .filter(n => n !== null) as number[];
+      
+      if (newArray.length > 0) {
+        setInputArray(newArray);
+      } else if (value.trim() === '') {
+        setInputArray([]);
+      }
+    } catch (error) {
+      setInputError("Please enter valid numbers separated by commas (e.g., 1, 2, 3)");
+    }
   };
 
   const generateRandomArray = () => {
@@ -30,7 +74,10 @@ export default function BinarySearchPage() {
     const newArray = Array.from({ length: size }, () => Math.floor(Math.random() * 100) + 1)
       .sort((a, b) => a - b); // Keep sorted for binary search
     setInputArray(newArray);
+    setInputText(newArray.join(', '));
     setTarget(newArray[Math.floor(Math.random() * newArray.length)]);
+    setInputError("");
+    setResult(null); // Clear previous result
   };
 
   const sortedArray = [...inputArray].sort((a, b) => a - b);
@@ -65,7 +112,7 @@ export default function BinarySearchPage() {
               "Searching in game trees and decision trees"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Binary search algorithm implementation",
               "Divide and conquer approach",
@@ -111,15 +158,25 @@ export default function BinarySearchPage() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Array Elements (will be sorted automatically)
+                  Array Elements (will be sorted automatically):
                 </label>
                 <input
                   type="text"
-                  value={inputArray.join(', ')}
+                  className={`w-full border-4 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:ring-4 ${
+                    inputError ? 'border-red-500 focus:border-red-600 focus:ring-red-200' : 'border-gray-800 focus:border-teal-600 focus:ring-teal-200'
+                  }`}
+                  value={inputText}
                   onChange={handleArrayChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 bg-white"
-                  placeholder="Enter numbers separated by commas"
+                  placeholder="e.g., 1, 3, 5, 7, 9, 11, 13, 15"
                 />
+                {inputError && (
+                  <div className="text-red-600 text-sm mt-1 font-medium">
+                    {inputError}
+                  </div>
+                )}
+                <div className="text-xs text-gray-500 mt-1">
+                  💡 Enter numbers separated by commas. They will be automatically sorted.
+                </div>
               </div>
 
               <div>
@@ -138,9 +195,10 @@ export default function BinarySearchPage() {
               <div className="flex gap-3">
                 <button
                   onClick={handleSearch}
-                  className="flex-1 bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors font-semibold"
+                  className="flex-1 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg transition-colors font-semibold"
+                  disabled={inputArray.length === 0 || isProcessing}
                 >
-                  Search
+                  {isProcessing ? "Searching..." : "Search"}
                 </button>
                 <button
                   onClick={generateRandomArray}
@@ -152,27 +210,32 @@ export default function BinarySearchPage() {
             </div>
 
             {/* Sorted Array Display */}
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Sorted Array:</h3>
-              <div className="flex flex-wrap gap-2">
-                {sortedArray.map((num, index) => (
-                  <div
-                    key={index}
-                    className={`px-3 py-2 rounded-lg font-mono ${
-                      num === target 
-                        ? 'bg-teal-200 text-teal-800 ring-2 ring-teal-400' 
-                        : 'bg-teal-100 text-teal-800'
-                    }`}
-                  >
-                    {num}
-                    <span className="text-xs text-teal-600 ml-1">[{index}]</span>
-                  </div>
-                ))}
+            {inputArray.length > 0 && !inputError && (
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg border-l-4 border-green-500">
+                <div className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <span className="text-green-600 mr-2">✓</span>
+                  Sorted Array ({[...inputArray].sort((a, b) => a - b).length} elements):
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {[...inputArray].sort((a, b) => a - b).map((num, index) => (
+                    <div
+                      key={index}
+                      className={`px-3 py-2 rounded-lg font-mono font-bold ${
+                        num === target 
+                          ? 'bg-teal-200 text-teal-800 ring-2 ring-teal-400' 
+                          : 'bg-teal-100 text-teal-800'
+                      }`}
+                    >
+                      {num}
+                      <span className="text-xs text-teal-600 ml-1">[{index}]</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-2 text-sm text-gray-600">
+                  Target: <span className="font-mono font-bold text-teal-600">{target}</span>
+                </div>
               </div>
-              <div className="mt-2 text-sm text-gray-600">
-                Target: <span className="font-mono font-bold text-teal-600">{target}</span>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Results Section */}

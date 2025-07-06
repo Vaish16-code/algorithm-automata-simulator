@@ -151,7 +151,7 @@ export default function ExamResult({ title, input, result, steps, finalAnswer, e
               <div className="flex items-center space-x-3">
                 <Award className="h-6 w-6" />
                 <div>
-                  <h4 className="text-xl font-bold">Mumbai University Answer Format</h4>
+                  <h4 className="text-xl font-bold">University Answer Format</h4>
                   <p className="text-purple-100">Ready-to-write exam answer</p>
                 </div>
               </div>

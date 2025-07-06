@@ -63,7 +63,7 @@ export default function OperatingSystemsPage() {
       "Performance comparison of different algorithms",
       "Real-world optimization problems"
     ],
-    examPattern: "Mumbai University OS exams typically include 2-3 questions (15-20 marks total) on memory management and disk scheduling algorithms."
+    examPattern: "University OS exams typically include 2-3 questions (15-20 marks total) on memory management and disk scheduling algorithms."
   };
 
   return (
@@ -173,7 +173,7 @@ export default function OperatingSystemsPage() {
 
         {/* Exam Preparation */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">University Exam Preparation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>

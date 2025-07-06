@@ -58,7 +58,7 @@ export default function KruskalPage() {
       "MST in dense vs sparse graphs",
       "Applications in clustering problems"
     ],
-    examPattern: "Kruskal&apos;s algorithm is a major topic in Mumbai University exams (10-15 marks), often combined with Union-Find implementation and complexity analysis."
+    examPattern: "Kruskal&apos;s algorithm is a major topic in university exams (10-15 marks), often combined with Union-Find implementation and complexity analysis."
   };
 
   const handleSolve = () => {
@@ -303,7 +303,15 @@ export default function KruskalPage() {
             <div className="bg-gray-50 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-gray-700 mb-4">MST Visualization</h3>
               {result ? (
-                <KruskalChart data={result} vertices={vertices} />
+                <KruskalChart 
+                  data={result} 
+                  vertices={vertices}
+                  currentStep={isAnimating ? animationStep : -1}
+                  totalSteps={isAnimating ? animationSteps.length : 0}
+                  onNext={nextAnimationStep}
+                  onPrev={prevAnimationStep}
+                  onReset={resetAnimation}
+                />
               ) : (
                 <div className="h-64 flex items-center justify-center text-gray-500 bg-white rounded-lg border-2 border-dashed border-gray-300">
                   <div className="text-center">
@@ -525,7 +533,7 @@ export default function KruskalPage() {
 
         {/* Exam Preparation */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">University Exam Preparation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>

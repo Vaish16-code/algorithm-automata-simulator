@@ -11,10 +11,25 @@ export interface MergeSortStep {
   range: [number, number];
 }
 
+export interface MergeSortTreeNode {
+  id: string;
+  array: number[];           // Shows the current state of this node
+  originalArray: number[];   // Original unsorted subarray for this node
+  mergedArray?: number[];    // Sorted result after merging (only for merged nodes)
+  range: [number, number];
+  level: number;
+  left?: MergeSortTreeNode;
+  right?: MergeSortTreeNode;
+  isLeaf: boolean;
+  isDividing: boolean;       // True during division phase (shows original unsorted)
+  isMerged: boolean;         // True after merging (shows sorted result)
+}
+
 export interface MergeSortResult {
   sortedArray: number[];
   steps: MergeSortStep[];
   comparisons: number;
+  tree: MergeSortTreeNode;
 }
 
 // Merge Sort Algorithm
@@ -22,8 +37,28 @@ export function mergeSort(arr: number[]): MergeSortResult {
   const steps: MergeSortStep[] = [];
   let stepCount = 0;
   let comparisons = 0;
+  let nodeId = 0;
 
-  function mergeSortHelper(array: number[], start: number, end: number): number[] {
+  function createTreeNode(array: number[], start: number, end: number, level: number): MergeSortTreeNode {
+    const id = `node-${nodeId++}`;
+    const isLeaf = start === end;
+    const nodeArray = array.slice(start, end + 1);
+    
+    return {
+      id,
+      array: [...nodeArray],        // Initially shows the original unsorted subarray
+      originalArray: [...nodeArray], // Keep track of original unsorted subarray
+      range: [start, end],
+      level,
+      isLeaf,
+      isDividing: true,
+      isMerged: false
+    };
+  }
+
+  function mergeSortHelper(array: number[], start: number, end: number, level: number): { result: number[], node: MergeSortTreeNode } {
+    const node = createTreeNode(array, start, end, level);
+    
     if (start >= end) {
       steps.push({
         step: stepCount++,
@@ -31,7 +66,12 @@ export function mergeSort(arr: number[]): MergeSortResult {
         array: [array[start]],
         range: [start, end]
       });
-      return [array[start]];
+      // For leaf nodes, they are already "sorted" (single element)
+      node.isDividing = false;
+      node.isMerged = true;
+      node.mergedArray = [array[start]];
+      node.array = [array[start]]; // Update display array to show sorted result
+      return { result: [array[start]], node };
     }
 
     const mid = Math.floor((start + end) / 2);
@@ -43,10 +83,21 @@ export function mergeSort(arr: number[]): MergeSortResult {
       range: [start, end]
     });
 
-    const left = mergeSortHelper(array, start, mid);
-    const right = mergeSortHelper(array, mid + 1, end);
+    const leftResult = mergeSortHelper(array, start, mid, level + 1);
+    const rightResult = mergeSortHelper(array, mid + 1, end, level + 1);
 
-    return merge(left, right, start, end);
+    node.left = leftResult.node;
+    node.right = rightResult.node;
+
+    const merged = merge(leftResult.result, rightResult.result, start, end);
+    
+    // Update node to show it's now merged
+    node.isDividing = false;
+    node.isMerged = true;
+    node.mergedArray = [...merged];
+    node.array = [...merged]; // Update display array to show sorted result
+
+    return { result: merged, node };
   }
 
   function merge(left: number[], right: number[], start: number, end: number): number[] {
@@ -96,12 +147,13 @@ export function mergeSort(arr: number[]): MergeSortResult {
     return merged;
   }
 
-  const sortedArray = mergeSortHelper(arr, 0, arr.length - 1);
+  const { result: sortedArray, node: tree } = mergeSortHelper(arr, 0, arr.length - 1, 0);
 
   return {
     sortedArray,
     steps,
-    comparisons
+    comparisons,
+    tree
   };
 }
 
@@ -416,5 +468,96 @@ export function maxSubarray(arr: number[]): MaxSubarrayResult {
     startIndex: maxStart,
     endIndex: maxEnd,
     steps
+  };
+}
+
+// Min-Max Tree interfaces
+export interface MinMaxTreeNode {
+  id: string;
+  array: number[];
+  left: number;
+  right: number;
+  min: number;
+  max: number;
+  level: number;
+  isBaseCase: boolean;
+  isDividing: boolean;
+  isCombining: boolean;
+  leftChild?: MinMaxTreeNode;
+  rightChild?: MinMaxTreeNode;
+  leftResult?: { min: number; max: number };
+  rightResult?: { min: number; max: number };
+}
+
+export interface MinMaxTreeResult {
+  root: MinMaxTreeNode;
+  min: number;
+  max: number;
+  comparisons: number;
+}
+
+// Build Min-Max Tree
+export function buildMinMaxTree(arr: number[]): MinMaxTreeResult {
+  let comparisons = 0;
+  let nodeId = 0;
+
+  const generateId = () => `node-${nodeId++}`;
+
+  const buildTree = (array: number[], left: number, right: number, level: number): MinMaxTreeNode => {
+    const node: MinMaxTreeNode = {
+      id: generateId(),
+      array: array.slice(left, right + 1),
+      left,
+      right,
+      min: -1,
+      max: -1,
+      level,
+      isBaseCase: false,
+      isDividing: true,
+      isCombining: false
+    };
+
+    if (left === right) {
+      // Base case: single element
+      node.min = array[left];
+      node.max = array[left];
+      node.isBaseCase = true;
+      node.isDividing = false;
+      return node;
+    }
+
+    if (right === left + 1) {
+      // Base case: two elements
+      comparisons++;
+      node.min = Math.min(array[left], array[right]);
+      node.max = Math.max(array[left], array[right]);
+      node.isBaseCase = true;
+      node.isDividing = false;
+      return node;
+    }
+
+    // Divide
+    const mid = Math.floor((left + right) / 2);
+    node.leftChild = buildTree(array, left, mid, level + 1);
+    node.rightChild = buildTree(array, mid + 1, right, level + 1);
+
+    // Combine
+    comparisons += 2; // Two comparisons to find overall min and max
+    node.leftResult = { min: node.leftChild.min, max: node.leftChild.max };
+    node.rightResult = { min: node.rightChild.min, max: node.rightChild.max };
+    node.min = Math.min(node.leftResult.min, node.rightResult.min);
+    node.max = Math.max(node.leftResult.max, node.rightResult.max);
+    node.isDividing = false;
+    node.isCombining = true;
+
+    return node;
+  };
+
+  const root = buildTree(arr, 0, arr.length - 1, 0);
+  return {
+    root,
+    min: root.min,
+    max: root.max,
+    comparisons
   };
 }

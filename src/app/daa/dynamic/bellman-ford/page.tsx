@@ -291,7 +291,7 @@ export default function BellmanFordPage() {
               "Distance vector routing protocols"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Bellman-Ford algorithm implementation",
               "Negative cycle detection",

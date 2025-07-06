@@ -318,7 +318,7 @@ export default function MultistageGraphPage() {
               "Network routing optimization"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Multistage graph problem formulation",
               "Dynamic programming solution approach",

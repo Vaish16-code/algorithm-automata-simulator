@@ -168,7 +168,7 @@ export default function StudentFriendlyKnapsack() {
               </label>
               <input
                 type="number"
-                className="w-full text-2xl font-bold border-4 border-yellow-400 rounded-lg px-4 py-3 focus:outline-none focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 bg-white text-gray-800"
+                className="w-full text-2xl font-bold border-4 border-yellow-400 rounded-lg px-4 py-3 focus:outline-none focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 bg-white text-gray-800 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                 value={capacity}
                 onChange={handleCapacityChange}
                 min="1"

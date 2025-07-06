@@ -525,7 +525,7 @@ export default function VirtualMemoryPage() {
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-800 mb-2">Mumbai University Exam Tips</h4>
+              <h4 className="font-semibold text-gray-800 mb-2">University Exam Tips</h4>
               <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
                 <li>Show address translation step by step</li>
                 <li>Calculate page number = logical address / page size</li>

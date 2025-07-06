@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { EducationalInfo, ExamResult } from "@/components";
+import { buildMinMaxTree, MinMaxTreeNode } from "../../../utils/divideConquer";
+import MinMaxTreeView from "../../../components/MinMaxTreeView";
 
 interface MinMaxStep {
   array: number[];
@@ -23,12 +25,16 @@ interface MinMaxResult {
 export default function MinMaxPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [array, setArray] = useState<number[]>([64, 34, 25, 12, 22, 11, 90, 88, 76, 50]);
+  const [inputText, setInputText] = useState("64, 34, 25, 12, 22, 11, 90, 88, 76, 50");
   const [arraySize, setArraySize] = useState(10);
   const [steps, setSteps] = useState<MinMaxStep[]>([]);
   const [currentStep, setCurrentStep] = useState(-1);
   const [isAnimating, setIsAnimating] = useState(false);
   const [totalComparisons, setTotalComparisons] = useState(0);
   const [algorithm, setAlgorithm] = useState<'naive' | 'divide-conquer'>('divide-conquer');
+  const [inputError, setInputError] = useState("");
+  const [treeRoot, setTreeRoot] = useState<MinMaxTreeNode | null>(null);
+  const [showTreeView, setShowTreeView] = useState(true);
 
   useEffect(() => {
     drawArray();
@@ -39,9 +45,12 @@ export default function MinMaxPage() {
       Math.floor(Math.random() * 100) + 1
     );
     setArray(newArray);
+    setInputText(newArray.join(', '));
     setSteps([]);
     setCurrentStep(-1);
     setTotalComparisons(0);
+    setInputError("");
+    setTreeRoot(null);
   };
 
   const naiveMinMax = () => {
@@ -49,6 +58,9 @@ export default function MinMaxPage() {
     let comparisons = 0;
     let min = array[0];
     let max = array[0];
+
+    // Clear tree for naive algorithm
+    setTreeRoot(null);
 
     minMaxSteps.push({
       array: [...array],
@@ -132,6 +144,10 @@ export default function MinMaxPage() {
   const divideConquerMinMax = () => {
     const minMaxSteps: MinMaxStep[] = [];
     let comparisons = 0;
+
+    // Build the tree visualization
+    const treeResult = buildMinMaxTree(array);
+    setTreeRoot(treeResult.root);
 
     const findMinMax = (arr: number[], left: number, right: number, level: number): MinMaxResult => {
       if (left === right) {
@@ -229,6 +245,17 @@ export default function MinMaxPage() {
   };
 
   const findMinMax = () => {
+    if (array.length === 0) {
+      setInputError("Please enter a valid array with at least one element.");
+      return;
+    }
+    if (array.length > 50) {
+      setInputError("Please enter an array with maximum 50 elements for better visualization.");
+      return;
+    }
+    
+    setInputError("");
+    
     if (algorithm === 'naive') {
       naiveMinMax();
     } else {
@@ -351,7 +378,7 @@ export default function MinMaxPage() {
               "Data validation and bounds checking"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Linear search for min-max",
               "Divide and conquer approach",
@@ -431,7 +458,8 @@ export default function MinMaxPage() {
                 </button>
                 <button
                   onClick={findMinMax}
-                  className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                  className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition-colors"
+                  disabled={array.length === 0 || isAnimating}
                 >
                   Find Min-Max
                 </button>
@@ -439,7 +467,7 @@ export default function MinMaxPage() {
 
               <button
                 onClick={autoAnimate}
-                disabled={isAnimating}
+                disabled={isAnimating || array.length === 0}
                 className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400"
               >
                 {isAnimating ? 'Animating...' : 'Auto Animate'}
@@ -453,17 +481,57 @@ export default function MinMaxPage() {
               </label>
               <input
                 type="text"
-                value={array.join(', ')}
+                className={`w-full border-4 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:ring-4 ${
+                  inputError ? 'border-red-500 focus:border-red-600 focus:ring-red-200' : 'border-gray-800 focus:border-purple-600 focus:ring-purple-200'
+                }`}
+                value={inputText}
                 onChange={(e) => {
-                  const values = e.target.value.split(',').map(v => parseInt(v.trim())).filter(v => !isNaN(v));
-                  if (values.length > 0) {
-                    setArray(values);
-                    setArraySize(values.length);
+                  const value = e.target.value;
+                  setInputText(value);
+                  setInputError("");
+                  setSteps([]);
+                  setCurrentStep(-1);
+                  setTotalComparisons(0);
+                  
+                  try {
+                    const newArray = value
+                      .split(',')
+                      .map(n => {
+                        const trimmed = n.trim();
+                        if (trimmed === '') return null;
+                        const num = parseInt(trimmed);
+                        if (isNaN(num)) {
+                          throw new Error(`Invalid number: ${trimmed}`);
+                        }
+                        return num;
+                      })
+                      .filter(n => n !== null) as number[];
+                    
+                    if (newArray.length > 0) {
+                      if (newArray.length > 50) {
+                        setInputError("Please enter an array with maximum 50 elements for better visualization.");
+                        return;
+                      }
+                      setArray(newArray);
+                      setArraySize(newArray.length);
+                    } else if (value.trim() === '') {
+                      setArray([]);
+                      setArraySize(0);
+                    }
+                  } catch (error) {
+                    setInputError("Please enter valid numbers separated by commas (e.g., 1, 2, 3)");
                   }
                 }}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                placeholder="64, 34, 25, 12, 22, 11, 90"
+                placeholder="e.g., 64, 34, 25, 12, 22, 11, 90"
               />
+              {inputError && (
+                <div className="text-red-600 text-sm mt-1 font-medium">
+                  {inputError}
+                </div>
+              )}
+              <div className="text-xs text-gray-500 mt-1">
+                💡 Enter numbers separated by commas. Example: 64, 34, 25, 12, 22
+              </div>
             </div>
           </div>
 
@@ -594,6 +662,30 @@ export default function MinMaxPage() {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Tree Visualization */}
+        {algorithm === 'divide-conquer' && (
+          <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-purple-200 mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold text-gray-800">
+                Divide & Conquer Tree Visualization
+              </h2>
+              <button
+                onClick={() => setShowTreeView(!showTreeView)}
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                {showTreeView ? 'Hide Tree' : 'Show Tree'}
+              </button>
+            </div>
+            
+            {showTreeView && (
+              <MinMaxTreeView 
+                root={treeRoot} 
+                className="mt-4"
+              />
+            )}
           </div>
         )}
 

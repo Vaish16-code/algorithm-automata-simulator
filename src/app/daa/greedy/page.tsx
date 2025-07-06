@@ -81,7 +81,7 @@ export default function GreedyAlgorithmsPage() {
       "Job scheduling with profits and deadlines",
       "Graph algorithms (MST, shortest path)"
     ],
-    examPattern: "Mumbai University typically asks 1-2 questions on greedy algorithms worth 10-15 marks total, focusing on algorithm design and complexity analysis."
+    examPattern: "Universities typically ask 1-2 questions on greedy algorithms worth 10-15 marks total, focusing on algorithm design and complexity analysis."
   };
 
   return (
@@ -93,7 +93,7 @@ export default function GreedyAlgorithmsPage() {
             Greedy Algorithms
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Master greedy algorithmic techniques with interactive simulators designed for Mumbai University curriculum
+            Master greedy algorithmic techniques with interactive simulators designed for university curriculum
           </p>
         </div>
 
@@ -176,7 +176,7 @@ export default function GreedyAlgorithmsPage() {
 
         {/* Exam Preparation */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">University Exam Preparation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>

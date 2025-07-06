@@ -326,7 +326,7 @@ export default function FloydWarshallPage() {
               "Supply chain optimization"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "All-pairs shortest path problem",
               "Floyd-Warshall algorithm implementation",

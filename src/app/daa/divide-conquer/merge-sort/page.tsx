@@ -7,26 +7,75 @@ import { EducationalInfo, ExamResult } from "../../../../components";
 
 export default function MergeSortPage() {
   const [inputArray, setInputArray] = useState([64, 34, 25, 12, 22, 11, 90]);
+  const [inputText, setInputText] = useState("64, 34, 25, 12, 22, 11, 90");
   const [result, setResult] = useState<MergeSortResult | null>(null);
+  const [inputError, setInputError] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSolve = () => {
-    const output = mergeSort(inputArray);
-    setResult(output);
+    if (inputArray.length === 0) {
+      setInputError("Please enter a valid array with at least one element.");
+      return;
+    }
+    if (inputArray.length > 20) {
+      setInputError("Please enter an array with maximum 20 elements for better visualization.");
+      return;
+    }
+    
+    console.log("Sorting array:", inputArray);
+    setInputError("");
+    setIsProcessing(true);
+    setResult(null); // Clear previous result
+    
+    try {
+      const output = mergeSort([...inputArray]); // Create a copy to avoid mutation
+      console.log("Sort result:", output);
+      setResult(output);
+    } catch (error) {
+      console.error("Error during sorting:", error);
+      setInputError("An error occurred during sorting. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleArrayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const newArray = value
-      .split(',')
-      .map(n => parseInt(n.trim()))
-      .filter(n => !isNaN(n));
-    setInputArray(newArray);
+    setInputText(value);
+    setInputError("");
+    setResult(null); // Clear previous result when input changes
+    
+    try {
+      const newArray = value
+        .split(',')
+        .map(n => {
+          const trimmed = n.trim();
+          if (trimmed === '') return null;
+          const num = parseInt(trimmed);
+          if (isNaN(num)) {
+            throw new Error(`Invalid number: ${trimmed}`);
+          }
+          return num;
+        })
+        .filter(n => n !== null) as number[];
+      
+      if (newArray.length > 0) {
+        setInputArray(newArray);
+      } else if (value.trim() === '') {
+        setInputArray([]);
+      }
+    } catch (error) {
+      setInputError("Please enter valid numbers separated by commas (e.g., 1, 2, 3)");
+    }
   };
 
   const generateRandomArray = () => {
     const size = Math.floor(Math.random() * 8) + 5; // 5-12 elements
     const newArray = Array.from({ length: size }, () => Math.floor(Math.random() * 100) + 1);
     setInputArray(newArray);
+    setInputText(newArray.join(', '));
+    setInputError("");
+    setResult(null); // Clear previous result
   };
 
   return (
@@ -59,7 +108,7 @@ export default function MergeSortPage() {
               "Foundation for other divide-and-conquer algorithms"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Divide and conquer paradigm",
               "Merge sort algorithm implementation",
@@ -109,11 +158,21 @@ export default function MergeSortPage() {
                   </label>
                   <input
                     type="text"
-                    className="w-full border-4 border-gray-800 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-200"
-                    value={inputArray.join(', ')}
+                    className={`w-full border-4 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:ring-4 ${
+                      inputError ? 'border-red-500 focus:border-red-600 focus:ring-red-200' : 'border-gray-800 focus:border-blue-600 focus:ring-blue-200'
+                    }`}
+                    value={inputText}
                     onChange={handleArrayChange}
                     placeholder="e.g., 64, 34, 25, 12, 22, 11, 90"
                   />
+                  {inputError && (
+                    <div className="text-red-600 text-sm mt-1 font-medium">
+                      {inputError}
+                    </div>
+                  )}
+                  <div className="text-xs text-gray-500 mt-1">
+                    💡 Enter numbers separated by commas. Example: 5, 2, 8, 1, 9
+                  </div>
                 </div>
 
                 <div className="flex gap-4">
@@ -125,16 +184,19 @@ export default function MergeSortPage() {
                   </button>
                   <button
                     onClick={handleSolve}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md"
-                    disabled={inputArray.length === 0}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium px-6 py-2 rounded-md"
+                    disabled={inputArray.length === 0 || isProcessing}
                   >
-                    Sort Array
+                    {isProcessing ? "Sorting..." : "Sort Array"}
                   </button>
                 </div>
 
-                {inputArray.length > 0 && (
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <div className="text-sm font-medium text-gray-700 mb-2">Current Array:</div>
+                {inputArray.length > 0 && !inputError && (
+                  <div className="p-4 bg-gray-50 rounded-lg border-l-4 border-green-500">
+                    <div className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                      <span className="text-green-600 mr-2">✓</span>
+                      Current Array ({inputArray.length} elements):
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {inputArray.map((num: number, index: number) => (
                         <div

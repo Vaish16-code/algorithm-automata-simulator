@@ -171,7 +171,7 @@ export default function PrimPage() {
       "MST in graphs with negative weights",
       "Applications in network design problems"
     ],
-    examPattern: "Prim&apos;s algorithm is frequently asked in Mumbai University exams (10-15 marks), focusing on algorithm tracing, complexity analysis, and comparison with Kruskal&apos;s."
+    examPattern: "Prim&apos;s algorithm is frequently asked in university exams (10-15 marks), focusing on algorithm tracing, complexity analysis, and comparison with Kruskal&apos;s."
   };
 
   return (
@@ -416,7 +416,15 @@ export default function PrimPage() {
         {result && (
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">MST Visualization</h2>
-            <PrimChart data={result} vertices={vertices} />
+            <PrimChart 
+              data={result} 
+              vertices={vertices}
+              currentStep={isAnimating ? animationStep : -1}
+              totalSteps={isAnimating ? animationSteps.length : 0}
+              onNext={nextAnimationStep}
+              onPrev={prevAnimationStep}
+              onReset={resetAnimation}
+            />
           </div>
         )}
 
@@ -461,7 +469,7 @@ export default function PrimPage() {
 
         {/* Exam Preparation */}
         <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">University Exam Preparation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>

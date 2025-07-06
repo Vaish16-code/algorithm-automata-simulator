@@ -362,7 +362,7 @@ export default function SingleSourceShortestPathPage() {
               "Social network analysis"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Single source shortest path problem",
               "Bellman-Ford algorithm implementation",

@@ -139,7 +139,7 @@ export default function DAAHomePage() {
               Master algorithmic thinking through interactive visualizations and step-by-step analysis
             </p>
             <p className="text-lg text-blue-200 mt-4 max-w-3xl mx-auto">
-              Explore fundamental algorithm design paradigms with real-time simulations, complexity analysis, and Mumbai University exam preparation
+              Explore fundamental algorithm design paradigms with real-time simulations, complexity analysis, and university exam preparation
             </p>
           </div>
           

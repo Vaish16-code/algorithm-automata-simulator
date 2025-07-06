@@ -262,7 +262,7 @@ export default function TSPDynamicPage() {
               "Warehouse order picking optimization"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Travelling Salesman Problem formulation",
               "Dynamic programming with bitmasks",

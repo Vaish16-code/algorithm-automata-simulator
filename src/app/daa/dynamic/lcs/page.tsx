@@ -56,7 +56,7 @@ export default function LCSPage() {
               "Data compression and file comparison"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Longest Common Subsequence problem",
               "Dynamic programming formulation",

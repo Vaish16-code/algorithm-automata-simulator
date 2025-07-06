@@ -70,7 +70,7 @@ export default function FractionalKnapsackPage() {
               "Continuous optimization problems"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Greedy Algorithm Strategy",
               "Fractional Knapsack Problem",
@@ -121,7 +121,7 @@ export default function FractionalKnapsackPage() {
                 <input
                   type="number"
                   min="1"
-                  className="w-full border-4 border-gray-800 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-200"
+                  className="w-full border-4 border-gray-800 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-200 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                   value={capacity}
                   onChange={(e) => setCapacity(parseInt(e.target.value) || 1)}
                 />
@@ -137,7 +137,7 @@ export default function FractionalKnapsackPage() {
                       <input
                         type="number"
                         min="1"
-                        className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
+                        className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         value={weight}
                         onChange={(e) => updateWeight(index, parseInt(e.target.value) || 1)}
                       />
@@ -147,7 +147,7 @@ export default function FractionalKnapsackPage() {
                       <input
                         type="number"
                         min="1"
-                        className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
+                        className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         value={profits[index]}
                         onChange={(e) => updateProfit(index, parseInt(e.target.value) || 1)}
                       />
@@ -187,6 +187,124 @@ export default function FractionalKnapsackPage() {
           <div className="space-y-6">
             {result && (
               <>
+                {/* Solution Table */}
+                <div className="bg-white rounded-lg shadow-md p-6 border-2 border-gray-800">
+                  <h3 className="text-xl font-bold mb-6 text-gray-900">Step-by-Step Solution Table</h3>
+                  
+                  {/* Items sorted by ratio table */}
+                  <div className="mb-6">
+                    <h4 className="text-lg font-semibold mb-3 text-gray-800">1. Items Sorted by Profit/Weight Ratio</h4>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-2 border-gray-800 text-sm">
+                        <thead className="bg-gray-800 text-white">
+                          <tr>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Object</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Weight</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Profit</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Ratio (P/W)</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white">
+                          {weights
+                            .map((weight, index) => ({
+                              index: index + 1,
+                              weight,
+                              profit: profits[index],
+                              ratio: profits[index] / weight
+                            }))
+                            .sort((a, b) => b.ratio - a.ratio)
+                            .map((item, sortedIndex) => (
+                              <tr key={sortedIndex} className="border-b border-gray-300">
+                                <td className="border border-gray-300 px-4 py-3 font-semibold">Item {item.index}</td>
+                                <td className="border border-gray-300 px-4 py-3">{item.weight}</td>
+                                <td className="border border-gray-300 px-4 py-3">{item.profit}</td>
+                                <td className="border border-gray-300 px-4 py-3 font-bold text-blue-600">{item.ratio.toFixed(2)}</td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Solution process table */}
+                  <div className="mb-6">
+                    <h4 className="text-lg font-semibold mb-3 text-gray-800">2. Solution Process</h4>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-2 border-gray-800 text-sm">
+                        <thead className="bg-gray-800 text-white">
+                          <tr>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Step</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Object</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Weight</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Profit</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Fraction Taken</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Profit Gained</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Remaining Weight</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Total Profit</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white">
+                          {(() => {
+                            let remainingCapacity = capacity;
+                            let totalProfit = 0;
+                            const sortedItems = weights
+                              .map((weight, index) => ({
+                                index: index + 1,
+                                weight,
+                                profit: profits[index],
+                                ratio: profits[index] / weight
+                              }))
+                              .sort((a, b) => b.ratio - a.ratio);
+                            
+                            return sortedItems.map((item, step) => {
+                              if (remainingCapacity <= 0) return null;
+                              
+                              const fraction = Math.min(1, remainingCapacity / item.weight);
+                              const profitGained = item.profit * fraction;
+                              const weightTaken = item.weight * fraction;
+                              
+                              remainingCapacity -= weightTaken;
+                              totalProfit += profitGained;
+                              
+                              return (
+                                <tr key={step} className="border-b border-gray-300">
+                                  <td className="border border-gray-300 px-4 py-3 font-bold">{step + 1}</td>
+                                  <td className="border border-gray-300 px-4 py-3 font-semibold">Item {item.index}</td>
+                                  <td className="border border-gray-300 px-4 py-3">{item.weight}</td>
+                                  <td className="border border-gray-300 px-4 py-3">{item.profit}</td>
+                                  <td className="border border-gray-300 px-4 py-3 font-bold text-green-600">
+                                    {fraction === 1 ? 'Full (1.0)' : `${fraction.toFixed(3)}`}
+                                  </td>
+                                  <td className="border border-gray-300 px-4 py-3 font-bold text-blue-600">
+                                    {profitGained.toFixed(2)}
+                                  </td>
+                                  <td className="border border-gray-300 px-4 py-3 font-bold text-red-600">
+                                    {Math.max(0, remainingCapacity).toFixed(2)}
+                                  </td>
+                                  <td className="border border-gray-300 px-4 py-3 font-bold text-purple-600">
+                                    {totalProfit.toFixed(2)}
+                                  </td>
+                                </tr>
+                              );
+                            }).filter(row => row !== null);
+                          })()}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Final result */}
+                  <div className="bg-green-100 border-2 border-green-500 rounded-lg p-4">
+                    <h4 className="text-lg font-bold text-green-800 mb-2">Final Result:</h4>
+                    <p className="text-green-700 font-semibold">
+                      Maximum Profit Achieved: <span className="text-xl font-bold">{result.totalProfit.toFixed(2)}</span>
+                    </p>
+                    <p className="text-green-700 mt-1">
+                      Total Items Selected: {result.selectedItems.length}
+                    </p>
+                  </div>
+                </div>
+
                 <ExamResult
                   title="Fractional Knapsack Solution"
                   input={`Capacity: ${capacity}, Items: ${weights.length}`}

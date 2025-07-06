@@ -193,7 +193,7 @@ export default function LCSMultistagePage() {
               "Data mining: Pattern discovery in multiple datasets"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Multiple sequence LCS problem",
               "Multistage dynamic programming approach",

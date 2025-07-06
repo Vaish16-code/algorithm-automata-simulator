@@ -109,7 +109,7 @@ export default function DynamicProgrammingPage() {
       "All-pairs shortest path problems",
       "Multistage graph optimization"
     ],
-    examPattern: "Mumbai University typically asks 2-3 questions on dynamic programming worth 15-20 marks total, focusing on algorithm design, recurrence relations, and complexity analysis."
+    examPattern: "Universities typically ask 2-3 questions on dynamic programming worth 15-20 marks total, focusing on algorithm design, recurrence relations, and complexity analysis."
   };
 
   return (
@@ -121,7 +121,7 @@ export default function DynamicProgrammingPage() {
             Dynamic Programming
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Master dynamic programming techniques with interactive simulators designed for Mumbai University curriculum
+            Master dynamic programming techniques with interactive simulators designed for university curriculum
           </p>
         </div>
 
@@ -208,7 +208,7 @@ export default function DynamicProgrammingPage() {
 
         {/* Exam Preparation */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">University Exam Preparation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>

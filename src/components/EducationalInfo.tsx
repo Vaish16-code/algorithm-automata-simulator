@@ -10,7 +10,7 @@ interface EducationalInfoProps {
     keyPoints: string[];
     applications: string[];
   };
-  mumbaiUniversity: {
+  university: {
     syllabus: string[];
     marks: string;
     commonQuestions: string[];
@@ -25,7 +25,7 @@ interface EducationalInfoProps {
   };
 }
 
-export default function EducationalInfo({ topic, description, theory, mumbaiUniversity, algorithm }: EducationalInfoProps) {
+export default function EducationalInfo({ topic, description, theory, university, algorithm }: EducationalInfoProps) {
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
       {/* Header */}
@@ -78,11 +78,11 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
           </div>
         </div>
 
-        {/* Mumbai University Section */}
+        {/* University Section */}
         <div className="border-t pt-6">
           <h3 className="flex items-center text-lg font-semibold text-gray-900 mb-3">
             <Award className="h-5 w-5 mr-2 text-purple-500" />
-            Mumbai University Guidelines
+            University Guidelines
           </h3>
           
           <div className="bg-purple-50 rounded-lg p-4 mb-4">
@@ -92,7 +92,7 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
                 <span className="font-semibold text-purple-900">Exam Weightage</span>
               </div>
               <span className="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
-                {mumbaiUniversity.marks} Marks
+                {university.marks} Marks
               </span>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
                 Syllabus Coverage:
               </h4>
               <ul className="space-y-1 mb-4">
-                {mumbaiUniversity.syllabus.map((item, index) => (
+                {university.syllabus.map((item: string, index: number) => (
                   <li key={index} className="text-sm text-black bg-gray-50 px-3 py-1 rounded">
                     {item}
                   </li>
@@ -118,7 +118,7 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
                 Common Questions:
               </h4>
               <ul className="space-y-1 mb-4">
-                {mumbaiUniversity.commonQuestions.map((question, index) => (
+                {university.commonQuestions.map((question: string, index: number) => (
                   <li key={index} className="text-sm text-gray-900 bg-orange-50 px-3 py-1 rounded border-l-2 border-orange-300 font-medium">
                     {question}
                   </li>
@@ -133,7 +133,7 @@ export default function EducationalInfo({ topic, description, theory, mumbaiUniv
               Exam Tips:
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {mumbaiUniversity.examTips.map((tip, index) => (
+              {university.examTips.map((tip: string, index: number) => (
                 <div key={index} className="flex items-start text-sm text-green-700 bg-green-50 px-3 py-2 rounded">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-2 mt-2 flex-shrink-0"></div>
                   {tip}

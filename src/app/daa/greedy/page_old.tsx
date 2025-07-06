@@ -48,7 +48,7 @@ export default function KnapsackPage() {
               </label>
               <input
                 type="number"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                 value={capacity}
                 onChange={(e) => setCapacity(parseInt(e.target.value) || 0)}
                 min="1"

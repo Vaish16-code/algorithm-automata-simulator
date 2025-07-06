@@ -6,33 +6,31 @@ import { knapsackDP, KnapsackDPResult } from "../../../utils/dynamicProgramming"
 import { EducationalInfo, ExamResult } from "../../../../components";
 
 export default function KnapsackDPPage() {
-  const [capacity, setCapacity] = useState(7);
+  const [capacity, setCapacity] = useState("");
   const [items, setItems] = useState([
-    { weight: 1, value: 1 },
-    { weight: 3, value: 4 },
-    { weight: 4, value: 5 },
-    { weight: 5, value: 7 }
+    { weight: "", value: "" }
   ]);
   const [result, setResult] = useState<KnapsackDPResult | null>(null);
 
   const handleSolve = () => {
-    const weights = items.map(item => item.weight);
-    const values = items.map(item => item.value);
-    const output = knapsackDP(capacity, weights, values);
+    const capacityNum = parseInt(capacity) || 0;
+    const weights = items.map(item => parseInt(item.weight) || 0);
+    const values = items.map(item => parseInt(item.value) || 0);
+    const output = knapsackDP(capacityNum, weights, values);
     setResult(output);
   };
 
   const addItem = () => {
-    setItems([...items, { weight: 1, value: 1 }]);
+    setItems([...items, { weight: "", value: "" }]);
   };
 
   const removeItem = (index: number) => {
     setItems(items.filter((_, i) => i !== index));
   };
 
-  const updateItem = (index: number, field: string, value: number) => {
+  const updateItem = (index: number, field: string, value: string) => {
     setItems(items.map((item, i) => 
-      i === index ? { ...item, [field]: Math.max(1, value) } : item
+      i === index ? { ...item, [field]: value } : item
     ));
   };
 
@@ -66,7 +64,7 @@ export default function KnapsackDPPage() {
               "Cargo loading and logistics optimization"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Dynamic Programming fundamentals",
               "0/1 Knapsack problem formulation",
@@ -115,37 +113,48 @@ export default function KnapsackDPPage() {
                   Knapsack Capacity:
                 </label>
                 <input
-                  type="number"
-                  min="1"
-                  className="w-full border-4 border-gray-800 rounded-md px-3 py-2 bg-white text-gray-900 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:border-purple-500 shadow-md"
+                  type="text"
+                  className="w-full border-4 border-gray-800 rounded-md px-3 py-2 bg-white text-gray-900 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:border-purple-500 shadow-md [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                   value={capacity}
-                  onChange={(e) => setCapacity(parseInt(e.target.value) || 1)}
+                  onChange={(e) => setCapacity(e.target.value)}
+                  placeholder="Enter knapsack capacity"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck="false"
                 />
               </div>
 
               <div className="space-y-4 mb-6">
                 <h3 className="text-lg font-semibold text-gray-700">Items:</h3>
                 {items.map((item, index) => (
-                  <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div key={`item-${index}-${Date.now()}`} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                     <div className="font-semibold text-gray-700">Item {index + 1}:</div>
                     <div className="flex items-center gap-2">
                       <label className="text-sm font-medium">Weight:</label>
                       <input
-                        type="number"
-                        min="1"
-                        className="w-20 border-4 border-gray-800 rounded px-2 py-1 bg-white text-gray-900 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                        key={`weight-${index}-${Date.now()}`}
+                        type="text"
+                        className="w-20 border-4 border-gray-800 rounded px-2 py-1 bg-white text-gray-900 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         value={item.weight}
-                        onChange={(e) => updateItem(index, 'weight', parseInt(e.target.value) || 1)}
+                        onChange={(e) => updateItem(index, 'weight', e.target.value)}
+                        placeholder="Weight"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck="false"
                       />
                     </div>
                     <div className="flex items-center gap-2">
                       <label className="text-sm font-medium">Value:</label>
                       <input
-                        type="number"
-                        min="1"
-                        className="w-20 border-4 border-gray-800 rounded px-2 py-1 bg-white text-gray-900 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                        key={`value-${index}-${Date.now()}`}
+                        type="text"
+                        className="w-20 border-4 border-gray-800 rounded px-2 py-1 bg-white text-gray-900 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         value={item.value}
-                        onChange={(e) => updateItem(index, 'value', parseInt(e.target.value) || 1)}
+                        onChange={(e) => updateItem(index, 'value', e.target.value)}
+                        placeholder="Value"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck="false"
                       />
                     </div>
                     <button
@@ -180,9 +189,72 @@ export default function KnapsackDPPage() {
           <div className="space-y-6">
             {result && (
               <>
+                {/* Items Analysis Table */}
+                <div className="bg-white rounded-lg shadow-md p-6 border-2 border-gray-800">
+                  <h3 className="text-xl font-bold mb-6 text-gray-900">Items Analysis with Profit/Weight Ratios</h3>
+                  
+                  <div className="mb-6">
+                    <h4 className="text-lg font-semibold mb-3 text-gray-800">Items Sorted by Profit/Weight Ratio (Highest First)</h4>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-2 border-gray-800 text-sm">
+                        <thead className="bg-gray-800 text-white">
+                          <tr>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Original Item</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Weight</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Value</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Ratio (V/W)</th>
+                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Selected by DP</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white">
+                          {items
+                            .map((item, index) => ({
+                              originalIndex: index + 1,
+                              weight: parseInt(item.weight) || 0,
+                              value: parseInt(item.value) || 0,
+                              ratio: (parseInt(item.value) || 0) / (parseInt(item.weight) || 1)
+                            }))
+                            .sort((a, b) => b.ratio - a.ratio)
+                            .map((item, sortedIndex) => {
+                              const isSelected = result.selectedItems.some(selected => selected.index === item.originalIndex - 1);
+                              return (
+                                <tr key={sortedIndex} className={`border-b border-gray-300 ${isSelected ? 'bg-green-100' : ''}`}>
+                                  <td className="border border-gray-300 px-4 py-3 font-semibold">Item {item.originalIndex}</td>
+                                  <td className="border border-gray-300 px-4 py-3">{item.weight}</td>
+                                  <td className="border border-gray-300 px-4 py-3">{item.value}</td>
+                                  <td className="border border-gray-300 px-4 py-3 font-bold text-blue-600">{item.ratio.toFixed(2)}</td>
+                                  <td className="border border-gray-300 px-4 py-3 font-bold">
+                                    {isSelected ? (
+                                      <span className="text-green-600 bg-green-200 px-2 py-1 rounded">✓ Yes</span>
+                                    ) : (
+                                      <span className="text-red-600 bg-red-200 px-2 py-1 rounded">✗ No</span>
+                                    )}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Analysis */}
+                  <div className="bg-blue-100 border-2 border-blue-500 rounded-lg p-4">
+                    <h4 className="text-lg font-bold text-blue-800 mb-2">Analysis:</h4>
+                    <p className="text-blue-700 font-semibold mb-2">
+                      Note: While the Fractional Knapsack uses greedy approach (highest ratio first), 
+                      the 0/1 Knapsack uses Dynamic Programming for optimal solution.
+                    </p>
+                    <p className="text-blue-700">
+                      DP considers all possible combinations to find the true optimal solution, 
+                      which may not always follow the highest ratio order.
+                    </p>
+                  </div>
+                </div>
+
                 <ExamResult
                   title="0/1 Knapsack Solution"
-                  input={`Capacity: ${capacity}, Items: ${items.length}`}
+                  input={`Capacity: ${capacity || 0}, Items: ${items.length}`}
                   result={result.maxValue > 0}
                   steps={result.selectedItems.map((item, index) => ({
                     stepNumber: index + 1,
@@ -192,10 +264,10 @@ export default function KnapsackDPPage() {
                   }))}
                   finalAnswer={`Maximum value achievable: ${result.maxValue}`}
                   examFormat={{
-                    question: `Solve the 0/1 Knapsack problem with capacity ${capacity} and given items using Dynamic Programming.`,
+                    question: `Solve the 0/1 Knapsack problem with capacity ${capacity || 0} and given items using Dynamic Programming.`,
                     solution: [
-                      `Items: ${items.map((item, i) => `Item ${i+1}: w=${item.weight}, v=${item.value}`).join(', ')}`,
-                      `Capacity: ${capacity}`,
+                      `Items: ${items.map((item, i) => `Item ${i+1}: w=${item.weight || 0}, v=${item.value || 0}`).join(', ')}`,
+                      `Capacity: ${capacity || 0}`,
                       `DP Recurrence: dp[i][w] = max(dp[i-1][w], dp[i-1][w-wi] + vi)`,
                       `Selected items: ${result.selectedItems.map(item => `Item ${item.index + 1}`).join(', ')}`,
                       `Total weight used: ${result.selectedItems.reduce((sum, item) => sum + item.weight, 0)}`,
@@ -208,7 +280,7 @@ export default function KnapsackDPPage() {
 
                 <div className="bg-white rounded-lg shadow-md p-6">
                   <h3 className="text-lg font-semibold mb-4 text-gray-800">DP Table Visualization</h3>
-                  <KnapsackDPChart data={result} capacity={capacity} />
+                  <KnapsackDPChart data={result} capacity={parseInt(capacity) || 0} />
                 </div>
 
                 <div className="bg-white rounded-lg shadow-md p-6">
@@ -233,7 +305,7 @@ export default function KnapsackDPPage() {
                         <div>Total Items: {items.length}</div>
                         <div>Selected Items: {result.selectedItems.length}</div>
                         <div>Total Weight: {result.selectedItems.reduce((sum, item) => sum + item.weight, 0)}</div>
-                        <div>Capacity Used: {((result.selectedItems.reduce((sum, item) => sum + item.weight, 0) / capacity) * 100).toFixed(1)}%</div>
+                        <div>Capacity Used: {((result.selectedItems.reduce((sum, item) => sum + item.weight, 0) / (parseInt(capacity) || 1)) * 100).toFixed(1)}%</div>
                         <div className="font-bold text-lg text-purple-600">Maximum Value: {result.maxValue}</div>
                       </div>
                     </div>

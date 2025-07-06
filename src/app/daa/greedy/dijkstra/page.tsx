@@ -301,7 +301,7 @@ export default function DijkstraPage() {
               "Game AI pathfinding"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Dijkstra's algorithm implementation",
               "Shortest path problem formulation",

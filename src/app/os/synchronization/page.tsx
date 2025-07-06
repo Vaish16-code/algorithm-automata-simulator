@@ -447,7 +447,7 @@ export default function SynchronizationPage() {
               </div>
             </div>
 
-            {/* Mumbai University Tips */}
+            {/* University Tips */}
             <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
               <h3 className="text-xl font-semibold mb-4">Mumbai University Tips</h3>
               <ul className="space-y-2 text-sm">

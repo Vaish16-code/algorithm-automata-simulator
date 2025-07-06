@@ -102,7 +102,7 @@ export default function DivideConquerPage() {
       "Multiplication of large integers",
       "Finding majority element"
     ],
-    examPattern: "Mumbai University frequently asks divide and conquer questions (10-15 marks), focusing on Merge Sort, binary search, and complexity analysis."
+    examPattern: "Universities frequently ask divide and conquer questions (10-15 marks), focusing on Merge Sort, binary search, and complexity analysis."
   };
 
   return (
@@ -210,7 +210,7 @@ export default function DivideConquerPage() {
 
         {/* Exam Preparation */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">University Exam Preparation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>

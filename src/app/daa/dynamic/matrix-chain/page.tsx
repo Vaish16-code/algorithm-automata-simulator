@@ -74,7 +74,7 @@ export default function MatrixChainPage() {
               "Compiler optimization for expression evaluation"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Matrix chain multiplication problem formulation",
               "Dynamic programming approach",
