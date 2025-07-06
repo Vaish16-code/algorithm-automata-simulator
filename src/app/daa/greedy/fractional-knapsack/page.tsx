@@ -6,19 +6,25 @@ import { fractionalKnapsack, KnapsackResult } from "../../../utils/greedyAlgorit
 import { EducationalInfo, ExamResult } from "../../../../components";
 
 export default function FractionalKnapsackPage() {
-  const [capacity, setCapacity] = useState(50);
-  const [weights, setWeights] = useState([10, 20, 30]);
-  const [profits, setProfits] = useState([60, 100, 120]);
+  const [capacity, setCapacity] = useState("");
+  const [weights, setWeights] = useState([""]);
+  const [profits, setProfits] = useState([""]);
   const [result, setResult] = useState<KnapsackResult | null>(null);
 
   const handleSolve = () => {
-    const output = fractionalKnapsack(capacity, weights, profits);
-    setResult(output);
+    const capacityNum = parseInt(capacity) || 0;
+    const weightsNum = weights.map(w => parseInt(w) || 0).filter(w => w > 0);
+    const profitsNum = profits.map(p => parseInt(p) || 0).filter(p => p > 0);
+    
+    if (capacityNum > 0 && weightsNum.length > 0 && profitsNum.length > 0 && weightsNum.length === profitsNum.length) {
+      const output = fractionalKnapsack(capacityNum, weightsNum, profitsNum);
+      setResult(output);
+    }
   };
 
   const addItem = () => {
-    setWeights([...weights, 1]);
-    setProfits([...profits, 1]);
+    setWeights([...weights, ""]);
+    setProfits([...profits, ""]);
   };
 
   const removeItem = (index: number) => {
@@ -28,15 +34,15 @@ export default function FractionalKnapsackPage() {
     }
   };
 
-  const updateWeight = (index: number, value: number) => {
+  const updateWeight = (index: number, value: string) => {
     const newWeights = [...weights];
-    newWeights[index] = Math.max(1, value);
+    newWeights[index] = value;
     setWeights(newWeights);
   };
 
-  const updateProfit = (index: number, value: number) => {
+  const updateProfit = (index: number, value: string) => {
     const newProfits = [...profits];
-    newProfits[index] = Math.max(1, value);
+    newProfits[index] = value;
     setProfits(newProfits);
   };
 
@@ -119,11 +125,14 @@ export default function FractionalKnapsackPage() {
                   Knapsack Capacity:
                 </label>
                 <input
-                  type="number"
-                  min="1"
+                  type="text"
                   className="w-full border-4 border-gray-800 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-200 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                   value={capacity}
-                  onChange={(e) => setCapacity(parseInt(e.target.value) || 1)}
+                  placeholder="Enter knapsack capacity (e.g., 50)"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  onChange={(e) => setCapacity(e.target.value)}
                 />
               </div>
 
@@ -135,25 +144,35 @@ export default function FractionalKnapsackPage() {
                     <div className="flex items-center gap-2">
                       <label className="text-sm font-medium">Weight:</label>
                       <input
-                        type="number"
-                        min="1"
+                        type="text"
                         className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         value={weight}
-                        onChange={(e) => updateWeight(index, parseInt(e.target.value) || 1)}
+                        placeholder="W"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck="false"
+                        key={`weight-${index}`}
+                        onChange={(e) => updateWeight(index, e.target.value)}
                       />
                     </div>
                     <div className="flex items-center gap-2">
                       <label className="text-sm font-medium">Profit:</label>
                       <input
-                        type="number"
-                        min="1"
+                        type="text"
                         className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         value={profits[index]}
-                        onChange={(e) => updateProfit(index, parseInt(e.target.value) || 1)}
+                        placeholder="P"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck="false"
+                        key={`profit-${index}`}
+                        onChange={(e) => updateProfit(index, e.target.value)}
                       />
                     </div>
                     <div className="text-sm text-gray-600">
-                      Ratio: {(profits[index] / weight).toFixed(2)}
+                      Ratio: {weight && profits[index] && !isNaN(parseInt(weight)) && !isNaN(parseInt(profits[index])) 
+                        ? (parseInt(profits[index]) / parseInt(weight)).toFixed(2) 
+                        : '--'}
                     </div>
                     <button
                       onClick={() => removeItem(index)}
@@ -187,38 +206,46 @@ export default function FractionalKnapsackPage() {
           <div className="space-y-6">
             {result && (
               <>
-                {/* Solution Table */}
+                {/* Solution Table - Following the handwritten method */}
                 <div className="bg-white rounded-lg shadow-md p-6 border-2 border-gray-800">
-                  <h3 className="text-xl font-bold mb-6 text-gray-900">Step-by-Step Solution Table</h3>
+                  <h3 className="text-xl font-bold mb-6 text-gray-900">Fractional Knapsack Solution (Maximum P/W Ratio Method)</h3>
                   
-                  {/* Items sorted by ratio table */}
+                  {/* Initial Setup */}
+                  <div className="mb-6 bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4">
+                    <h4 className="text-lg font-bold text-yellow-800 mb-2">Given:</h4>
+                    <p className="text-yellow-700"><strong>Knapsack Capacity (W) = {parseInt(capacity) || 0}</strong></p>
+                    <p className="text-yellow-700"><strong>Number of Items (n) = {weights.filter(w => parseInt(w) > 0).length}</strong></p>
+                  </div>
+
+                  {/* Step 1: Calculate P/W ratios and sort */}
                   <div className="mb-6">
-                    <h4 className="text-lg font-semibold mb-3 text-gray-800">1. Items Sorted by Profit/Weight Ratio</h4>
+                    <h4 className="text-lg font-semibold mb-3 text-gray-800">Step 1: Calculate P/W Ratios and Sort (Highest First)</h4>
                     <div className="overflow-x-auto">
                       <table className="w-full border-2 border-gray-800 text-sm">
                         <thead className="bg-gray-800 text-white">
                           <tr>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Object</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Weight</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Profit</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Ratio (P/W)</th>
+                            <th className="border border-gray-600 px-4 py-3 text-center font-bold">Object</th>
+                            <th className="border border-gray-600 px-4 py-3 text-center font-bold">Profit (P)</th>
+                            <th className="border border-gray-600 px-4 py-3 text-center font-bold">Weight (W)</th>
+                            <th className="border border-gray-600 px-4 py-3 text-center font-bold">P/W Ratio</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white">
                           {weights
                             .map((weight, index) => ({
-                              index: index + 1,
-                              weight,
-                              profit: profits[index],
-                              ratio: profits[index] / weight
+                              originalIndex: index + 1,
+                              weight: parseInt(weight) || 0,
+                              profit: parseInt(profits[index]) || 0,
+                              ratio: (parseInt(profits[index]) || 0) / (parseInt(weight) || 1)
                             }))
+                            .filter(item => item.weight > 0 && item.profit > 0)
                             .sort((a, b) => b.ratio - a.ratio)
                             .map((item, sortedIndex) => (
                               <tr key={sortedIndex} className="border-b border-gray-300">
-                                <td className="border border-gray-300 px-4 py-3 font-semibold">Item {item.index}</td>
-                                <td className="border border-gray-300 px-4 py-3">{item.weight}</td>
-                                <td className="border border-gray-300 px-4 py-3">{item.profit}</td>
-                                <td className="border border-gray-300 px-4 py-3 font-bold text-blue-600">{item.ratio.toFixed(2)}</td>
+                                <td className="border border-gray-300 px-4 py-3 text-center font-bold">{item.originalIndex}</td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">{item.profit}</td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">{item.weight}</td>
+                                <td className="border border-gray-300 px-4 py-3 text-center font-bold text-blue-600">{item.ratio.toFixed(2)}</td>
                               </tr>
                             ))}
                         </tbody>
@@ -226,62 +253,63 @@ export default function FractionalKnapsackPage() {
                     </div>
                   </div>
 
-                  {/* Solution process table */}
+                  {/* Step 2: Solution Process - Exactly like handwritten method */}
                   <div className="mb-6">
-                    <h4 className="text-lg font-semibold mb-3 text-gray-800">2. Solution Process</h4>
+                    <h4 className="text-lg font-semibold mb-3 text-gray-800">Step 2: Greedy Selection Process</h4>
                     <div className="overflow-x-auto">
                       <table className="w-full border-2 border-gray-800 text-sm">
                         <thead className="bg-gray-800 text-white">
                           <tr>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Step</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Object</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Weight</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Profit</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Fraction Taken</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Profit Gained</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Remaining Weight</th>
-                            <th className="border border-gray-600 px-4 py-3 text-left font-bold">Total Profit</th>
+                            <th className="border border-gray-600 px-3 py-3 text-center font-bold">Object</th>
+                            <th className="border border-gray-600 px-3 py-3 text-center font-bold">Profit (P)</th>
+                            <th className="border border-gray-600 px-3 py-3 text-center font-bold">Weight (W)</th>
+                            <th className="border border-gray-600 px-3 py-3 text-center font-bold">Remaining Weight</th>
+                            <th className="border border-gray-600 px-3 py-3 text-center font-bold">Fraction</th>
+                            <th className="border border-gray-600 px-3 py-3 text-center font-bold">Profit Gained</th>
+                            <th className="border border-gray-600 px-3 py-3 text-center font-bold">Total Profit</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white">
                           {(() => {
-                            let remainingCapacity = capacity;
+                            let remainingCapacity = parseInt(capacity) || 0;
                             let totalProfit = 0;
                             const sortedItems = weights
                               .map((weight, index) => ({
-                                index: index + 1,
-                                weight,
-                                profit: profits[index],
-                                ratio: profits[index] / weight
+                                originalIndex: index + 1,
+                                weight: parseInt(weight) || 0,
+                                profit: parseInt(profits[index]) || 0,
+                                ratio: (parseInt(profits[index]) || 0) / (parseInt(weight) || 1)
                               }))
+                              .filter(item => item.weight > 0 && item.profit > 0)
                               .sort((a, b) => b.ratio - a.ratio);
                             
                             return sortedItems.map((item, step) => {
                               if (remainingCapacity <= 0) return null;
                               
-                              const fraction = Math.min(1, remainingCapacity / item.weight);
+                              const canTakeFull = item.weight <= remainingCapacity;
+                              const fraction = canTakeFull ? 1 : remainingCapacity / item.weight;
+                              const weightTaken = canTakeFull ? item.weight : remainingCapacity;
                               const profitGained = item.profit * fraction;
-                              const weightTaken = item.weight * fraction;
                               
+                              const beforeRemaining = remainingCapacity;
                               remainingCapacity -= weightTaken;
                               totalProfit += profitGained;
                               
                               return (
                                 <tr key={step} className="border-b border-gray-300">
-                                  <td className="border border-gray-300 px-4 py-3 font-bold">{step + 1}</td>
-                                  <td className="border border-gray-300 px-4 py-3 font-semibold">Item {item.index}</td>
-                                  <td className="border border-gray-300 px-4 py-3">{item.weight}</td>
-                                  <td className="border border-gray-300 px-4 py-3">{item.profit}</td>
-                                  <td className="border border-gray-300 px-4 py-3 font-bold text-green-600">
-                                    {fraction === 1 ? 'Full (1.0)' : `${fraction.toFixed(3)}`}
+                                  <td className="border border-gray-300 px-3 py-3 text-center font-bold text-lg">{item.originalIndex}</td>
+                                  <td className="border border-gray-300 px-3 py-3 text-center">{item.profit}</td>
+                                  <td className="border border-gray-300 px-3 py-3 text-center">{item.weight}</td>
+                                  <td className="border border-gray-300 px-3 py-3 text-center font-bold text-red-600">
+                                    {beforeRemaining} → {Math.max(0, remainingCapacity).toFixed(1)}
                                   </td>
-                                  <td className="border border-gray-300 px-4 py-3 font-bold text-blue-600">
-                                    {profitGained.toFixed(2)}
+                                  <td className="border border-gray-300 px-3 py-3 text-center font-bold text-green-600">
+                                    {fraction === 1 ? '1' : `${weightTaken}/${item.weight} = ${fraction.toFixed(3)}`}
                                   </td>
-                                  <td className="border border-gray-300 px-4 py-3 font-bold text-red-600">
-                                    {Math.max(0, remainingCapacity).toFixed(2)}
+                                  <td className="border border-gray-300 px-3 py-3 text-center font-bold text-blue-600">
+                                    {fraction === 1 ? profitGained.toFixed(0) : `${fraction.toFixed(3)} × ${item.profit} = ${profitGained.toFixed(2)}`}
                                   </td>
-                                  <td className="border border-gray-300 px-4 py-3 font-bold text-purple-600">
+                                  <td className="border border-gray-300 px-3 py-3 text-center font-bold text-purple-600 text-lg">
                                     {totalProfit.toFixed(2)}
                                   </td>
                                 </tr>
@@ -293,15 +321,20 @@ export default function FractionalKnapsackPage() {
                     </div>
                   </div>
 
-                  {/* Final result */}
-                  <div className="bg-green-100 border-2 border-green-500 rounded-lg p-4">
-                    <h4 className="text-lg font-bold text-green-800 mb-2">Final Result:</h4>
-                    <p className="text-green-700 font-semibold">
-                      Maximum Profit Achieved: <span className="text-xl font-bold">{result.totalProfit.toFixed(2)}</span>
-                    </p>
-                    <p className="text-green-700 mt-1">
-                      Total Items Selected: {result.selectedItems.length}
-                    </p>
+                  {/* Final Answer */}
+                  <div className="bg-green-100 border-2 border-green-500 rounded-lg p-6">
+                    <h4 className="text-xl font-bold text-green-800 mb-3">Final Answer:</h4>
+                    <div className="text-green-700 space-y-2">
+                      <p className="text-2xl font-bold">Maximum Profit = {result.totalProfit.toFixed(2)}</p>
+                      <p className="text-lg">
+                        <strong>Solution Strategy:</strong> Take items in order of highest P/W ratio until knapsack is full
+                      </p>
+                      <p className="text-lg">
+                        <strong>Items Selected:</strong> {result.selectedItems.map((item, index) => 
+                          `Item ${item.index}${item.fraction < 1 ? ` (${(item.fraction * 100).toFixed(1)}%)` : ''}`
+                        ).join(', ')}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -319,7 +352,11 @@ export default function FractionalKnapsackPage() {
                   examFormat={{
                     question: `Solve the Fractional Knapsack problem with capacity ${capacity} and given items using Greedy Algorithm.`,
                     solution: [
-                      `Items with ratios: ${weights.map((w, i) => `Item ${i+1}: w=${w}, p=${profits[i]}, ratio=${(profits[i]/w).toFixed(2)}`).join(', ')}`,
+                      `Items with ratios: ${weights.map((w, i) => {
+                        const weight = parseInt(w) || 0;
+                        const profit = parseInt(profits[i]) || 0;
+                        return weight > 0 && profit > 0 ? `Item ${i+1}: w=${weight}, p=${profit}, ratio=${(profit/weight).toFixed(2)}` : '';
+                      }).filter(s => s).join(', ')}`,
                       `Capacity: ${capacity}`,
                       `Greedy Strategy: Sort by value/weight ratio in descending order`,
                       `Solution steps:`,
@@ -328,7 +365,8 @@ export default function FractionalKnapsackPage() {
                       ),
                       `Total weight used: ${weights.filter((_, i) => result.selectedItems.some(item => item.index === i+1)).reduce((sum, w, i) => {
                         const selectedItem = result.selectedItems.find(item => item.index === i+1);
-                        return sum + (selectedItem ? w * selectedItem.fraction : 0);
+                        const weight = parseInt(w) || 0;
+                        return sum + (selectedItem ? weight * selectedItem.fraction : 0);
                       }, 0).toFixed(1)}`,
                       `Maximum profit: ${result.totalProfit.toFixed(2)}`
                     ],
@@ -367,12 +405,14 @@ export default function FractionalKnapsackPage() {
                         <div>Items Used: {result.selectedItems.length}</div>
                         <div>Total Weight: {weights.filter((_, i) => result.selectedItems.some(item => item.index === i+1)).reduce((sum, w, i) => {
                           const selectedItem = result.selectedItems.find(item => item.index === i+1);
-                          return sum + (selectedItem ? w * selectedItem.fraction : 0);
+                          const weight = parseInt(w) || 0;
+                          return sum + (selectedItem ? weight * selectedItem.fraction : 0);
                         }, 0).toFixed(1)}</div>
                         <div>Capacity Used: {((weights.filter((_, i) => result.selectedItems.some(item => item.index === i+1)).reduce((sum, w, i) => {
                           const selectedItem = result.selectedItems.find(item => item.index === i+1);
-                          return sum + (selectedItem ? w * selectedItem.fraction : 0);
-                        }, 0) / capacity) * 100).toFixed(1)}%</div>
+                          const weight = parseInt(w) || 0;
+                          return sum + (selectedItem ? weight * selectedItem.fraction : 0);
+                        }, 0) / (parseInt(capacity) || 1)) * 100).toFixed(1)}%</div>
                         <div className="font-bold text-lg text-yellow-600">Maximum Profit: {result.totalProfit.toFixed(2)}</div>
                       </div>
                     </div>

@@ -127,12 +127,11 @@ export default function KnapsackDPPage() {
               <div className="space-y-4 mb-6">
                 <h3 className="text-lg font-semibold text-gray-700">Items:</h3>
                 {items.map((item, index) => (
-                  <div key={`item-${index}-${Date.now()}`} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                     <div className="font-semibold text-gray-700">Item {index + 1}:</div>
                     <div className="flex items-center gap-2">
                       <label className="text-sm font-medium">Weight:</label>
                       <input
-                        key={`weight-${index}-${Date.now()}`}
                         type="text"
                         className="w-20 border-4 border-gray-800 rounded px-2 py-1 bg-white text-gray-900 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         value={item.weight}
@@ -146,7 +145,6 @@ export default function KnapsackDPPage() {
                     <div className="flex items-center gap-2">
                       <label className="text-sm font-medium">Value:</label>
                       <input
-                        key={`value-${index}-${Date.now()}`}
                         type="text"
                         className="w-20 border-4 border-gray-800 rounded px-2 py-1 bg-white text-gray-900 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         value={item.value}
@@ -253,27 +251,28 @@ export default function KnapsackDPPage() {
                 </div>
 
                 <ExamResult
-                  title="0/1 Knapsack Solution"
+                  title="0/1 Knapsack Dynamic Programming Solution"
                   input={`Capacity: ${capacity || 0}, Items: ${items.length}`}
                   result={result.maxValue > 0}
-                  steps={result.selectedItems.map((item, index) => ({
+                  steps={result.steps.slice(0, 10).map((step, index) => ({
                     stepNumber: index + 1,
-                    description: `Selected Item ${item.index + 1}`,
-                    currentState: `Weight: ${item.weight}, Value: ${item.value}`,
-                    explanation: `Added item with value-to-weight ratio ${(item.value / item.weight).toFixed(2)}`
+                    description: step.includes('Processing Item') ? step : `Step ${index + 1}`,
+                    currentState: step.includes('dp[') ? step.split(':')[1]?.trim() || step : step,
+                    explanation: step.includes('Decision:') ? step : `Building DP table systematically`
                   }))}
-                  finalAnswer={`Maximum value achievable: ${result.maxValue}`}
+                  finalAnswer={`Maximum value achievable: ${result.maxValue} using items ${result.selectedItems.map(item => item.index).join(', ')}`}
                   examFormat={{
                     question: `Solve the 0/1 Knapsack problem with capacity ${capacity || 0} and given items using Dynamic Programming.`,
                     solution: [
-                      `Items: ${items.map((item, i) => `Item ${i+1}: w=${item.weight || 0}, v=${item.value || 0}`).join(', ')}`,
-                      `Capacity: ${capacity || 0}`,
-                      `DP Recurrence: dp[i][w] = max(dp[i-1][w], dp[i-1][w-wi] + vi)`,
-                      `Selected items: ${result.selectedItems.map(item => `Item ${item.index + 1}`).join(', ')}`,
-                      `Total weight used: ${result.selectedItems.reduce((sum, item) => sum + item.weight, 0)}`,
-                      `Maximum value: ${result.maxValue}`
+                      `Given: Capacity W = ${capacity || 0}`,
+                      `Items: ${items.map((item, i) => `Item ${i+1}: weight=${item.weight || 0}, value=${item.value || 0}`).join('; ')}`,
+                      `DP Recurrence Relation: dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i]] + value[i])`,
+                      `Base Cases: dp[0][w] = 0 for all w; dp[i][0] = 0 for all i`,
+                      `Optimal Solution: Select items ${result.selectedItems.map(item => item.index).join(', ')}`,
+                      `Total weight used: ${result.selectedItems.reduce((sum, item) => sum + item.weight, 0)} ≤ ${capacity || 0}`,
+                      `Maximum value achieved: ${result.maxValue}`
                     ],
-                    conclusion: `The optimal solution selects ${result.selectedItems.length} items with total value ${result.maxValue}.`,
+                    conclusion: `The dynamic programming approach finds the optimal solution with maximum value ${result.maxValue} by systematically building the DP table and backtracking to identify selected items.`,
                     marks: 15
                   }}
                 />
