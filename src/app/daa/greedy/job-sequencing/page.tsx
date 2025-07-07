@@ -6,11 +6,7 @@ import { jobSequencing, JobSequencingResult } from "../../../utils/greedyAlgorit
 
 export default function JobSequencingPage() {
   const [jobs, setJobs] = useState([
-    { id: 1, deadline: 2, profit: 100 },
-    { id: 2, deadline: 1, profit: 19 },
-    { id: 3, deadline: 2, profit: 27 },
-    { id: 4, deadline: 1, profit: 25 },
-    { id: 5, deadline: 3, profit: 15 }
+    { id: 1, deadline: "", profit: "" }
   ]);
   const [result, setResult] = useState<JobSequencingResult | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -19,6 +15,13 @@ export default function JobSequencingPage() {
 
   interface Job {
     id: number;
+    deadline: string;
+    profit: string;
+    scheduledTime?: number;
+  }
+
+  interface ProcessedJob {
+    id: number;
     deadline: number;
     profit: number;
     scheduledTime?: number;
@@ -26,35 +29,45 @@ export default function JobSequencingPage() {
 
   interface AnimationStep {
     type: string;
-    sortedJobs: Job[];
-    timeline: (Job | null)[];
-    selectedJobs: Job[];
-    currentJob: Job | null;
+    sortedJobs: ProcessedJob[];
+    timeline: (ProcessedJob | null)[];
+    selectedJobs: ProcessedJob[];
+    currentJob: ProcessedJob | null;
     message: string;
   }
 
   const handleSolve = () => {
-    const output = jobSequencing(jobs);
+    const processedJobs = jobs.map(job => ({
+      id: job.id,
+      deadline: parseInt(job.deadline) || 0,
+      profit: parseInt(job.profit) || 0
+    }));
+    const output = jobSequencing(processedJobs);
     setResult(output);
   };
 
   const handleAnimate = () => {
-    const output = jobSequencing(jobs);
+    const processedJobs = jobs.map(job => ({
+      id: job.id,
+      deadline: parseInt(job.deadline) || 0,
+      profit: parseInt(job.profit) || 0
+    }));
+    const output = jobSequencing(processedJobs);
     setResult(output);
     
     // Generate animation steps
-    const steps = generateJobSequencingAnimationSteps(jobs);
+    const steps = generateJobSequencingAnimationSteps(processedJobs);
     setAnimationSteps(steps);
     setAnimationStep(0);
     setIsAnimating(true);
   };
 
-  const generateJobSequencingAnimationSteps = (jobs: Job[]): AnimationStep[] => {
+  const generateJobSequencingAnimationSteps = (processedJobs: ProcessedJob[]): AnimationStep[] => {
     const steps: AnimationStep[] = [];
-    const sortedJobs = [...jobs].sort((a, b) => b.profit - a.profit);
-    const maxDeadline = Math.max(...jobs.map(j => j.deadline));
-    const timeline: (Job | null)[] = new Array(maxDeadline).fill(null);
-    const selectedJobs: Job[] = [];
+    const sortedJobs = [...processedJobs].sort((a, b) => b.profit - a.profit);
+    const maxDeadline = Math.max(...processedJobs.map(j => j.deadline));
+    const timeline: (ProcessedJob | null)[] = new Array(maxDeadline).fill(null);
+    const selectedJobs: ProcessedJob[] = [];
 
     // Step 1: Show sorted jobs
     steps.push({
@@ -134,14 +147,16 @@ export default function JobSequencingPage() {
 
   const addJob = () => {
     const newId = Math.max(...jobs.map(j => j.id)) + 1;
-    setJobs([...jobs, { id: newId, deadline: 1, profit: 10 }]);
+    setJobs([...jobs, { id: newId, deadline: "", profit: "" }]);
   };
 
   const removeJob = (id: number) => {
-    setJobs(jobs.filter(j => j.id !== id));
+    if (jobs.length > 1) {
+      setJobs(jobs.filter(j => j.id !== id));
+    }
   };
 
-  const updateJob = (id: number, field: string, value: number) => {
+  const updateJob = (id: number, field: string, value: string) => {
     setJobs(jobs.map(j => 
       j.id === id ? { ...j, [field]: value } : j
     ));
@@ -164,21 +179,29 @@ export default function JobSequencingPage() {
                 <div className="flex items-center gap-2">
                   <label className="text-sm font-medium">Deadline:</label>
                   <input
-                    type="number"
-                    min="1"
+                    type="text"
+                    placeholder="D"
                     className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                     value={job.deadline}
-                    onChange={(e) => updateJob(job.id, 'deadline', parseInt(e.target.value) || 1)}
+                    onChange={(e) => updateJob(job.id, 'deadline', e.target.value)}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck="false"
                   />
                 </div>
                 <div className="flex items-center gap-2">
                   <label className="text-sm font-medium">Profit:</label>
                   <input
-                    type="number"
-                    min="1"
+                    type="text"
+                    placeholder="P"
                     className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                     value={job.profit}
-                    onChange={(e) => updateJob(job.id, 'profit', parseInt(e.target.value) || 1)}
+                    onChange={(e) => updateJob(job.id, 'profit', e.target.value)}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck="false"
                   />
                 </div>
                 <button
@@ -278,7 +301,7 @@ export default function JobSequencingPage() {
               <div className="bg-blue-50 rounded-lg p-4">
                 <h4 className="font-semibold text-blue-800 mb-2">Sorted Jobs by Profit</h4>
                 <div className="space-y-2 max-h-32 overflow-y-auto">
-                  {(animationSteps[animationStep]?.sortedJobs || []).map((job: Job, idx: number) => (
+                  {(animationSteps[animationStep]?.sortedJobs || []).map((job: ProcessedJob, idx: number) => (
                     <div 
                       key={idx} 
                       className={`text-sm p-2 rounded flex justify-between ${
@@ -298,7 +321,7 @@ export default function JobSequencingPage() {
                 <h4 className="font-semibold text-green-800 mb-2">Timeline & Selected Jobs</h4>
                 <div className="space-y-2">
                   <div className="flex gap-1 mb-2">
-                    {(animationSteps[animationStep]?.timeline || []).map((job: Job | null, timeSlot: number) => (
+                    {(animationSteps[animationStep]?.timeline || []).map((job: ProcessedJob | null, timeSlot: number) => (
                       <div 
                         key={timeSlot}
                         className={`w-12 h-12 border-2 rounded flex items-center justify-center text-xs font-bold ${
@@ -312,7 +335,7 @@ export default function JobSequencingPage() {
                     ))}
                   </div>
                   <div className="space-y-1 max-h-20 overflow-y-auto">
-                    {(animationSteps[animationStep]?.selectedJobs || []).map((job: Job, idx: number) => (
+                    {(animationSteps[animationStep]?.selectedJobs || []).map((job: ProcessedJob, idx: number) => (
                       <div key={idx} className="text-sm text-green-700">
                         Job {job.id}: Time {job.scheduledTime}, Profit {job.profit}
                       </div>

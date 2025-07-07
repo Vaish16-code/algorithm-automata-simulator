@@ -59,13 +59,20 @@ export function KnapsackDPChart({ data, capacity }: KnapsackDPChartProps) {
           📊 Dynamic Programming Table
         </h3>
         
+        <div className="mb-4 text-sm text-gray-700">
+          <p><strong>DP Recurrence:</strong> dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i]] + value[i])</p>
+          <p><strong>Table Meaning:</strong> dp[i][w] = maximum value using items 1 to i with weight capacity w</p>
+        </div>
+        
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr>
-                <th className="border-4 border-gray-800 px-4 py-3 bg-gray-900 text-white font-bold text-lg">Items\Capacity</th>
+                <th className="border-2 border-gray-800 px-3 py-2 bg-gray-900 text-white font-bold">
+                  Items \ Weight
+                </th>
                 {Array.from({ length: capacity + 1 }, (_, i) => (
-                  <th key={i} className="border-4 border-gray-800 px-4 py-3 bg-gray-900 text-white font-bold text-lg">
+                  <th key={i} className="border-2 border-gray-800 px-3 py-2 bg-gray-900 text-white font-bold min-w-[40px]">
                     {i}
                   </th>
                 ))}
@@ -74,27 +81,48 @@ export function KnapsackDPChart({ data, capacity }: KnapsackDPChartProps) {
             <tbody>
               {data.dpTable.map((row, i) => (
                 <tr key={i}>
-                  <td className="border-4 border-gray-600 px-4 py-3 bg-gray-800 text-white font-bold text-lg">
-                    {i === 0 ? "0" : `Item ${i}`}
+                  <td className="border-2 border-gray-600 px-3 py-2 bg-gray-800 text-white font-bold">
+                    {i === 0 ? "∅" : `${i}`}
                   </td>
-                  {row.map((value, j) => (
-                    <td 
-                      key={j} 
-                      className={`border-4 border-gray-600 px-4 py-3 text-center font-bold text-lg ${
-                        value > 0 ? 'bg-blue-100 text-blue-900' : 'bg-white text-gray-900'
-                      }`}
-                    >
-                      {value}
-                    </td>
-                  ))}
+                  {row.map((value, j) => {
+                    // Determine if this cell represents an optimal choice
+                    let cellClass = "border-2 border-gray-600 px-3 py-2 text-center font-semibold";
+                    
+                    if (value === 0) {
+                      cellClass += " bg-gray-100 text-gray-600";
+                    } else if (i > 0 && j > 0 && value > data.dpTable[i-1][j]) {
+                      // This cell chose to include the item
+                      cellClass += " bg-green-100 text-green-800 border-green-400";
+                    } else if (value > 0) {
+                      // This cell has value but excluded the current item
+                      cellClass += " bg-blue-100 text-blue-800";
+                    }
+                    
+                    return (
+                      <td key={j} className={cellClass}>
+                        {value}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         
-        <div className="mt-4 text-sm text-gray-600">
-          <p><strong>Note:</strong> Each cell dp[i][w] represents the maximum value achievable using items 1 to i with weight capacity w.</p>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-gray-100 border border-gray-600"></div>
+            <span>Base case (0 value)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-green-100 border border-green-400"></div>
+            <span>Item included in optimal solution</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-blue-100 border border-gray-600"></div>
+            <span>Item excluded, previous value copied</span>
+          </div>
         </div>
       </div>
 

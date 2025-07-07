@@ -124,13 +124,13 @@ export function jobSequencing(jobs: Job[]): JobSequencingResult {
 
 // Graph and MST interfaces
 export interface Edge {
-  from: number;
-  to: number;
+  from: string;
+  to: string;
   weight: number;
 }
 
 export interface Graph {
-  vertices: number;
+  vertices: string[];
   edges: Edge[];
 }
 
@@ -142,31 +142,44 @@ export interface PrimResult {
   totalWeight: number;
   mstEdges: MSTEdge[];
   steps: string[];
+  allEdges: Edge[];
 }
 
 // Prim's Algorithm for Minimum Spanning Tree
 export function primMST(graph: Graph): PrimResult {
   const { vertices, edges } = graph;
   const mstEdges: MSTEdge[] = [];
-  const visited = new Set<number>();
+  const visited = new Set<string>();
   const steps: string[] = [];
   let totalWeight = 0;
-  let stepCount = 0;
+  let stepCount = 1;
 
-  // Start with vertex 0
-  visited.add(0);
-  steps.push("Start with vertex 0");
+  if (vertices.length === 0) {
+    return { totalWeight: 0, mstEdges: [], steps: [], allEdges: edges };
+  }
 
-  while (visited.size < vertices) {
+  // Start with first vertex (alphabetically sorted for consistency)
+  const sortedVertices = vertices.sort();
+  const startVertex = sortedVertices[0];
+  visited.add(startVertex);
+  
+  steps.push(`Step ${stepCount}: Start with vertex ${startVertex}`);
+  steps.push(`Visited vertices: {${startVertex}}`);
+  steps.push('');
+  stepCount++;
+
+  while (visited.size < vertices.length) {
     let minEdge: Edge | null = null;
     let minWeight = Infinity;
+    const availableEdges: Edge[] = [];
 
-    // Find minimum weight edge connecting visited to unvisited vertex
+    // Find all edges connecting visited to unvisited vertices
     for (const edge of edges) {
       const { from, to, weight } = edge;
       
       if ((visited.has(from) && !visited.has(to)) || 
           (visited.has(to) && !visited.has(from))) {
+        availableEdges.push(edge);
         if (weight < minWeight) {
           minWeight = weight;
           minEdge = edge;
@@ -176,17 +189,46 @@ export function primMST(graph: Graph): PrimResult {
 
     if (minEdge) {
       const newVertex = visited.has(minEdge.from) ? minEdge.to : minEdge.from;
-      visited.add(newVertex);
       
-      const mstEdgeWithStep: MSTEdge = { ...minEdge, step: stepCount++ };
+      // Show available edges at this step
+      const availableEdgesStr = availableEdges
+        .sort((a, b) => a.weight - b.weight)
+        .map(e => {
+          const fromVertex = visited.has(e.from) ? e.from : e.to;
+          const toVertex = visited.has(e.from) ? e.to : e.from;
+          return `(${fromVertex}, ${toVertex}): ${e.weight}`;
+        })
+        .join(', ');
+      
+      steps.push(`Step ${stepCount}: Available edges from visited vertices: ${availableEdgesStr}`);
+      
+      // Add the minimum edge
+      visited.add(newVertex);
+      const mstEdgeWithStep: MSTEdge = { ...minEdge, step: mstEdges.length };
       mstEdges.push(mstEdgeWithStep);
       totalWeight += minEdge.weight;
       
-      steps.push(`Add edge (${minEdge.from}, ${minEdge.to}) with weight ${minEdge.weight}`);
+      const fromVertex = visited.has(minEdge.from) ? minEdge.from : minEdge.to;
+      const toVertex = visited.has(minEdge.from) ? minEdge.to : minEdge.from;
+      
+      steps.push(`Choose minimum weight edge (${fromVertex}, ${toVertex}) with weight ${minEdge.weight}`);
+      steps.push(`Add vertex ${newVertex} to MST`);
+      steps.push(`Visited vertices: {${Array.from(visited).sort().join(', ')}}`);
+      steps.push(`Total weight so far: ${totalWeight}`);
+      steps.push('');
+      stepCount++;
+    } else {
+      steps.push(`No more edges available - graph may be disconnected`);
+      break;
     }
   }
 
-  return { totalWeight, mstEdges, steps };
+  if (mstEdges.length === vertices.length - 1) {
+    steps.push(`MST Complete!`);
+    steps.push(`Minimum spanning tree weight: ${totalWeight}`);
+  }
+
+  return { totalWeight, mstEdges, steps, allEdges: edges };
 }
 
 // Kruskal's Algorithm interfaces
@@ -194,38 +236,47 @@ export interface KruskalResult {
   totalWeight: number;
   mstEdges: MSTEdge[];
   steps: string[];
+  allEdges: Edge[];
 }
 
 // Union-Find data structure for cycle detection
 class UnionFind {
-  parent: number[];
-  rank: number[];
+  parent: Map<string, string>;
+  rank: Map<string, number>;
 
-  constructor(n: number) {
-    this.parent = Array.from({ length: n }, (_, i) => i);
-    this.rank = new Array(n).fill(0);
-  }
-
-  find(x: number): number {
-    if (this.parent[x] !== x) {
-      this.parent[x] = this.find(this.parent[x]);
+  constructor(vertices: string[]) {
+    this.parent = new Map();
+    this.rank = new Map();
+    
+    for (const vertex of vertices) {
+      this.parent.set(vertex, vertex);
+      this.rank.set(vertex, 0);
     }
-    return this.parent[x];
   }
 
-  union(x: number, y: number): boolean {
+  find(x: string): string {
+    if (this.parent.get(x) !== x) {
+      this.parent.set(x, this.find(this.parent.get(x)!));
+    }
+    return this.parent.get(x)!;
+  }
+
+  union(x: string, y: string): boolean {
     const rootX = this.find(x);
     const rootY = this.find(y);
 
     if (rootX === rootY) return false;
 
-    if (this.rank[rootX] < this.rank[rootY]) {
-      this.parent[rootX] = rootY;
-    } else if (this.rank[rootX] > this.rank[rootY]) {
-      this.parent[rootY] = rootX;
+    const rankX = this.rank.get(rootX)!;
+    const rankY = this.rank.get(rootY)!;
+
+    if (rankX < rankY) {
+      this.parent.set(rootX, rootY);
+    } else if (rankX > rankY) {
+      this.parent.set(rootY, rootX);
     } else {
-      this.parent[rootY] = rootX;
-      this.rank[rootX]++;
+      this.parent.set(rootY, rootX);
+      this.rank.set(rootX, rankX + 1);
     }
     return true;
   }
@@ -236,34 +287,74 @@ export function kruskalMST(graph: Graph): KruskalResult {
   const mstEdges: MSTEdge[] = [];
   const steps: string[] = [];
   let totalWeight = 0;
-  let stepCount = 0;
+  let stepCount = 1;
 
-  // Sort edges by weight
-  const sortedEdges = [...edges].sort((a, b) => a.weight - b.weight);
-  steps.push(`Sort edges by weight: ${sortedEdges.map(e => `(${e.from},${e.to}):${e.weight}`).join(', ')}`);
+  if (vertices.length === 0 || edges.length === 0) {
+    return { totalWeight: 0, mstEdges: [], steps: [], allEdges: edges };
+  }
 
+  // Sort edges by weight (ascending order)
+  const sortedEdges = [...edges].sort((a, b) => {
+    if (a.weight !== b.weight) return a.weight - b.weight;
+    // If weights are equal, sort by vertex names for consistency
+    if (a.from !== b.from) return a.from.localeCompare(b.from);
+    return a.to.localeCompare(b.to);
+  });
+  
+  steps.push(`Step ${stepCount}: Sort all edges by weight`);
+  steps.push(`Sorted edges: ${sortedEdges.map(e => `(${e.from}, ${e.to}): ${e.weight}`).join(', ')}`);
+  steps.push('');
+  stepCount++;
+
+  // Initialize Union-Find data structure
   const unionFind = new UnionFind(vertices);
+  
+  steps.push(`Step ${stepCount}: Initialize Union-Find structure`);
+  steps.push(`Each vertex is its own parent: ${vertices.map(v => `${v} -> ${v}`).join(', ')}`);
+  steps.push('');
+  stepCount++;
 
-  for (const edge of sortedEdges) {
+  // Process each edge in sorted order
+  for (let i = 0; i < sortedEdges.length; i++) {
+    const edge = sortedEdges[i];
     const { from, to, weight } = edge;
     
-    // Check if adding this edge creates a cycle
-    if (unionFind.union(from, to)) {
-      const mstEdgeWithStep: MSTEdge = { ...edge, step: stepCount++ };
+    steps.push(`Step ${stepCount}: Consider edge (${from}, ${to}) with weight ${weight}`);
+    
+    // Check if vertices are in same component (would create cycle)
+    const rootFrom = unionFind.find(from);
+    const rootTo = unionFind.find(to);
+    
+    if (rootFrom !== rootTo) {
+      // No cycle, add edge to MST
+      unionFind.union(from, to);
+      const mstEdgeWithStep: MSTEdge = { ...edge, step: mstEdges.length };
       mstEdges.push(mstEdgeWithStep);
       totalWeight += weight;
-      steps.push(`Add edge (${from}, ${to}) with weight ${weight} - no cycle formed`);
+      
+      steps.push(`✓ Add edge (${from}, ${to}) - No cycle formed`);
+      steps.push(`Union: ${from} and ${to} are now connected`);
+      steps.push(`MST edges: ${mstEdges.map(e => `(${e.from}, ${e.to}): ${e.weight}`).join(', ')}`);
+      steps.push(`Total weight: ${totalWeight}`);
     } else {
-      steps.push(`Skip edge (${from}, ${to}) with weight ${weight} - would create cycle`);
+      // Cycle detected, reject edge
+      steps.push(`✗ Reject edge (${from}, ${to}) - Creates cycle`);
+      steps.push(`${from} and ${to} already connected (same component: ${rootFrom})`);
     }
+    
+    steps.push('');
+    stepCount++;
 
-    // Stop when we have vertices-1 edges
-    if (mstEdges.length === vertices - 1) {
+    // Stop when we have vertices-1 edges (complete MST)
+    if (mstEdges.length === vertices.length - 1) {
+      steps.push(`MST Complete!`);
+      steps.push(`Total edges in MST: ${mstEdges.length} (= vertices - 1)`);
+      steps.push(`Minimum spanning tree weight: ${totalWeight}`);
       break;
     }
   }
 
-  return { totalWeight, mstEdges, steps };
+  return { totalWeight, mstEdges, steps, allEdges: edges };
 }
 
 // Dijkstra's Algorithm interfaces and implementation

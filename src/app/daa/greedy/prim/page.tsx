@@ -1,33 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { PrimChart } from "../../../components/PrimChart";
+import { GraphBuilder } from "../../../../components/GraphBuilder";
 import { primMST, PrimResult, Graph } from "../../../utils/greedyAlgorithms";
 
 export default function PrimPage() {
-  const [vertices, setVertices] = useState(5);
-  const [edges, setEdges] = useState([
-    { from: 0, to: 1, weight: 2 },
-    { from: 0, to: 3, weight: 6 },
-    { from: 1, to: 2, weight: 3 },
-    { from: 1, to: 3, weight: 8 },
-    { from: 1, to: 4, weight: 5 },
-    { from: 2, to: 4, weight: 7 },
-    { from: 3, to: 4, weight: 9 }
-  ]);
+  const [graph, setGraph] = useState<Graph>({ vertices: [], edges: [] });
   const [result, setResult] = useState<PrimResult | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationStep, setAnimationStep] = useState(0);
   const [animationSteps, setAnimationSteps] = useState<any[]>([]);
 
+  const handleGraphChange = useCallback((newGraph: Graph) => {
+    setGraph(newGraph);
+  }, []);
+
   const handleSolve = () => {
-    const graph: Graph = { vertices, edges };
+    if (graph.vertices.length === 0 || graph.edges.length === 0) {
+      alert("Please build a graph first!");
+      return;
+    }
     const output = primMST(graph);
     setResult(output);
   };
 
   const handleAnimate = () => {
-    const graph: Graph = { vertices, edges };
+    if (graph.vertices.length === 0 || graph.edges.length === 0) {
+      alert("Please build a graph first!");
+      return;
+    }
     const output = primMST(graph);
     setResult(output);
     
@@ -40,19 +42,20 @@ export default function PrimPage() {
 
   const generatePrimAnimationSteps = (graph: Graph) => {
     const steps = [];
-    const visited = new Set<number>();
+    const visited = new Set<string>();
     const mstEdges: any[] = [];
     
-    // Step 1: Start with vertex 0
-    visited.add(0);
+    // Step 1: Start with first vertex
+    const startVertex = graph.vertices[0];
+    visited.add(startVertex);
     steps.push({
       type: 'start',
-      visited: new Set([0]),
+      visited: new Set([startVertex]),
       mstEdges: [],
-      message: 'Starting with vertex 0'
+      message: `Starting with vertex ${startVertex}`
     });
 
-    while (visited.size < graph.vertices) {
+    while (visited.size < graph.vertices.length) {
       let minEdge = null;
       let minWeight = Infinity;
 
@@ -109,26 +112,6 @@ export default function PrimPage() {
     setIsAnimating(false);
     setAnimationStep(0);
     setAnimationSteps([]);
-  };
-
-  const addEdge = () => {
-    setEdges([...edges, { from: 0, to: 1, weight: 1 }]);
-  };
-
-  const removeEdge = (index: number) => {
-    setEdges(edges.filter((_, i) => i !== index));
-  };
-
-  const updateEdge = (index: number, field: string, value: number) => {
-    setEdges(edges.map((edge, i) => 
-      i === index ? { ...edge, [field]: Math.max(0, Math.min(vertices - 1, value)) } : edge
-    ));
-  };
-
-  const updateWeight = (index: number, weight: number) => {
-    setEdges(edges.map((edge, i) => 
-      i === index ? { ...edge, weight: Math.max(1, weight) } : edge
-    ));
   };
 
   const educationalContent = {
@@ -191,90 +174,54 @@ export default function PrimPage() {
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Algorithm Simulator</h2>
           
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Number of Vertices:
-            </label>
-            <input
-              type="number"
-              min="3"
-              max="10"
-              className="w-32 border-4 border-gray-800 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
-              value={vertices}
-              onChange={(e) => setVertices(parseInt(e.target.value) || 3)}
-            />
-          </div>
-
-          <div className="space-y-4 mb-6">
-            <h3 className="text-lg font-semibold text-gray-700">Edges:</h3>
-            {edges.map((edge, index) => (
-              <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium">From:</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max={vertices - 1}
-                    className="w-16 border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
-                    value={edge.from}
-                    onChange={(e) => updateEdge(index, 'from', parseInt(e.target.value) || 0)}
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium">To:</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max={vertices - 1}
-                    className="w-16 border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
-                    value={edge.to}
-                    onChange={(e) => updateEdge(index, 'to', parseInt(e.target.value) || 0)}
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium">Weight:</label>
-                  <input
-                    type="number"
-                    min="1"
-                    className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
-                    value={edge.weight}
-                    onChange={(e) => updateWeight(index, parseInt(e.target.value) || 1)}
-                  />
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Graph Builder Section */}
+            <div className="space-y-6">
+              <GraphBuilder 
+                onGraphChange={handleGraphChange}
+                initialGraph={graph}
+              />
+              
+              <div className="flex flex-wrap gap-4">
                 <button
-                  onClick={() => removeEdge(index)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
-                  disabled={edges.length <= 1}
+                  onClick={handleSolve}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                 >
-                  Remove
+                  Find MST using Prim&apos;s
+                </button>
+                <button
+                  onClick={handleAnimate}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-lg flex items-center gap-2 text-lg shadow-lg"
+                >
+                  <span>🎬</span>
+                  Animate Algorithm
                 </button>
               </div>
-            ))}
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-4">
-              <button
-                onClick={addEdge}
-                className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md"
-              >
-                Add Edge
-              </button>
-              <button
-                onClick={handleSolve}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md"
-              >
-                Find MST using Prim&apos;s
-              </button>
             </div>
-            <div className="flex justify-center">
-              <button
-                onClick={handleAnimate}
-                className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-lg flex items-center gap-2 text-lg shadow-lg"
-              >
-                <span>🎬</span>
-                Animate Algorithm Step-by-Step
-              </button>
+
+            {/* Visualization Section */}
+            <div className="bg-gray-50 rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">MST Visualization</h3>
+              {result ? (
+                <PrimChart 
+                  data={result} 
+                  vertices={graph.vertices.length}
+                  currentStep={isAnimating ? animationStep : -1}
+                  totalSteps={isAnimating ? animationSteps.length : 0}
+                  onNext={nextAnimationStep}
+                  onPrev={prevAnimationStep}
+                  onReset={resetAnimation}
+                />
+              ) : (
+                <div className="h-64 flex items-center justify-center text-gray-500 bg-white rounded-lg border-2 border-dashed border-gray-300">
+                  <div className="text-center">
+                    <svg className="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <p>Click &quot;Find MST&quot; to see visualization</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -418,7 +365,7 @@ export default function PrimPage() {
             <h2 className="text-2xl font-bold text-gray-800 mb-6">MST Visualization</h2>
             <PrimChart 
               data={result} 
-              vertices={vertices}
+              vertices={graph.vertices.length}
               currentStep={isAnimating ? animationStep : -1}
               totalSteps={isAnimating ? animationSteps.length : 0}
               onNext={nextAnimationStep}

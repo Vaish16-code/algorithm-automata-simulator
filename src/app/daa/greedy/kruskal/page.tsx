@@ -1,22 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { KruskalChart } from "../../../components/KruskalChart";
+import { GraphBuilder } from "../../../../components/GraphBuilder";
 import { kruskalMST, KruskalResult, Graph } from "../../../utils/greedyAlgorithms";
 
 export default function KruskalPage() {
-  const [vertices, setVertices] = useState(4);
-  const [edges, setEdges] = useState([
-    { from: 0, to: 1, weight: 10 },
-    { from: 0, to: 2, weight: 6 },
-    { from: 0, to: 3, weight: 5 },
-    { from: 1, to: 3, weight: 15 },
-    { from: 2, to: 3, weight: 4 }
-  ]);
+  const [graph, setGraph] = useState<Graph>({ vertices: [], edges: [] });
   const [result, setResult] = useState<KruskalResult | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationStep, setAnimationStep] = useState(0);
   const [animationSteps, setAnimationSteps] = useState<any[]>([]);
+
+  const handleGraphChange = useCallback((newGraph: Graph) => {
+    setGraph(newGraph);
+  }, []);
 
   const educationalContent = {
     overview: "Kruskal&apos;s algorithm is a greedy algorithm for finding the Minimum Spanning Tree (MST) of a weighted undirected graph. It builds the MST by sorting all edges by weight and adding them one by one, ensuring no cycles are formed using Union-Find data structure.",
@@ -24,7 +22,7 @@ export default function KruskalPage() {
       "Edge-based approach to MST construction", 
       "Sorts all edges by weight initially",
       "Uses Union-Find to detect cycles",
-      "Greedy choice: minimum weight edge that doesn&apos;t create cycle",
+      "Greedy choice: minimum weight edge that doesn&pos;t create cycle",
       "Works well with sparse graphs"
     ],
     applications: [
@@ -62,13 +60,19 @@ export default function KruskalPage() {
   };
 
   const handleSolve = () => {
-    const graph: Graph = { vertices, edges };
+    if (graph.vertices.length === 0 || graph.edges.length === 0) {
+      alert("Please build a graph first!");
+      return;
+    }
     const output = kruskalMST(graph);
     setResult(output);
   };
 
   const handleAnimate = () => {
-    const graph: Graph = { vertices, edges };
+    if (graph.vertices.length === 0 || graph.edges.length === 0) {
+      alert("Please build a graph first!");
+      return;
+    }
     const output = kruskalMST(graph);
     setResult(output);
     
@@ -82,25 +86,42 @@ export default function KruskalPage() {
   const generateKruskalAnimationSteps = (graph: Graph) => {
     const steps = [];
     const sortedEdges = [...graph.edges].sort((a, b) => a.weight - b.weight);
-    const parent = Array.from({ length: graph.vertices }, (_, i) => i);
-    const mstEdges: any[] = [];
-
-    const find = (x: number): number => {
-      if (parent[x] !== x) {
-        parent[x] = find(parent[x]);
+    const unionFind = new Map<string, string>();
+    const rank = new Map<string, number>();
+    
+    // Initialize Union-Find
+    for (const vertex of graph.vertices) {
+      unionFind.set(vertex, vertex);
+      rank.set(vertex, 0);
+    }
+    
+    const find = (x: string): string => {
+      if (unionFind.get(x) !== x) {
+        unionFind.set(x, find(unionFind.get(x)!));
       }
-      return parent[x];
+      return unionFind.get(x)!;
     };
 
-    const union = (x: number, y: number) => {
+    const union = (x: string, y: string) => {
       const rootX = find(x);
       const rootY = find(y);
       if (rootX !== rootY) {
-        parent[rootX] = rootY;
+        const rankX = rank.get(rootX)!;
+        const rankY = rank.get(rootY)!;
+        if (rankX < rankY) {
+          unionFind.set(rootX, rootY);
+        } else if (rankX > rankY) {
+          unionFind.set(rootY, rootX);
+        } else {
+          unionFind.set(rootY, rootX);
+          rank.set(rootX, rankX + 1);
+        }
         return true;
       }
       return false;
     };
+
+    const mstEdges: any[] = [];
 
     // Step 1: Show sorted edges
     steps.push({
@@ -136,7 +157,7 @@ export default function KruskalPage() {
         });
       }
 
-      if (mstEdges.length === graph.vertices - 1) {
+      if (mstEdges.length === graph.vertices.length - 1) {
         break;
       }
     }
@@ -170,20 +191,6 @@ export default function KruskalPage() {
     setAnimationSteps([]);
   };
 
-  const addEdge = () => {
-    setEdges([...edges, { from: 0, to: 1, weight: 1 }]);
-  };
-
-  const removeEdge = (index: number) => {
-    setEdges(edges.filter((_, i) => i !== index));
-  };
-
-  const updateEdge = (index: number, field: 'from' | 'to' | 'weight', value: number) => {
-    const newEdges = [...edges];
-    newEdges[index] = { ...newEdges[index], [field]: value };
-    setEdges(newEdges);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
       <main className="container mx-auto px-4 py-8">
@@ -202,100 +209,27 @@ export default function KruskalPage() {
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Algorithm Simulator</h2>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Input Section */}
+            {/* Graph Builder Section */}
             <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Number of Vertices:
-                </label>
-                <input
-                  type="number"
-                  value={vertices}
-                  onChange={(e) => setVertices(parseInt(e.target.value) || 1)}
-                  className="w-full border-4 border-gray-800 rounded-lg px-4 py-3 text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-200"
-                  min="1"
-                  max="10"
-                />
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">Graph Edges:</h3>
-                <div className="space-y-3">
-                  {edges.map((edge, index) => (
-                    <div key={index} className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <label className="text-sm font-medium text-gray-600">From:</label>
-                        <input
-                          type="number"
-                          value={edge.from}
-                          onChange={(e) => updateEdge(index, 'from', parseInt(e.target.value) || 0)}
-                          className="w-16 border-4 border-gray-800 rounded px-3 py-2 text-center text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
-                          min="0"
-                          max={vertices - 1}
-                        />
-                      </div>
-                      
-                      <span className="text-gray-400 font-mono">→</span>
-                      
-                      <div className="flex items-center gap-2">
-                        <label className="text-sm font-medium text-gray-600">To:</label>
-                        <input
-                          type="number"
-                          value={edge.to}
-                          onChange={(e) => updateEdge(index, 'to', parseInt(e.target.value) || 0)}
-                          className="w-16 border-4 border-gray-800 rounded px-3 py-2 text-center text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
-                          min="0"
-                          max={vertices - 1}
-                        />
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <label className="text-sm font-medium text-gray-600">Weight:</label>
-                        <input
-                          type="number"
-                          value={edge.weight}
-                          onChange={(e) => updateEdge(index, 'weight', parseInt(e.target.value) || 0)}
-                          className="w-20 border-4 border-gray-800 rounded px-3 py-2 text-center text-lg font-bold text-black bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
-                          min="1"
-                        />
-                      </div>
-                      
-                      <button
-                        onClick={() => removeEdge(index)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
-                        disabled={edges.length <= 1}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="space-y-4 mt-4">
-                  <div className="flex flex-wrap gap-4">
-                    <button
-                      onClick={addEdge}
-                      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                    >
-                      Add Edge
-                    </button>
-                    <button
-                      onClick={handleSolve}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-                    >
-                      Find MST using Kruskal&apos;s
-                    </button>
-                  </div>
-                  <div className="flex justify-center">
-                    <button
-                      onClick={handleAnimate}
-                      className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-lg flex items-center gap-2 text-lg shadow-lg"
-                    >
-                      <span>🎬</span>
-                      Animate Algorithm Step-by-Step
-                    </button>
-                  </div>
-                </div>
+              <GraphBuilder 
+                onGraphChange={handleGraphChange}
+                initialGraph={graph}
+              />
+              
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={handleSolve}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Find MST using Kruskal&apos;s
+                </button>
+                <button
+                  onClick={handleAnimate}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-lg flex items-center gap-2 text-lg shadow-lg"
+                >
+                  <span>🎬</span>
+                  Animate Algorithm
+                </button>
               </div>
             </div>
 
@@ -305,7 +239,7 @@ export default function KruskalPage() {
               {result ? (
                 <KruskalChart 
                   data={result} 
-                  vertices={vertices}
+                  vertices={graph.vertices.length}
                   currentStep={isAnimating ? animationStep : -1}
                   totalSteps={isAnimating ? animationSteps.length : 0}
                   onNext={nextAnimationStep}
@@ -423,6 +357,65 @@ export default function KruskalPage() {
         {result && !isAnimating && (
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Algorithm Result</h2>
+            
+            {/* Step-by-Step Solution Table */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Step-by-Step Solution</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full border-4 border-black">
+                  <thead>
+                    <tr className="bg-blue-600 text-white">
+                      <th className="border-2 border-black px-4 py-3 text-lg font-bold">Step</th>
+                      <th className="border-2 border-black px-4 py-3 text-lg font-bold">Edge</th>
+                      <th className="border-2 border-black px-4 py-3 text-lg font-bold">Weight</th>
+                      <th className="border-2 border-black px-4 py-3 text-lg font-bold">Action</th>
+                      <th className="border-2 border-black px-4 py-3 text-lg font-bold">Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="bg-yellow-100">
+                      <td className="border-2 border-black px-4 py-3 font-bold text-center">1</td>
+                      <td className="border-2 border-black px-4 py-3 font-bold text-center">-</td>
+                      <td className="border-2 border-black px-4 py-3 font-bold text-center">-</td>
+                      <td className="border-2 border-black px-4 py-3 font-bold text-center">Sort Edges</td>
+                      <td className="border-2 border-black px-4 py-3 font-bold">Sort all edges by weight in ascending order</td>
+                    </tr>
+                    {(() => {
+                      const sortedEdges = [...(result as any).allEdges || []];
+                      const selectedEdges = new Set();
+                      
+                      // Create a set of selected edges (handle both directions)
+                      result.mstEdges.forEach(e => {
+                        const edgeKey = e.from < e.to ? `${e.from}-${e.to}-${e.weight}` : `${e.to}-${e.from}-${e.weight}`;
+                        selectedEdges.add(edgeKey);
+                      });
+                      
+                      return sortedEdges.map((edge: any, index: number) => {
+                        const edgeKey = edge.from < edge.to ? `${edge.from}-${edge.to}-${edge.weight}` : `${edge.to}-${edge.from}-${edge.weight}`;
+                        const isSelected = selectedEdges.has(edgeKey);
+                        
+                        return (
+                          <tr key={index} className={isSelected ? "bg-green-100" : "bg-red-100"}>
+                            <td className="border-2 border-black px-4 py-3 font-bold text-center">{index + 2}</td>
+                            <td className="border-2 border-black px-4 py-3 font-bold text-center">
+                              ({edge.from}, {edge.to})
+                            </td>
+                            <td className="border-2 border-black px-4 py-3 font-bold text-center">{edge.weight}</td>
+                            <td className="border-2 border-black px-4 py-3 font-bold text-center">
+                              {isSelected ? "✅ Add" : "❌ Reject"}
+                            </td>
+                            <td className="border-2 border-black px-4 py-3 font-bold">
+                              {isSelected ? "No cycle formed - Added to MST" : "Would create cycle - Rejected"}
+                            </td>
+                          </tr>
+                        );
+                      });
+                    })()}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-green-100 rounded-lg p-6 border-4 border-green-600">
                 <h3 className="text-2xl font-bold text-white mb-6 bg-green-600 p-3 rounded-lg">MST Properties</h3>

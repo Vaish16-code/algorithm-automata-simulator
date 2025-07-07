@@ -23,11 +23,20 @@ export default function DijkstraPage() {
   const [edges, setEdges] = useState<Edge[]>([]);
   const [selectedNode, setSelectedNode] = useState<number | null>(null);
   const [sourceNode, setSourceNode] = useState<number>(0);
-  const [isDrawingMode, setIsDrawingMode] = useState<'node' | 'edge' | 'none'>('none');
+  const [isDrawingMode, setIsDrawingMode] = useState<'node' | 'edge' | 'delete' | 'none'>('none');
   const [edgeStart, setEdgeStart] = useState<number | null>(null);
   const [edgeWeight, setEdgeWeight] = useState<string>('1');
   const [result, setResult] = useState<DijkstraResult | null>(null);
   const [animationStep, setAnimationStep] = useState<number>(-1);
+  
+  // New state for drag and drop
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragOffset, setDragOffset] = useState<{x: number, y: number}>({x: 0, y: 0});
+  const [dragStarted, setDragStarted] = useState<boolean>(false);
+  
+  // New state for undo functionality
+  const [history, setHistory] = useState<{nodes: Node[], edges: Edge[]}[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
   useEffect(() => {
     // Initialize with a sample graph
@@ -50,7 +59,40 @@ export default function DijkstraPage() {
 
     setNodes(sampleNodes);
     setEdges(sampleEdges);
+    saveToHistory(sampleNodes, sampleEdges);
   }, []);
+
+  // Save state to history for undo functionality
+  const saveToHistory = (newNodes: Node[], newEdges: Edge[]) => {
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push({ nodes: [...newNodes], edges: [...newEdges] });
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  };
+
+  // Undo function
+  const undo = () => {
+    if (historyIndex > 0) {
+      const prevState = history[historyIndex - 1];
+      setNodes(prevState.nodes);
+      setEdges(prevState.edges);
+      setHistoryIndex(historyIndex - 1);
+      setResult(null);
+      setAnimationStep(-1);
+    }
+  };
+
+  // Redo function
+  const redo = () => {
+    if (historyIndex < history.length - 1) {
+      const nextState = history[historyIndex + 1];
+      setNodes(nextState.nodes);
+      setEdges(nextState.edges);
+      setHistoryIndex(historyIndex + 1);
+      setResult(null);
+      setAnimationStep(-1);
+    }
+  };
 
   useEffect(() => {
     drawGraph();
@@ -153,6 +195,99 @@ export default function DijkstraPage() {
   };
 
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    // This is now just a fallback - most logic is in handleCanvasMouseUp
+    if (!isDragging && !dragStarted) {
+      handleCanvasClickInternal(event);
+    }
+  };
+
+  // Mouse down handler for dragging
+  const handleCanvasMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const clickedNode = nodes.find(node => 
+      Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
+    );
+
+    if (clickedNode && isDrawingMode === 'none') {
+      // Start dragging
+      setIsDragging(true);
+      setSelectedNode(clickedNode.id);
+      setDragOffset({
+        x: x - clickedNode.x,
+        y: y - clickedNode.y
+      });
+      setDragStarted(false);
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  // Mouse move handler for dragging
+  const handleCanvasMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDragging || selectedNode === null) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    if (!dragStarted) {
+      setDragStarted(true);
+    }
+
+    const newNodes = nodes.map(node => 
+      node.id === selectedNode 
+        ? { 
+            ...node, 
+            x: Math.max(20, Math.min(480, x - dragOffset.x)), 
+            y: Math.max(20, Math.min(280, y - dragOffset.y)) 
+          }
+        : node
+    );
+    setNodes(newNodes);
+    event.preventDefault();
+  };
+
+  // Mouse up handler for dragging
+  const handleCanvasMouseUp = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (isDragging) {
+      setIsDragging(false);
+      setSelectedNode(null);
+      if (dragStarted) {
+        saveToHistory(nodes, edges);
+        setDragStarted(false);
+        return; // Don't process as click
+      }
+    }
+
+    // If not dragging, handle as regular click
+    if (!dragStarted) {
+      handleCanvasClickInternal(event);
+    }
+  };
+
+  // Mouse leave handler - only end drag, don't process as click
+  const handleCanvasMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      setSelectedNode(null);
+      if (dragStarted) {
+        saveToHistory(nodes, edges);
+        setDragStarted(false);
+      }
+    }
+  };
+
+  // Separate the click logic
+  const handleCanvasClickInternal = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -168,7 +303,9 @@ export default function DijkstraPage() {
         y,
         label: String.fromCharCode(65 + nodes.length) // A, B, C, ...
       };
-      setNodes([...nodes, newNode]);
+      const newNodes = [...nodes, newNode];
+      setNodes(newNodes);
+      saveToHistory(newNodes, edges);
     } else if (isDrawingMode === 'edge') {
       // Find clicked node
       const clickedNode = nodes.find(node => 
@@ -186,12 +323,69 @@ export default function DijkstraPage() {
             to: clickedNode.id,
             weight
           };
-          setEdges([...edges, newEdge]);
+          const newEdges = [...edges, newEdge];
+          setEdges(newEdges);
           setEdgeStart(null);
+          saveToHistory(nodes, newEdges);
+        }
+      }
+    } else if (isDrawingMode === 'delete') {
+      // Find clicked node or edge to delete
+      const clickedNode = nodes.find(node => 
+        Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
+      );
+
+      if (clickedNode) {
+        // Delete node and all connected edges
+        const newNodes = nodes.filter(n => n.id !== clickedNode.id);
+        const newEdges = edges.filter(e => e.from !== clickedNode.id && e.to !== clickedNode.id);
+        setNodes(newNodes);
+        setEdges(newEdges);
+        saveToHistory(newNodes, newEdges);
+        if (selectedNode === clickedNode.id) setSelectedNode(null);
+      } else {
+        // Check if clicked on an edge
+        const clickedEdge = edges.find(edge => {
+          const fromNode = nodes.find(n => n.id === edge.from);
+          const toNode = nodes.find(n => n.id === edge.to);
+          if (!fromNode || !toNode) return false;
+          
+          // Calculate distance from point to line segment
+          const A = x - fromNode.x;
+          const B = y - fromNode.y;
+          const C = toNode.x - fromNode.x;
+          const D = toNode.y - fromNode.y;
+          
+          const dot = A * C + B * D;
+          const lenSq = C * C + D * D;
+          let param = -1;
+          if (lenSq !== 0) param = dot / lenSq;
+          
+          let xx, yy;
+          if (param < 0) {
+            xx = fromNode.x;
+            yy = fromNode.y;
+          } else if (param > 1) {
+            xx = toNode.x;
+            yy = toNode.y;
+          } else {
+            xx = fromNode.x + param * C;
+            yy = fromNode.y + param * D;
+          }
+          
+          const dx = x - xx;
+          const dy = y - yy;
+          return Math.sqrt(dx * dx + dy * dy) < 10;
+        });
+
+        if (clickedEdge) {
+          const newEdges = edges.filter(e => e !== clickedEdge);
+          setEdges(newEdges);
+          saveToHistory(nodes, newEdges);
         }
       }
     } else {
-      // Select node
+      // Select node (only if not in any special mode)
       const clickedNode = nodes.find(node => 
         Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
       );
@@ -223,12 +417,15 @@ export default function DijkstraPage() {
   };
 
   const clearGraph = () => {
-    setNodes([]);
-    setEdges([]);
+    const newNodes: Node[] = [];
+    const newEdges: Edge[] = [];
+    setNodes(newNodes);
+    setEdges(newEdges);
     setResult(null);
     setAnimationStep(-1);
     setSelectedNode(null);
     setEdgeStart(null);
+    saveToHistory(newNodes, newEdges);
   };
 
   const loadSampleGraph = () => {
@@ -253,6 +450,7 @@ export default function DijkstraPage() {
     setEdges(sampleEdges);
     setResult(null);
     setAnimationStep(-1);
+    saveToHistory(sampleNodes, sampleEdges);
   };
 
   const nextStep = () => {
@@ -367,6 +565,17 @@ export default function DijkstraPage() {
                 >
                   Add Edge
                 </button>
+
+                <button
+                  onClick={() => setIsDrawingMode(isDrawingMode === 'delete' ? 'none' : 'delete')}
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                    isDrawingMode === 'delete' 
+                      ? 'bg-red-600 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  Delete
+                </button>
                 
                 {isDrawingMode === 'edge' && (
                   <input
@@ -393,6 +602,22 @@ export default function DijkstraPage() {
                   className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                 >
                   Load Sample
+                </button>
+
+                <button
+                  onClick={undo}
+                  disabled={historyIndex <= 0}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:bg-gray-400"
+                >
+                  ↶ Undo
+                </button>
+
+                <button
+                  onClick={redo}
+                  disabled={historyIndex >= history.length - 1}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:bg-gray-400"
+                >
+                  ↷ Redo
                 </button>
               </div>
 
@@ -427,8 +652,15 @@ export default function DijkstraPage() {
                 ref={canvasRef}
                 width={500}
                 height={300}
-                className="border rounded-lg cursor-pointer bg-gray-50"
-                onClick={handleCanvasClick}
+                className={`border rounded-lg bg-gray-50 ${
+                  isDragging ? 'cursor-grabbing' : 
+                  isDrawingMode === 'none' ? 'cursor-grab' : 'cursor-pointer'
+                }`}
+                onMouseDown={handleCanvasMouseDown}
+                onMouseMove={handleCanvasMouseMove}
+                onMouseUp={handleCanvasMouseUp}
+                onMouseLeave={handleCanvasMouseLeave}
+                style={{ userSelect: 'none' }}
               />
             </div>
 
@@ -437,6 +669,9 @@ export default function DijkstraPage() {
               <ul className="list-disc list-inside space-y-1">
                 <li>Click &quot;Add Node&quot; then click on canvas to add vertices</li>
                 <li>Click &quot;Add Edge&quot;, set weight, then click two nodes to connect</li>
+                <li>Click &quot;Delete&quot; then click nodes or edges to remove them</li>
+                <li>Drag nodes to move them around</li>
+                <li>Use Undo/Redo to restore accidentally deleted items</li>
                 <li>Select source node and run the algorithm</li>
               </ul>
             </div>
@@ -572,6 +807,187 @@ export default function DijkstraPage() {
             )}
           </div>
         </div>
+
+        {/* Output Graph Section - Shortest Path Tree */}
+        {result && animationStep === result.steps.length - 1 && (
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border-2 border-green-200">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              🌳 Shortest Path Tree - Output Graph
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Visual Output Graph */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">Visual Shortest Path Tree</h3>
+                <div className="border border-gray-300 rounded-lg p-4 bg-green-50">
+                  <canvas
+                    ref={(canvas) => {
+                      if (canvas && result) {
+                        const ctx = canvas.getContext('2d');
+                        if (!ctx) return;
+                        
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Draw only shortest path edges in green
+                        const finalStep = result.steps[result.steps.length - 1];
+                        
+                        // Get shortest path edges from the result
+                        edges.forEach(edge => {
+                          const fromNode = nodes.find(n => n.id === edge.from);
+                          const toNode = nodes.find(n => n.id === edge.to);
+                          
+                          if (fromNode && toNode) {
+                            // Check if this edge is part of any shortest path
+                            let isInShortestPath = false;
+                            
+                            if (result.shortestPaths) {
+                              result.shortestPaths.forEach(path => {
+                                for (let i = 0; i < path.length - 1; i++) {
+                                  if ((path[i] === edge.from && path[i + 1] === edge.to) ||
+                                      (path[i] === edge.to && path[i + 1] === edge.from)) {
+                                    isInShortestPath = true;
+                                    break;
+                                  }
+                                }
+                              });
+                            }
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(fromNode.x * 0.8, fromNode.y * 0.8);
+                            ctx.lineTo(toNode.x * 0.8, toNode.y * 0.8);
+                            
+                            if (isInShortestPath) {
+                              ctx.strokeStyle = '#22c55e';
+                              ctx.lineWidth = 4;
+                            } else {
+                              ctx.strokeStyle = '#d1d5db';
+                              ctx.lineWidth = 1;
+                            }
+                            ctx.stroke();
+                            
+                            // Draw weight for shortest path edges
+                            if (isInShortestPath) {
+                              const midX = ((fromNode.x + toNode.x) / 2) * 0.8;
+                              const midY = ((fromNode.y + toNode.y) / 2) * 0.8;
+                              ctx.fillStyle = '#16a34a';
+                              ctx.font = 'bold 12px Arial';
+                              ctx.fillText(edge.weight.toString(), midX - 8, midY - 3);
+                            }
+                          }
+                        });
+                        
+                        // Draw nodes
+                        nodes.forEach(node => {
+                          ctx.beginPath();
+                          ctx.arc(node.x * 0.8, node.y * 0.8, 16, 0, 2 * Math.PI);
+                          
+                          if (node.id === sourceNode) {
+                            ctx.fillStyle = '#ef4444'; // Source - red
+                          } else if (finalStep.distances[node.id] !== Infinity) {
+                            ctx.fillStyle = '#22c55e'; // Reachable - green
+                          } else {
+                            ctx.fillStyle = '#9ca3af'; // Unreachable - gray
+                          }
+                          
+                          ctx.fill();
+                          ctx.strokeStyle = '#374151';
+                          ctx.lineWidth = 2;
+                          ctx.stroke();
+                          
+                          // Draw label
+                          ctx.fillStyle = '#ffffff';
+                          ctx.font = 'bold 12px Arial';
+                          ctx.textAlign = 'center';
+                          ctx.fillText(node.label, node.x * 0.8, node.y * 0.8 + 4);
+                          
+                          // Draw distance
+                          ctx.fillStyle = '#dc2626';
+                          ctx.font = '10px Arial';
+                          const distance = finalStep.distances[node.id];
+                          ctx.fillText(
+                            distance === Infinity ? '∞' : distance.toString(),
+                            node.x * 0.8,
+                            node.y * 0.8 - 20
+                          );
+                        });
+                      }
+                    }}
+                    width={400}
+                    height={240}
+                    className="border rounded bg-white"
+                  />
+                </div>
+                <div className="mt-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span>Source</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-1 bg-green-500"></div>
+                      <span>Shortest Path</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span>Reachable</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Textual Output */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">Shortest Path Tree Details</h3>
+                <div className="bg-gray-50 p-4 rounded-lg border">
+                  <div className="space-y-3">
+                    <div>
+                      <h4 className="font-semibold text-green-700">Source Vertex:</h4>
+                      <p className="text-gray-700">{nodes.find(n => n.id === sourceNode)?.label}</p>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-semibold text-green-700">Shortest Distances:</h4>
+                      <div className="space-y-1">
+                        {nodes.map(node => {
+                          const finalStep = result.steps[result.steps.length - 1];
+                          const distance = finalStep.distances[node.id];
+                          return (
+                            <div key={node.id} className="flex justify-between">
+                              <span>To {node.label}:</span>
+                              <span className="font-mono font-bold">
+                                {distance === Infinity ? '∞ (unreachable)' : `${distance}`}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-semibold text-green-700">Shortest Paths:</h4>
+                      <div className="space-y-1 text-sm">
+                        {nodes.map(node => {
+                          if (node.id === sourceNode) return null;
+                          const path = result.shortestPaths ? result.shortestPaths[node.id] : [];
+                          return (
+                            <div key={node.id}>
+                              <span className="text-gray-600">To {node.label}: </span>
+                              <span className="font-mono">
+                                {path.length > 0 
+                                  ? path.map(id => nodes.find(n => n.id === id)?.label).join(' → ')
+                                  : 'No path'
+                                }
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Step-by-Step Table */}
         {result && (
