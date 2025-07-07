@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { dijkstraAlgorithm, DijkstraResult } from "@/app/utils/greedyAlgorithms";
 import { EducationalInfo, ExamResult } from "@/components";
 
@@ -18,7 +18,6 @@ interface Edge {
 }
 
 export default function DijkstraPage() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [selectedNode, setSelectedNode] = useState<number | null>(null);
@@ -28,6 +27,7 @@ export default function DijkstraPage() {
   const [edgeWeight, setEdgeWeight] = useState<string>('1');
   const [result, setResult] = useState<DijkstraResult | null>(null);
   const [animationStep, setAnimationStep] = useState<number>(-1);
+  const [isDirected, setIsDirected] = useState<boolean>(false);
   
   // New state for drag and drop
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -94,150 +94,42 @@ export default function DijkstraPage() {
     }
   };
 
-  useEffect(() => {
-    drawGraph();
-  }, [nodes, edges, selectedNode, animationStep, result]);
-
-  const drawGraph = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw edges
-    edges.forEach((edge, index) => {
-      const fromNode = nodes.find(n => n.id === edge.from);
-      const toNode = nodes.find(n => n.id === edge.to);
-      
-      if (fromNode && toNode) {
-        ctx.beginPath();
-        ctx.moveTo(fromNode.x, fromNode.y);
-        ctx.lineTo(toNode.x, toNode.y);
-        
-        // Highlight edge if it's in the shortest path
-        if (result && animationStep >= 0) {
-          const step = result.steps[animationStep];
-          if (step && step.edgesInPath && step.edgesInPath.some(e => 
-            (e.from === edge.from && e.to === edge.to) || 
-            (e.from === edge.to && e.to === edge.from)
-          )) {
-            ctx.strokeStyle = '#22c55e';
-            ctx.lineWidth = 3;
-          } else {
-            ctx.strokeStyle = '#6b7280';
-            ctx.lineWidth = 2;
-          }
-        } else {
-          ctx.strokeStyle = '#6b7280';
-          ctx.lineWidth = 2;
-        }
-        
-        ctx.stroke();
-
-        // Draw weight
-        const midX = (fromNode.x + toNode.x) / 2;
-        const midY = (fromNode.y + toNode.y) / 2;
-        ctx.fillStyle = '#1f2937';
-        ctx.font = '14px Arial';
-        ctx.fillText(edge.weight.toString(), midX - 10, midY - 5);
-      }
-    });
-
-    // Draw nodes
-    nodes.forEach(node => {
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, 20, 0, 2 * Math.PI);
-      
-      // Node colors based on algorithm state
-      if (result && animationStep >= 0) {
-        const step = result.steps[animationStep];
-        if (step) {
-          if (step.visited && step.visited.includes(node.id)) {
-            ctx.fillStyle = '#22c55e'; // Visited - green
-          } else if (step.currentNode === node.id) {
-            ctx.fillStyle = '#f59e0b'; // Current - orange
-          } else if (step.distances[node.id] !== Infinity) {
-            ctx.fillStyle = '#3b82f6'; // In queue - blue
-          } else {
-            ctx.fillStyle = '#e5e7eb'; // Unvisited - gray
-          }
-        } else {
-          ctx.fillStyle = node.id === sourceNode ? '#ef4444' : '#e5e7eb';
-        }
-      } else {
-        ctx.fillStyle = node.id === sourceNode ? '#ef4444' : (selectedNode === node.id ? '#3b82f6' : '#e5e7eb');
-      }
-      
-      ctx.fill();
-      ctx.strokeStyle = '#374151';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Draw label
-      ctx.fillStyle = '#1f2937';
-      ctx.font = 'bold 16px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(node.label, node.x, node.y + 5);
-
-      // Draw distance if algorithm is running
-      if (result && animationStep >= 0) {
-        const step = result.steps[animationStep];
-        if (step && step.distances[node.id] !== Infinity) {
-          ctx.fillStyle = '#dc2626';
-          ctx.font = '12px Arial';
-          ctx.fillText(step.distances[node.id].toString(), node.x, node.y - 30);
-        }
-      }
-    });
-  };
-
-  const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    // This is now just a fallback - most logic is in handleCanvasMouseUp
-    if (!isDragging && !dragStarted) {
-      handleCanvasClickInternal(event);
-    }
-  };
-
   // Mouse down handler for dragging
-  const handleCanvasMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    const clickedNode = nodes.find(node => 
-      Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
-    );
-
-    if (clickedNode && isDrawingMode === 'none') {
-      // Start dragging
+  const handleNodeMouseDown = (nodeId: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+    console.log('Node mouse down:', nodeId, 'Mode:', isDrawingMode);
+    
+    // Only allow dragging when not in edge mode
+    if (isDrawingMode !== 'edge') {
       setIsDragging(true);
-      setSelectedNode(clickedNode.id);
-      setDragOffset({
-        x: x - clickedNode.x,
-        y: y - clickedNode.y
-      });
+      setSelectedNode(nodeId);
+      
+      const node = nodes.find(n => n.id === nodeId);
+      if (node) {
+        const svg = event.currentTarget.closest('svg');
+        if (svg) {
+          const rect = svg.getBoundingClientRect();
+          setDragOffset({
+            x: event.clientX - rect.left - node.x,
+            y: event.clientY - rect.top - node.y
+          });
+        }
+      }
       setDragStarted(false);
+      // Only prevent default for dragging, not for edge creation
       event.preventDefault();
-      event.stopPropagation();
     }
+    // Don't prevent default in edge mode - let the click event fire
   };
 
-  // Mouse move handler for dragging
-  const handleCanvasMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  // SVG mouse move handler for dragging
+  const handleSvgMouseMove = (event: React.MouseEvent<SVGSVGElement>) => {
     if (!isDragging || selectedNode === null) return;
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const newX = Math.max(25, Math.min(475, event.clientX - rect.left - dragOffset.x));
+    const newY = Math.max(25, Math.min(275, event.clientY - rect.top - dragOffset.y));
 
     if (!dragStarted) {
       setDragStarted(true);
@@ -245,53 +137,127 @@ export default function DijkstraPage() {
 
     const newNodes = nodes.map(node => 
       node.id === selectedNode 
-        ? { 
-            ...node, 
-            x: Math.max(20, Math.min(480, x - dragOffset.x)), 
-            y: Math.max(20, Math.min(280, y - dragOffset.y)) 
-          }
+        ? { ...node, x: newX, y: newY }
         : node
     );
+    
     setNodes(newNodes);
     event.preventDefault();
   };
 
-  // Mouse up handler for dragging
-  const handleCanvasMouseUp = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  // SVG mouse down handler
+  const handleSvgMouseDown = (event: React.MouseEvent<SVGSVGElement>) => {
+    // This will be handled by individual nodes
+  };
+
+  // SVG mouse up handler
+  const handleSvgMouseUp = (event: React.MouseEvent<SVGSVGElement>) => {
+    console.log('SVG mouse up - isDragging:', isDragging, 'dragStarted:', dragStarted, 'mode:', isDrawingMode);
+    
     if (isDragging) {
       setIsDragging(false);
-      setSelectedNode(null);
       if (dragStarted) {
         saveToHistory(nodes, edges);
         setDragStarted(false);
+        setSelectedNode(null);
         return; // Don't process as click
       }
+      setSelectedNode(null);
     }
 
-    // If not dragging, handle as regular click
-    if (!dragStarted) {
-      handleCanvasClickInternal(event);
+    // If not dragging, handle as regular click for adding nodes/edges
+    if (!dragStarted && !isDragging && isDrawingMode === 'node') {
+      handleSvgClickInternal(event);
     }
   };
 
-  // Mouse leave handler - only end drag, don't process as click
-  const handleCanvasMouseLeave = () => {
+  // SVG mouse leave handler
+  const handleSvgMouseLeave = () => {
     if (isDragging) {
       setIsDragging(false);
-      setSelectedNode(null);
       if (dragStarted) {
         saveToHistory(nodes, edges);
         setDragStarted(false);
       }
+      setSelectedNode(null);
     }
   };
 
-  // Separate the click logic
-  const handleCanvasClickInternal = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  // Handle node clicks directly
+  const handleNodeClick = (nodeId: number, event: React.MouseEvent) => {
+    console.log('=== NODE CLICK EVENT ===');
+    console.log('Node clicked:', nodeId, 'Mode:', isDrawingMode, 'EdgeStart:', edgeStart);
+    console.log('isDragging:', isDragging, 'dragStarted:', dragStarted);
+    
+    // Don't handle click if we just finished dragging
+    if (dragStarted) {
+      console.log('⚠️ Ignoring click because drag just finished');
+      return;
+    }
+    
+    event.stopPropagation();
+    
+    if (isDrawingMode === 'edge') {
+      console.log('🎯 In edge creation mode');
+      if (edgeStart === null) {
+        setEdgeStart(nodeId);
+        console.log('✅ First node selected for edge:', nodeId);
+      } else if (edgeStart !== nodeId) {
+        // Create edge between edgeStart and nodeId
+        const weight = parseInt(edgeWeight) || 1;
+        
+        // Check if edge already exists
+        const existingEdge = edges.find(e => {
+          if (isDirected) {
+            // For directed graphs, only check from -> to direction
+            return e.from === edgeStart && e.to === nodeId;
+          } else {
+            // For undirected graphs, check both directions
+            return (e.from === edgeStart && e.to === nodeId) || 
+                   (e.from === nodeId && e.to === edgeStart);
+          }
+        });
+        
+        if (!existingEdge) {
+          const newEdge: Edge = {
+            from: edgeStart,
+            to: nodeId,
+            weight
+          };
+          const newEdges = [...edges, newEdge];
+          setEdges(newEdges);
+          saveToHistory(nodes, newEdges);
+          console.log('✅ Edge created:', edgeStart, 'to', nodeId, 'weight:', weight);
+          console.log('New edges array:', newEdges);
+        } else {
+          console.log('❌ Edge already exists between', edgeStart, 'and', nodeId);
+        }
+        setEdgeStart(null);
+      } else {
+        // Same node clicked twice, cancel
+        console.log('Same node clicked twice, canceling edge creation');
+        setEdgeStart(null);
+      }
+    } else if (isDrawingMode === 'delete') {
+      // Delete node and all connected edges
+      const newNodes = nodes.filter(n => n.id !== nodeId);
+      const newEdges = edges.filter(e => e.from !== nodeId && e.to !== nodeId);
+      setNodes(newNodes);
+      setEdges(newEdges);
+      saveToHistory(newNodes, newEdges);
+      if (selectedNode === nodeId) setSelectedNode(null);
+      console.log('Node deleted:', nodeId);
+    } else if (isDrawingMode === 'none') {
+      // Select node
+      setSelectedNode(nodeId);
+      console.log('Node selected:', nodeId);
+    }
+  };
 
-    const rect = canvas.getBoundingClientRect();
+  // SVG click logic
+  const handleSvgClickInternal = (event: React.MouseEvent<SVGSVGElement>) => {
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
@@ -307,90 +273,17 @@ export default function DijkstraPage() {
       setNodes(newNodes);
       saveToHistory(newNodes, edges);
     } else if (isDrawingMode === 'edge') {
-      // Find clicked node
-      const clickedNode = nodes.find(node => 
-        Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
-      );
-
-      if (clickedNode) {
-        if (edgeStart === null) {
-          setEdgeStart(clickedNode.id);
-        } else if (edgeStart !== clickedNode.id) {
-          // Create edge
-          const weight = parseInt(edgeWeight) || 1;
-          const newEdge: Edge = {
-            from: edgeStart,
-            to: clickedNode.id,
-            weight
-          };
-          const newEdges = [...edges, newEdge];
-          setEdges(newEdges);
-          setEdgeStart(null);
-          saveToHistory(nodes, newEdges);
-        }
-      }
-    } else if (isDrawingMode === 'delete') {
-      // Find clicked node or edge to delete
-      const clickedNode = nodes.find(node => 
-        Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
-      );
-
-      if (clickedNode) {
-        // Delete node and all connected edges
-        const newNodes = nodes.filter(n => n.id !== clickedNode.id);
-        const newEdges = edges.filter(e => e.from !== clickedNode.id && e.to !== clickedNode.id);
-        setNodes(newNodes);
-        setEdges(newEdges);
-        saveToHistory(newNodes, newEdges);
-        if (selectedNode === clickedNode.id) setSelectedNode(null);
-      } else {
-        // Check if clicked on an edge
-        const clickedEdge = edges.find(edge => {
-          const fromNode = nodes.find(n => n.id === edge.from);
-          const toNode = nodes.find(n => n.id === edge.to);
-          if (!fromNode || !toNode) return false;
-          
-          // Calculate distance from point to line segment
-          const A = x - fromNode.x;
-          const B = y - fromNode.y;
-          const C = toNode.x - fromNode.x;
-          const D = toNode.y - fromNode.y;
-          
-          const dot = A * C + B * D;
-          const lenSq = C * C + D * D;
-          let param = -1;
-          if (lenSq !== 0) param = dot / lenSq;
-          
-          let xx, yy;
-          if (param < 0) {
-            xx = fromNode.x;
-            yy = fromNode.y;
-          } else if (param > 1) {
-            xx = toNode.x;
-            yy = toNode.y;
-          } else {
-            xx = fromNode.x + param * C;
-            yy = fromNode.y + param * D;
-          }
-          
-          const dx = x - xx;
-          const dy = y - yy;
-          return Math.sqrt(dx * dx + dy * dy) < 10;
-        });
-
-        if (clickedEdge) {
-          const newEdges = edges.filter(e => e !== clickedEdge);
-          setEdges(newEdges);
-          saveToHistory(nodes, newEdges);
-        }
-      }
+      // Reset edge start if clicking on empty space
+      setEdgeStart(null);
     } else {
-      // Select node (only if not in any special mode)
-      const clickedNode = nodes.find(node => 
-        Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
-      );
-      setSelectedNode(clickedNode ? clickedNode.id : null);
+      // Select nothing if clicking on empty space
+      setSelectedNode(null);
     }
+  };
+
+  // Separate the click logic - this is now redundant since we handle clicks in SVG
+  const handleCanvasClickInternal = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    // This function is no longer needed with SVG implementation
   };
 
   const runDijkstra = () => {
@@ -405,10 +298,14 @@ export default function DijkstraPage() {
       graph[i][i] = 0;
     }
 
-    // Add edges
+    // Add edges based on graph type
     edges.forEach(edge => {
       graph[edge.from][edge.to] = edge.weight;
-      graph[edge.to][edge.from] = edge.weight; // Undirected graph
+      
+      // For undirected graphs, add the reverse edge as well
+      if (!isDirected) {
+        graph[edge.to][edge.from] = edge.weight;
+      }
     });
 
     const dijkstraResult = dijkstraAlgorithm(graph, sourceNode);
@@ -437,14 +334,30 @@ export default function DijkstraPage() {
       { id: 4, x: 400, y: 100, label: 'E' }
     ];
     
-    const sampleEdges: Edge[] = [
-      { from: 0, to: 1, weight: 4 },
-      { from: 0, to: 3, weight: 2 },
-      { from: 1, to: 2, weight: 3 },
-      { from: 1, to: 3, weight: 1 },
-      { from: 2, to: 4, weight: 2 },
-      { from: 3, to: 4, weight: 5 }
-    ];
+    let sampleEdges: Edge[];
+    
+    if (isDirected) {
+      // Directed graph example
+      sampleEdges = [
+        { from: 0, to: 1, weight: 4 },
+        { from: 0, to: 3, weight: 2 },
+        { from: 1, to: 2, weight: 3 },
+        { from: 3, to: 1, weight: 1 }, // Note: different direction than undirected
+        { from: 2, to: 4, weight: 2 },
+        { from: 3, to: 4, weight: 5 },
+        { from: 4, to: 0, weight: 7 } // Additional directed edge for demonstration
+      ];
+    } else {
+      // Undirected graph example (original)
+      sampleEdges = [
+        { from: 0, to: 1, weight: 4 },
+        { from: 0, to: 3, weight: 2 },
+        { from: 1, to: 2, weight: 3 },
+        { from: 1, to: 3, weight: 1 },
+        { from: 2, to: 4, weight: 2 },
+        { from: 3, to: 4, weight: 5 }
+      ];
+    }
 
     setNodes(sampleNodes);
     setEdges(sampleEdges);
@@ -477,15 +390,15 @@ export default function DijkstraPage() {
             Dijkstra&apos;s Algorithm <span className="text-blue-600">(Greedy)</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Find the shortest paths from a source vertex to all other vertices in a weighted graph
+            Find the shortest paths from a source vertex to all other vertices in a weighted graph (directed or undirected)
           </p>
         </div>
 
         <EducationalInfo
           topic="Dijkstra's Shortest Path Algorithm"
-          description="Dijkstra's algorithm finds the shortest paths from a source vertex to all other vertices in a weighted graph with non-negative edge weights using a greedy approach."
+          description="Dijkstra's algorithm finds the shortest paths from a source vertex to all other vertices in a weighted graph (directed or undirected) with non-negative edge weights using a greedy approach."
           theory={{
-            definition: "A greedy algorithm that finds the shortest paths from a source vertex to all other vertices in a weighted, directed graph with non-negative edge weights.",
+            definition: "A greedy algorithm that finds the shortest paths from a source vertex to all other vertices in a weighted graph with non-negative edge weights. Works with both directed and undirected graphs.",
             keyPoints: [
               "Uses greedy approach - always selects the unvisited vertex with minimum distance",
               "Maintains a distance array and visited set",
@@ -576,6 +489,22 @@ export default function DijkstraPage() {
                 >
                   Delete
                 </button>
+
+                {/* Graph Type Toggle */}
+                <button
+                  onClick={() => {
+                    setIsDirected(!isDirected);
+                    setResult(null);
+                    setAnimationStep(-1);
+                  }}
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                    isDirected 
+                      ? 'bg-purple-600 text-white' 
+                      : 'bg-purple-200 text-purple-800 hover:bg-purple-300'
+                  }`}
+                >
+                  {isDirected ? '📍 Directed' : '🔗 Undirected'}
+                </button>
                 
                 {isDrawingMode === 'edge' && (
                   <input
@@ -601,7 +530,7 @@ export default function DijkstraPage() {
                   onClick={loadSampleGraph}
                   className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                 >
-                  Load Sample
+                  Load Sample ({isDirected ? 'Directed' : 'Undirected'})
                 </button>
 
                 <button
@@ -647,33 +576,222 @@ export default function DijkstraPage() {
               </button>
             </div>
 
-            <div className="border border-gray-300 rounded-lg">
-              <canvas
-                ref={canvasRef}
+            <div className="border border-gray-300 rounded-lg bg-gray-50">
+              <svg
                 width={500}
                 height={300}
                 className={`border rounded-lg bg-gray-50 ${
-                  isDragging ? 'cursor-grabbing' : 
-                  isDrawingMode === 'none' ? 'cursor-grab' : 'cursor-pointer'
+                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
-                onMouseDown={handleCanvasMouseDown}
-                onMouseMove={handleCanvasMouseMove}
-                onMouseUp={handleCanvasMouseUp}
-                onMouseLeave={handleCanvasMouseLeave}
+                onMouseDown={handleSvgMouseDown}
+                onMouseMove={handleSvgMouseMove}
+                onMouseUp={handleSvgMouseUp}
+                onMouseLeave={handleSvgMouseLeave}
                 style={{ userSelect: 'none' }}
-              />
+              >
+                {/* Define arrowhead markers for directed graphs */}
+                {isDirected && (
+                  <defs>
+                    <marker
+                      id="arrowhead"
+                      markerWidth="10"
+                      markerHeight="7"
+                      refX="9"
+                      refY="3.5"
+                      orient="auto"
+                    >
+                      <polygon
+                        points="0 0, 10 3.5, 0 7"
+                        fill="#6b7280"
+                      />
+                    </marker>
+                    <marker
+                      id="arrowhead-highlighted"
+                      markerWidth="10"
+                      markerHeight="7"
+                      refX="9"
+                      refY="3.5"
+                      orient="auto"
+                    >
+                      <polygon
+                        points="0 0, 10 3.5, 0 7"
+                        fill="#22c55e"
+                      />
+                    </marker>
+                  </defs>
+                )}
+
+                {/* Draw edges */}
+                {edges.map((edge, index) => {
+                  const fromNode = nodes.find(n => n.id === edge.from);
+                  const toNode = nodes.find(n => n.id === edge.to);
+                  
+                  if (!fromNode || !toNode) return null;
+                  
+                  // Highlight edge if it's in the shortest path
+                  let strokeColor = '#6b7280';
+                  let strokeWidth = 2;
+                  let isHighlighted = false;
+                  
+                  if (result && animationStep >= 0) {
+                    const step = result.steps[animationStep];
+                    if (step && step.edgesInPath && step.edgesInPath.some(e => 
+                      (e.from === edge.from && e.to === edge.to) || 
+                      (!isDirected && e.from === edge.to && e.to === edge.from)
+                    )) {
+                      strokeColor = '#22c55e';
+                      strokeWidth = 3;
+                      isHighlighted = true;
+                    }
+                  }
+
+                  // Calculate arrow position for directed graphs
+                  const dx = toNode.x - fromNode.x;
+                  const dy = toNode.y - fromNode.y;
+                  const length = Math.sqrt(dx * dx + dy * dy);
+                  const unitX = dx / length;
+                  const unitY = dy / length;
+                  
+                  // Adjust end point to stop at node border (radius 20)
+                  const endX = toNode.x - unitX * 20;
+                  const endY = toNode.y - unitY * 20;
+                  
+                  return (
+                    <g key={`edge-${index}`}>
+                      <line
+                        x1={fromNode.x}
+                        y1={fromNode.y}
+                        x2={endX}
+                        y2={endY}
+                        stroke={strokeColor}
+                        strokeWidth={strokeWidth}
+                        markerEnd={isDirected ? (isHighlighted ? 'url(#arrowhead-highlighted)' : 'url(#arrowhead)') : undefined}
+                        style={{ pointerEvents: 'none' }}
+                      />
+                      
+                      {/* Draw weight */}
+                      <text
+                        x={(fromNode.x + toNode.x) / 2}
+                        y={(fromNode.y + toNode.y) / 2 - 5}
+                        textAnchor="middle"
+                        fill="#1f2937"
+                        fontSize="14"
+                        fontWeight="bold"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        {edge.weight}
+                      </text>
+                    </g>
+                  );
+                })}
+                
+                {/* Draw nodes */}
+                {nodes.map(node => {
+                  // Node colors based on algorithm state
+                  let fillColor = '#e5e7eb';
+                  
+                  if (result && animationStep >= 0) {
+                    const step = result.steps[animationStep];
+                    if (step) {
+                      if (step.visited && step.visited.includes(node.id)) {
+                        fillColor = '#22c55e'; // Visited - green
+                      } else if (step.currentNode === node.id) {
+                        fillColor = '#f59e0b'; // Current - orange
+                      } else if (step.distances[node.id] !== Infinity) {
+                        fillColor = '#3b82f6'; // In queue - blue
+                      }
+                    } else {
+                      fillColor = node.id === sourceNode ? '#ef4444' : '#e5e7eb';
+                    }
+                  } else {
+                    // Add special highlighting for edge creation mode
+                    if (isDrawingMode === 'edge' && edgeStart === node.id) {
+                      fillColor = '#fbbf24'; // Selected for edge creation - yellow
+                    } else if (node.id === sourceNode) {
+                      fillColor = '#ef4444'; // Source - red
+                    } else if (selectedNode === node.id) {
+                      fillColor = '#3b82f6'; // Selected - blue
+                    } else {
+                      fillColor = '#e5e7eb'; // Default - gray
+                    }
+                  }
+                  
+                  return (
+                    <g key={`node-${node.id}`}>
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={20}
+                        fill={fillColor}
+                        stroke="#374151"
+                        strokeWidth={2}
+                        style={{ cursor: 'grab' }}
+                        onMouseDown={(e) => handleNodeMouseDown(node.id, e)}
+                        onClick={(e) => {
+                          console.log('🖱️ CIRCLE CLICKED:', node.id);
+                          handleNodeClick(node.id, e);
+                        }}
+                      />
+                      <text
+                        x={node.x}
+                        y={node.y + 5}
+                        textAnchor="middle"
+                        fill="#1f2937"
+                        fontSize="16"
+                        fontWeight="bold"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        {node.label}
+                      </text>
+                      {/* Draw distance if algorithm is running */}
+                      {result && animationStep >= 0 && (() => {
+                        const step = result.steps[animationStep];
+                        if (step && step.distances[node.id] !== Infinity) {
+                          return (
+                            <text
+                              x={node.x}
+                              y={node.y - 30}
+                              textAnchor="middle"
+                              fill="#dc2626"
+                              fontSize="12"
+                              fontWeight="bold"
+                              style={{ pointerEvents: 'none' }}
+                            >
+                              {step.distances[node.id]}
+                            </text>
+                          );
+                        }
+                        return null;
+                      })()}
+                    </g>
+                  );
+                })}
+              </svg>
             </div>
 
             <div className="mt-4 text-sm text-gray-600">
               <p><strong>Instructions:</strong></p>
               <ul className="list-disc list-inside space-y-1">
+                <li>Toggle between <strong>{isDirected ? 'Directed' : 'Undirected'}</strong> graph mode</li>
                 <li>Click &quot;Add Node&quot; then click on canvas to add vertices</li>
-                <li>Click &quot;Add Edge&quot;, set weight, then click two nodes to connect</li>
-                <li>Click &quot;Delete&quot; then click nodes or edges to remove them</li>
-                <li>Drag nodes to move them around</li>
+                <li><strong>Add Edge:</strong> Click &quot;Add Edge&quot;, set weight, then click two nodes to connect them</li>
+                <li>{isDirected ? 'Directed edges have arrows showing direction (from first node to second)' : 'Undirected edges connect both ways automatically'}</li>
+                <li>The first node will turn yellow when selected, then click the second node</li>
+                <li>Click &quot;Delete&quot; then click nodes to remove them</li>
+                <li>Drag nodes to move them around (not available in edge mode)</li>
                 <li>Use Undo/Redo to restore accidentally deleted items</li>
                 <li>Select source node and run the algorithm</li>
               </ul>
+              {isDrawingMode === 'edge' && (
+                <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                  <p className="text-yellow-800 font-medium">
+                    🎯 Edge Creation Mode ({isDirected ? 'Directed' : 'Undirected'}): {edgeStart !== null ? 
+                      `First node selected (${nodes.find(n => n.id === edgeStart)?.label}). Now click a second node to create ${isDirected ? 'a directed edge' : 'an edge'}.` : 
+                      'Click a node to start creating an edge.'
+                    }
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -1045,12 +1163,13 @@ export default function DijkstraPage() {
               return `${node.label}: ${distance === Infinity ? '∞' : distance}`;
             }).join(', ')}`}
             examFormat={{
-              question: `Find shortest paths from vertex ${nodes.find(n => n.id === sourceNode)?.label} using Dijkstra's algorithm.`,
+              question: `Find shortest paths from vertex ${nodes.find(n => n.id === sourceNode)?.label} using Dijkstra's algorithm on a ${isDirected ? 'directed' : 'undirected'} graph.`,
               solution: [
                 `Dijkstra's Algorithm Execution:`,
+                `Graph Type: ${isDirected ? 'Directed' : 'Undirected'}`,
                 `Source vertex: ${nodes.find(n => n.id === sourceNode)?.label}`,
                 `Graph: ${nodes.length} vertices, ${edges.length} edges`,
-                `Edge weights: ${edges.map(e => `(${nodes.find(n => n.id === e.from)?.label}, ${nodes.find(n => n.id === e.to)?.label}): ${e.weight}`).join(', ')}`,
+                `Edge weights: ${edges.map(e => `(${nodes.find(n => n.id === e.from)?.label}${isDirected ? ' → ' : ' - '}${nodes.find(n => n.id === e.to)?.label}): ${e.weight}`).join(', ')}`,
                 ...result.steps.map((step, i) => `Step ${i + 1}: ${step.description} - ${step.action}`),
                 `Final shortest distances: ${nodes.map(node => {
                   const finalStep = result.steps[result.steps.length - 1];

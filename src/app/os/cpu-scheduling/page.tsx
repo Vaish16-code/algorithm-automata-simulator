@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Trash2, Play, RotateCcw, Clock, TrendingUp, Users } from "lucide-react";
-import { Process, fcfsScheduling, sjfScheduling, roundRobinScheduling, priorityScheduling } from "../../utils/operatingSystems";
+import { Process, fcfsScheduling, sjfScheduling, srtfScheduling, roundRobinScheduling, priorityScheduling } from "../../utils/operatingSystems";
 
 interface SchedulingAlgorithm {
   name: string;
@@ -29,6 +29,14 @@ const algorithms: SchedulingAlgorithm[] = [
     timeComplexity: "O(n log n)",
     advantages: ["Optimal average waiting time", "Good throughput"],
     disadvantages: ["Starvation possible", "Requires future knowledge", "Not practical for interactive systems"]
+  },
+  {
+    name: "Shortest Remaining Time First (SRTF)",
+    key: "srtf",
+    description: "Preemptive SJF based on remaining burst time",
+    timeComplexity: "O(n²)",
+    advantages: ["Better response time than SJF", "Optimal for shortest average waiting time", "Good for time-sharing"],
+    disadvantages: ["Starvation possible", "High context switching overhead", "Requires future knowledge"]
   },
   {
     name: "Round Robin (RR)",
@@ -94,6 +102,9 @@ export default function CPUSchedulingPage() {
         break;
       case "sjf":
         schedulingResult = sjfScheduling(processes);
+        break;
+      case "srtf":
+        schedulingResult = srtfScheduling(processes);
         break;
       case "rr":
         schedulingResult = roundRobinScheduling(processes, timeQuantum);

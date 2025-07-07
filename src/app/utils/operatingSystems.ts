@@ -135,6 +135,78 @@ export function sjfScheduling(processes: Process[]): SchedulingResult {
   };
 }
 
+// Shortest Remaining Time First (SRTF) - Preemptive SJF
+export function srtfScheduling(processes: Process[]): SchedulingResult {
+  const processQueue = [...processes].map(p => ({ ...p, remainingTime: p.burstTime }));
+  const completedProcesses: Process[] = [];
+  const ganttChart: GanttEntry[] = [];
+  let currentTime = 0;
+  let step = 0;
+  let currentProcess: Process | null = null;
+  
+  processQueue.sort((a, b) => a.arrivalTime - b.arrivalTime);
+
+  while (completedProcesses.length < processes.length) {
+    // Add arrived processes to ready queue
+    const arrivedProcesses = processQueue.filter(p => 
+      p.arrivalTime <= currentTime && p.remainingTime! > 0
+    );
+
+    if (arrivedProcesses.length === 0) {
+      currentTime++;
+      continue;
+    }
+
+    // Find process with shortest remaining time
+    const shortestRemainingProcess = arrivedProcesses.reduce((prev, curr) => 
+      (prev.remainingTime! < curr.remainingTime!) ? prev : curr
+    );
+
+    // If we need to switch processes (preemption)
+    if (currentProcess !== shortestRemainingProcess) {
+      currentProcess = shortestRemainingProcess;
+    }
+
+    // Execute current process for 1 time unit
+    const startTime = currentTime;
+    currentTime++;
+    currentProcess.remainingTime!--;
+
+    // Add to Gantt chart (merge consecutive entries for same process)
+    if (ganttChart.length > 0 && ganttChart[ganttChart.length - 1].processId === currentProcess.id) {
+      ganttChart[ganttChart.length - 1].endTime = currentTime;
+    } else {
+      ganttChart.push({
+        processId: currentProcess.id,
+        startTime: startTime,
+        endTime: currentTime,
+        step: step++
+      });
+    }
+
+    // If process completed
+    if (currentProcess.remainingTime === 0) {
+      currentProcess.completionTime = currentTime;
+      currentProcess.turnaroundTime = currentProcess.completionTime - currentProcess.arrivalTime;
+      currentProcess.waitingTime = currentProcess.turnaroundTime - currentProcess.burstTime;
+      
+      completedProcesses.push(currentProcess);
+      currentProcess = null;
+    }
+  }
+
+  const averageWaitingTime = completedProcesses.reduce((sum, p) => sum + (p.waitingTime || 0), 0) / completedProcesses.length;
+  const averageTurnaroundTime = completedProcesses.reduce((sum, p) => sum + (p.turnaroundTime || 0), 0) / completedProcesses.length;
+
+  return {
+    processes: completedProcesses,
+    averageWaitingTime: Math.round(averageWaitingTime * 100) / 100,
+    averageTurnaroundTime: Math.round(averageTurnaroundTime * 100) / 100,
+    ganttChart,
+    totalTime: currentTime
+  };
+}
+
 // Round Robin Scheduling
 export function roundRobinScheduling(processes: Process[], timeQuantum: number): SchedulingResult {
   const processQueue = [...processes].map(p => ({ ...p, remainingTime: p.burstTime }));

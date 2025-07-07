@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { bellmanFordAlgorithm, BellmanFordResult } from "@/app/utils/dynamicProgramming";
-import { EducationalInfo, ExamResult } from "@/components";
+import React, { useState, useEffect } from "react";
+import { bellmanFordAlgorithm, BellmanFordResult } from "../../../utils/dynamicProgramming";
+import { EducationalInfo, ExamResult } from "../../../../components";
 
 interface Node {
   id: number;
@@ -18,16 +18,24 @@ interface Edge {
 }
 
 export default function BellmanFordPage() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [selectedNode, setSelectedNode] = useState<number | null>(null);
   const [sourceNode, setSourceNode] = useState<number>(0);
-  const [isDrawingMode, setIsDrawingMode] = useState<'node' | 'edge' | 'none'>('none');
+  const [isDrawingMode, setIsDrawingMode] = useState<'node' | 'edge' | 'delete' | 'none'>('none');
   const [edgeStart, setEdgeStart] = useState<number | null>(null);
   const [edgeWeight, setEdgeWeight] = useState<string>('1');
   const [result, setResult] = useState<BellmanFordResult | null>(null);
   const [animationStep, setAnimationStep] = useState<number>(-1);
+  
+  // New state for drag and drop
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragOffset, setDragOffset] = useState<{x: number, y: number}>({x: 0, y: 0});
+  const [dragStarted, setDragStarted] = useState<boolean>(false);
+  
+  // New state for undo functionality
+  const [history, setHistory] = useState<{nodes: Node[], edges: Edge[]}[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
   useEffect(() => {
     // Initialize with a sample graph
@@ -50,157 +58,245 @@ export default function BellmanFordPage() {
 
     setNodes(sampleNodes);
     setEdges(sampleEdges);
+    saveToHistory(sampleNodes, sampleEdges);
   }, []);
 
-  useEffect(() => {
-    drawGraph();
-  }, [nodes, edges, selectedNode, animationStep, result]);
-
-  const drawGraph = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw edges
-    edges.forEach((edge) => {
-      const fromNode = nodes.find(n => n.id === edge.from);
-      const toNode = nodes.find(n => n.id === edge.to);
-      
-      if (fromNode && toNode) {
-        ctx.beginPath();
-        ctx.moveTo(fromNode.x, fromNode.y);
-        ctx.lineTo(toNode.x, toNode.y);
-        
-        // Highlight edge if it's being relaxed
-        if (result && animationStep >= 0) {
-          const step = result.steps[animationStep];
-          if (step && step.edgeBeingRelaxed && 
-              step.edgeBeingRelaxed.from === edge.from && 
-              step.edgeBeingRelaxed.to === edge.to) {
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 4;
-          } else {
-            ctx.strokeStyle = edge.weight < 0 ? '#dc2626' : '#6b7280';
-            ctx.lineWidth = 2;
-          }
-        } else {
-          ctx.strokeStyle = edge.weight < 0 ? '#dc2626' : '#6b7280';
-          ctx.lineWidth = 2;
-        }
-        
-        ctx.stroke();
-
-        // Draw arrow for directed edge
-        const angle = Math.atan2(toNode.y - fromNode.y, toNode.x - fromNode.x);
-        const arrowLength = 15;
-        const arrowAngle = Math.PI / 6;
-        
-        ctx.beginPath();
-        ctx.moveTo(toNode.x - 20 * Math.cos(angle), toNode.y - 20 * Math.sin(angle));
-        ctx.lineTo(
-          toNode.x - 20 * Math.cos(angle) - arrowLength * Math.cos(angle - arrowAngle),
-          toNode.y - 20 * Math.sin(angle) - arrowLength * Math.sin(angle - arrowAngle)
-        );
-        ctx.moveTo(toNode.x - 20 * Math.cos(angle), toNode.y - 20 * Math.sin(angle));
-        ctx.lineTo(
-          toNode.x - 20 * Math.cos(angle) - arrowLength * Math.cos(angle + arrowAngle),
-          toNode.y - 20 * Math.sin(angle) - arrowLength * Math.sin(angle + arrowAngle)
-        );
-        ctx.stroke();
-
-        // Draw weight
-        const midX = (fromNode.x + toNode.x) / 2;
-        const midY = (fromNode.y + toNode.y) / 2;
-        ctx.fillStyle = edge.weight < 0 ? '#dc2626' : '#1f2937';
-        ctx.font = 'bold 14px Arial';
-        ctx.fillText(edge.weight.toString(), midX - 10, midY - 5);
-      }
-    });
-
-    // Draw nodes
-    nodes.forEach(node => {
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, 20, 0, 2 * Math.PI);
-      
-      if (node.id === sourceNode) {
-        ctx.fillStyle = '#ef4444'; // Source - red
-      } else if (selectedNode === node.id) {
-        ctx.fillStyle = '#3b82f6'; // Selected - blue
-      } else {
-        ctx.fillStyle = '#e5e7eb'; // Default - gray
-      }
-      
-      ctx.fill();
-      ctx.strokeStyle = '#374151';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Draw label
-      ctx.fillStyle = '#1f2937';
-      ctx.font = 'bold 16px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(node.label, node.x, node.y + 5);
-
-      // Draw distance if algorithm is running
-      if (result && animationStep >= 0) {
-        const step = result.steps[animationStep];
-        if (step && step.distances[node.id] !== Infinity) {
-          ctx.fillStyle = '#dc2626';
-          ctx.font = 'bold 12px Arial';
-          ctx.fillText(step.distances[node.id].toString(), node.x, node.y - 30);
-        } else if (step && step.distances[node.id] === Infinity) {
-          ctx.fillStyle = '#6b7280';
-          ctx.font = '12px Arial';
-          ctx.fillText('∞', node.x, node.y - 30);
-        }
-      }
-    });
+  // Save state to history for undo functionality
+  const saveToHistory = (newNodes: Node[], newEdges: Edge[]) => {
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push({ nodes: [...newNodes], edges: [...newEdges] });
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
   };
 
-  const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  // Undo function
+  const undo = () => {
+    if (historyIndex > 0) {
+      const prevState = history[historyIndex - 1];
+      setNodes(prevState.nodes);
+      setEdges(prevState.edges);
+      setHistoryIndex(historyIndex - 1);
+      setResult(null);
+      setAnimationStep(-1);
+      // Update source node if it no longer exists
+      if (!prevState.nodes.find(n => n.id === sourceNode)) {
+        setSourceNode(prevState.nodes.length > 0 ? prevState.nodes[0].id : 0);
+      }
+    }
+  };
 
-    const rect = canvas.getBoundingClientRect();
+  // Redo function
+  const redo = () => {
+    if (historyIndex < history.length - 1) {
+      const nextState = history[historyIndex + 1];
+      setNodes(nextState.nodes);
+      setEdges(nextState.edges);
+      setHistoryIndex(historyIndex + 1);
+      setResult(null);
+      setAnimationStep(-1);
+      // Update source node if it no longer exists
+      if (!nextState.nodes.find(n => n.id === sourceNode)) {
+        setSourceNode(nextState.nodes.length > 0 ? nextState.nodes[0].id : 0);
+      }
+    }
+  };
+
+  // Mouse down handler for dragging
+  const handleNodeMouseDown = (nodeId: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+    console.log('Node mouse down:', nodeId, 'Mode:', isDrawingMode);
+    
+    // Only allow dragging when not in edge mode
+    if (isDrawingMode !== 'edge') {
+      setIsDragging(true);
+      setSelectedNode(nodeId);
+      
+      const node = nodes.find(n => n.id === nodeId);
+      if (node) {
+        const svg = event.currentTarget.closest('svg');
+        if (svg) {
+          const rect = svg.getBoundingClientRect();
+          setDragOffset({
+            x: event.clientX - rect.left - node.x,
+            y: event.clientY - rect.top - node.y
+          });
+        }
+      }
+      setDragStarted(false);
+      event.preventDefault();
+    }
+  };
+
+  // SVG mouse move handler for dragging
+  const handleSvgMouseMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    if (!isDragging || selectedNode === null) return;
+
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const newX = Math.max(25, Math.min(475, event.clientX - rect.left - dragOffset.x));
+    const newY = Math.max(25, Math.min(275, event.clientY - rect.top - dragOffset.y));
+
+    if (!dragStarted) {
+      setDragStarted(true);
+    }
+
+    const newNodes = nodes.map(node => 
+      node.id === selectedNode 
+        ? { ...node, x: newX, y: newY }
+        : node
+    );
+    
+    setNodes(newNodes);
+    event.preventDefault();
+  };
+
+  // SVG mouse up handler
+  const handleSvgMouseUp = (event: React.MouseEvent<SVGSVGElement>) => {
+    console.log('SVG mouse up - isDragging:', isDragging, 'dragStarted:', dragStarted, 'mode:', isDrawingMode);
+    
+    if (isDragging) {
+      setIsDragging(false);
+      if (dragStarted) {
+        saveToHistory(nodes, edges);
+        setDragStarted(false);
+        setSelectedNode(null);
+        return;
+      }
+      setSelectedNode(null);
+    }
+
+    // If not dragging, handle as regular click for adding nodes
+    if (!dragStarted && !isDragging && isDrawingMode === 'node') {
+      handleSvgClickInternal(event);
+    }
+  };
+
+  // SVG mouse leave handler
+  const handleSvgMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      if (dragStarted) {
+        saveToHistory(nodes, edges);
+        setDragStarted(false);
+      }
+      setSelectedNode(null);
+    }
+  };
+
+  // Handle node clicks directly
+  const handleNodeClick = (nodeId: number, event: React.MouseEvent) => {
+    console.log('=== NODE CLICK EVENT ===');
+    console.log('Node clicked:', nodeId, 'Mode:', isDrawingMode, 'EdgeStart:', edgeStart);
+    console.log('isDragging:', isDragging, 'dragStarted:', dragStarted);
+    
+    // Don't handle click if we just finished dragging
+    if (dragStarted) {
+      console.log('⚠️ Ignoring click because drag just finished');
+      return;
+    }
+    
+    event.stopPropagation();
+    
+    if (isDrawingMode === 'edge') {
+      console.log('🎯 In edge creation mode');
+      if (edgeStart === null) {
+        setEdgeStart(nodeId);
+        console.log('✅ First node selected for edge:', nodeId);
+      } else if (edgeStart !== nodeId) {
+        // Create edge between edgeStart and nodeId
+        const weight = parseInt(edgeWeight) || 1;
+        
+        // Check if edge already exists (directed graph)
+        const existingEdge = edges.find(e => 
+          e.from === edgeStart && e.to === nodeId
+        );
+        
+        if (!existingEdge) {
+          const newEdge: Edge = {
+            from: edgeStart,
+            to: nodeId,
+            weight
+          };
+          const newEdges = [...edges, newEdge];
+          setEdges(newEdges);
+          saveToHistory(nodes, newEdges);
+          console.log('✅ Edge created:', edgeStart, 'to', nodeId, 'weight:', weight);
+        } else {
+          console.log('❌ Edge already exists from', edgeStart, 'to', nodeId);
+        }
+        setEdgeStart(null);
+      } else {
+        // Same node clicked twice, cancel
+        console.log('🔄 Same node clicked twice, canceling edge creation');
+        setEdgeStart(null);
+      }
+    } else if (isDrawingMode === 'delete') {
+      // Delete node and all connected edges
+      const newNodes = nodes.filter(n => n.id !== nodeId);
+      const newEdges = edges.filter(e => e.from !== nodeId && e.to !== nodeId);
+      
+      // Renumber nodes to maintain sequential IDs
+      const renumberedNodes = newNodes.map((node, index) => ({
+        ...node,
+        id: index,
+        label: String.fromCharCode(65 + index)
+      }));
+      
+      // Update edge references to match renumbered nodes
+      const renumberedEdges = newEdges.map(edge => {
+        const fromIndex = newNodes.findIndex(n => n.id === edge.from);
+        const toIndex = newNodes.findIndex(n => n.id === edge.to);
+        return {
+          ...edge,
+          from: fromIndex,
+          to: toIndex
+        };
+      }).filter(edge => edge.from >= 0 && edge.to >= 0);
+      
+      setNodes(renumberedNodes);
+      setEdges(renumberedEdges);
+      saveToHistory(renumberedNodes, renumberedEdges);
+      
+      // Update source node if deleted
+      if (sourceNode === nodeId) {
+        setSourceNode(renumberedNodes.length > 0 ? renumberedNodes[0].id : 0);
+      } else if (sourceNode > nodeId) {
+        setSourceNode(sourceNode - 1);
+      }
+      
+      if (selectedNode === nodeId) setSelectedNode(null);
+      console.log('Node deleted:', nodeId);
+    } else if (isDrawingMode === 'none') {
+      // Select node
+      setSelectedNode(nodeId);
+      console.log('Node selected:', nodeId);
+    }
+  };
+
+  // SVG click logic
+  const handleSvgClickInternal = (event: React.MouseEvent<SVGSVGElement>) => {
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
     if (isDrawingMode === 'node') {
+      // Add new node
       const newNode: Node = {
         id: nodes.length,
         x,
         y,
-        label: String.fromCharCode(65 + nodes.length)
+        label: String.fromCharCode(65 + nodes.length) // A, B, C, ...
       };
-      setNodes([...nodes, newNode]);
+      const newNodes = [...nodes, newNode];
+      setNodes(newNodes);
+      saveToHistory(newNodes, edges);
     } else if (isDrawingMode === 'edge') {
-      const clickedNode = nodes.find(node => 
-        Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
-      );
-
-      if (clickedNode) {
-        if (edgeStart === null) {
-          setEdgeStart(clickedNode.id);
-        } else if (edgeStart !== clickedNode.id) {
-          const weight = parseInt(edgeWeight) || 1;
-          const newEdge: Edge = {
-            from: edgeStart,
-            to: clickedNode.id,
-            weight
-          };
-          setEdges([...edges, newEdge]);
-          setEdgeStart(null);
-        }
-      }
+      // Reset edge start if clicking on empty space
+      setEdgeStart(null);
     } else {
-      const clickedNode = nodes.find(node => 
-        Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
-      );
-      setSelectedNode(clickedNode ? clickedNode.id : null);
+      // Select nothing if clicking on empty space
+      setSelectedNode(null);
     }
   };
 
@@ -213,12 +309,16 @@ export default function BellmanFordPage() {
   };
 
   const clearGraph = () => {
-    setNodes([]);
-    setEdges([]);
+    const newNodes: Node[] = [];
+    const newEdges: Edge[] = [];
+    setNodes(newNodes);
+    setEdges(newEdges);
     setResult(null);
     setAnimationStep(-1);
     setSelectedNode(null);
     setEdgeStart(null);
+    setSourceNode(0);
+    saveToHistory(newNodes, newEdges);
   };
 
   const loadSampleGraph = () => {
@@ -243,6 +343,8 @@ export default function BellmanFordPage() {
     setEdges(sampleEdges);
     setResult(null);
     setAnimationStep(-1);
+    setSourceNode(0);
+    saveToHistory(sampleNodes, sampleEdges);
   };
 
   const nextStep = () => {
@@ -357,6 +459,17 @@ export default function BellmanFordPage() {
                 >
                   Add Edge
                 </button>
+
+                <button
+                  onClick={() => setIsDrawingMode(isDrawingMode === 'delete' ? 'none' : 'delete')}
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                    isDrawingMode === 'delete' 
+                      ? 'bg-red-600 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  Delete
+                </button>
                 
                 {isDrawingMode === 'edge' && (
                   <input
@@ -382,6 +495,22 @@ export default function BellmanFordPage() {
                   className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                 >
                   Load Sample
+                </button>
+
+                <button
+                  onClick={undo}
+                  disabled={historyIndex <= 0}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:bg-gray-400"
+                >
+                  ↶ Undo
+                </button>
+
+                <button
+                  onClick={redo}
+                  disabled={historyIndex >= history.length - 1}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:bg-gray-400"
+                >
+                  ↷ Redo
                 </button>
               </div>
 
@@ -411,24 +540,207 @@ export default function BellmanFordPage() {
               </button>
             </div>
 
-            <div className="border border-gray-300 rounded-lg">
-              <canvas
-                ref={canvasRef}
+            <div className="border border-gray-300 rounded-lg bg-gray-50">
+              <svg
                 width={500}
                 height={300}
-                className="border rounded-lg cursor-pointer bg-gray-50"
-                onClick={handleCanvasClick}
-              />
+                className={`border rounded-lg bg-gray-50 ${
+                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
+                }`}
+                onMouseMove={handleSvgMouseMove}
+                onMouseUp={handleSvgMouseUp}
+                onMouseLeave={handleSvgMouseLeave}
+                style={{ userSelect: 'none' }}
+              >
+                {/* Define arrowhead markers for directed graphs */}
+                <defs>
+                  <marker
+                    id="arrowhead"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="9"
+                    refY="3.5"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 10 3.5, 0 7"
+                      fill="#6b7280"
+                    />
+                  </marker>
+                  <marker
+                    id="arrowhead-negative"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="9"
+                    refY="3.5"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 10 3.5, 0 7"
+                      fill="#dc2626"
+                    />
+                  </marker>
+                  <marker
+                    id="arrowhead-highlighted"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="9"
+                    refY="3.5"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 10 3.5, 0 7"
+                      fill="#ef4444"
+                    />
+                  </marker>
+                </defs>
+
+                {/* Draw edges */}
+                {edges.map((edge, index) => {
+                  const fromNode = nodes.find(n => n.id === edge.from);
+                  const toNode = nodes.find(n => n.id === edge.to);
+                  
+                  if (!fromNode || !toNode) return null;
+                  
+                  // Highlight edge if it's being relaxed
+                  let strokeColor = edge.weight < 0 ? '#dc2626' : '#6b7280';
+                  let strokeWidth = 2;
+                  let markerEnd = edge.weight < 0 ? 'url(#arrowhead-negative)' : 'url(#arrowhead)';
+                  
+                  if (result && animationStep >= 0 && result.steps[animationStep]) {
+                    const step = result.steps[animationStep];
+                    if (step.edgeBeingRelaxed && 
+                        step.edgeBeingRelaxed.from === edge.from && 
+                        step.edgeBeingRelaxed.to === edge.to) {
+                      strokeColor = '#ef4444';
+                      strokeWidth = 4;
+                      markerEnd = 'url(#arrowhead-highlighted)';
+                    }
+                  }
+
+                  // Calculate arrow position for directed graphs
+                  const dx = toNode.x - fromNode.x;
+                  const dy = toNode.y - fromNode.y;
+                  const length = Math.sqrt(dx * dx + dy * dy);
+                  const unitX = dx / length;
+                  const unitY = dy / length;
+                  
+                  // Adjust end point to stop at node border (radius 20)
+                  const endX = toNode.x - unitX * 20;
+                  const endY = toNode.y - unitY * 20;
+                  
+                  return (
+                    <g key={`edge-${index}`}>
+                      <line
+                        x1={fromNode.x}
+                        y1={fromNode.y}
+                        x2={endX}
+                        y2={endY}
+                        stroke={strokeColor}
+                        strokeWidth={strokeWidth}
+                        markerEnd={markerEnd}
+                        style={{ pointerEvents: 'none' }}
+                      />
+                      
+                      {/* Draw weight */}
+                      <text
+                        x={(fromNode.x + toNode.x) / 2}
+                        y={(fromNode.y + toNode.y) / 2 - 5}
+                        textAnchor="middle"
+                        fill={edge.weight < 0 ? '#dc2626' : '#1f2937'}
+                        fontSize="14"
+                        fontWeight="bold"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        {edge.weight}
+                      </text>
+                    </g>
+                  );
+                })}
+                
+                {/* Draw nodes */}
+                {nodes.map(node => {
+                  // Node colors based on algorithm state and selection
+                  let fillColor = '#e5e7eb'; // Default - gray
+                  
+                  if (node.id === sourceNode) {
+                    fillColor = '#ef4444'; // Source - red
+                  } else if (isDrawingMode === 'edge' && edgeStart === node.id) {
+                    fillColor = '#fbbf24'; // Selected for edge creation - yellow
+                  } else if (selectedNode === node.id) {
+                    fillColor = '#3b82f6'; // Selected - blue
+                  }
+                  
+                  return (
+                    <g key={`node-${node.id}`}>
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={20}
+                        fill={fillColor}
+                        stroke="#374151"
+                        strokeWidth={2}
+                        style={{ cursor: 'grab' }}
+                        onMouseDown={(e) => handleNodeMouseDown(node.id, e)}
+                        onClick={(e) => {
+                          console.log('🖱️ CIRCLE CLICKED:', node.id);
+                          handleNodeClick(node.id, e);
+                        }}
+                      />
+                      <text
+                        x={node.x}
+                        y={node.y + 5}
+                        textAnchor="middle"
+                        fill="#1f2937"
+                        fontSize="16"
+                        fontWeight="bold"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        {node.label}
+                      </text>
+                      
+                      {/* Draw distance if algorithm is running */}
+                      {result && animationStep >= 0 && result.steps[animationStep] && (
+                        <text
+                          x={node.x}
+                          y={node.y - 30}
+                          textAnchor="middle"
+                          fill={result.steps[animationStep].distances[node.id] !== Infinity ? '#dc2626' : '#6b7280'}
+                          fontSize="12"
+                          fontWeight="bold"
+                          style={{ pointerEvents: 'none' }}
+                        >
+                          {result.steps[animationStep].distances[node.id] === Infinity ? '∞' : result.steps[animationStep].distances[node.id]}
+                        </text>
+                      )}
+                    </g>
+                  );
+                })}
+              </svg>
             </div>
 
             <div className="mt-4 text-sm text-gray-600">
               <p><strong>Instructions:</strong></p>
               <ul className="list-disc list-inside space-y-1">
                 <li>Click &quot;Add Node&quot; then click on canvas to add vertices</li>
-                <li>Click &quot;Add Edge&quot;, set weight, then click two nodes to connect</li>
-                <li>Negative weights are allowed (shown in red)</li>
-                <li>Select source node and run the algorithm</li>
+                <li><strong>Add Edge:</strong> Click &quot;Add Edge&quot;, set weight, then click two nodes to connect them</li>
+                <li>Negative weights are allowed and shown in red</li>
+                <li>Drag nodes to move them around (not available in edge mode)</li>
+                <li>Click &quot;Delete&quot; then click nodes to remove them (can be undone)</li>
+                <li>Use Undo/Redo to restore accidentally deleted items</li>
+                <li>Select source node and run the algorithm to find shortest paths</li>
+                <li>Red source node shows where shortest path calculation starts</li>
               </ul>
+              {isDrawingMode === 'edge' && (
+                <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                  <p className="text-yellow-800 font-medium">
+                    🎯 Edge Creation Mode: {edgeStart !== null ? 
+                      `First node selected (${nodes.find(n => n.id === edgeStart)?.label}). Now click a second node to create a directed edge.` : 
+                      'Click a node to start creating an edge.'
+                    }
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 

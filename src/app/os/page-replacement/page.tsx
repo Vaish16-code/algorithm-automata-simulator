@@ -448,7 +448,14 @@ const PageReplacementSimulator = () => {
               <input
                 type="number"
                 value={frameSize}
-                onChange={(e) => setFrameSize(parseInt(e.target.value))}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (!isNaN(value) && value >= 1 && value <= 10) {
+                    setFrameSize(value);
+                  } else if (e.target.value === '') {
+                    setFrameSize(1); // Default to 1 when empty
+                  }
+                }}
                 min="1"
                 max="10"
                 className="w-full px-3 py-2 border-2 border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black font-medium"

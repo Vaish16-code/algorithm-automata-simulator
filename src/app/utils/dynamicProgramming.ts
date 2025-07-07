@@ -420,9 +420,36 @@ export function multistageGraphAlgorithm(
 }
 
 // Floyd-Warshall interfaces
+export interface FloydWarshallStep {
+  stepNumber: number;
+  description: string;
+  action: string;
+  currentK: number;
+  matrix: number[][];
+  matrixSections?: {
+    topLeft: number[][];
+    topRight: number[][];
+    bottomLeft: number[][];
+    bottomRight: number[][];
+    kRow: number[];
+    kCol: number[];
+    coordinates: {
+      topLeft: { startRow: number; endRow: number; startCol: number; endCol: number };
+      topRight: { startRow: number; endRow: number; startCol: number; endCol: number };
+      bottomLeft: { startRow: number; endRow: number; startCol: number; endCol: number };
+      bottomRight: { startRow: number; endRow: number; startCol: number; endCol: number };
+    };
+  };
+  updatedCells?: { i: number; j: number; oldValue: number; newValue: number }[];
+  highlightedNodes?: number[];
+  highlightedPaths?: number[][];
+  isInitial?: boolean;
+  isFinal?: boolean;
+}
+
 export interface FloydWarshallResult {
   distances: number[][];
-  steps: string[];
+  steps: FloydWarshallStep[];
   hasNegativeCycle: boolean;
 }
 
@@ -430,23 +457,97 @@ export interface FloydWarshallResult {
 export function floydWarshall(graph: number[][]): FloydWarshallResult {
   const n = graph.length;
   const dist: number[][] = graph.map(row => [...row]);
-  const steps: string[] = [];
+  const steps: FloydWarshallStep[] = [];
   const INF = Infinity;
+  let stepNumber = 1;
   
-  steps.push("Initialize distance matrix with input graph");
+  // Helper function to create matrix sections
+  const createMatrixSections = (matrix: number[][], k: number) => {
+    if (k === -1) return undefined;
+    
+    const topLeft = matrix.slice(0, k).map(row => row.slice(0, k));
+    const topRight = matrix.slice(0, k).map(row => row.slice(k + 1));
+    const bottomLeft = matrix.slice(k + 1).map(row => row.slice(0, k));
+    const bottomRight = matrix.slice(k + 1).map(row => row.slice(k + 1));
+    const kRow = matrix[k];
+    const kCol = matrix.map(row => row[k]);
+    
+    return {
+      topLeft,
+      topRight,
+      bottomLeft,
+      bottomRight,
+      kRow,
+      kCol,
+      coordinates: {
+        topLeft: { startRow: 0, endRow: k - 1, startCol: 0, endCol: k - 1 },
+        topRight: { startRow: 0, endRow: k - 1, startCol: k + 1, endCol: n - 1 },
+        bottomLeft: { startRow: k + 1, endRow: n - 1, startCol: 0, endCol: k - 1 },
+        bottomRight: { startRow: k + 1, endRow: n - 1, startCol: k + 1, endCol: n - 1 }
+      }
+    };
+  };
+  
+  // Initial step
+  steps.push({
+    stepNumber: stepNumber++,
+    description: "Initialize distance matrix with input graph",
+    action: "Starting Floyd-Warshall algorithm with initial adjacency matrix",
+    currentK: -1,
+    matrix: dist.map(row => [...row]),
+    isInitial: true
+  });
   
   for (let k = 0; k < n; k++) {
-    steps.push(`Using vertex ${k} as intermediate vertex`);
+    const updatedCells: { i: number; j: number; oldValue: number; newValue: number }[] = [];
+    
+    // Add step showing matrix division
+    steps.push({
+      stepNumber: stepNumber++,
+      description: `Iteration ${k + 1}: Using vertex ${k} as intermediate`,
+      action: `Dividing matrix around vertex ${k} to check for shorter paths`,
+      currentK: k,
+      matrix: dist.map(row => [...row]),
+      matrixSections: createMatrixSections(dist, k),
+      highlightedNodes: [k]
+    });
     
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < n; j++) {
-        if (dist[i][k] !== INF && dist[k][j] !== INF && 
+        if (i !== k && j !== k && dist[i][k] !== INF && dist[k][j] !== INF && 
             dist[i][k] + dist[k][j] < dist[i][j]) {
           const oldDist = dist[i][j];
           dist[i][j] = dist[i][k] + dist[k][j];
-          steps.push(`Update dist[${i}][${j}]: ${oldDist} → ${dist[i][j]} via vertex ${k}`);
+          updatedCells.push({ i, j, oldValue: oldDist, newValue: dist[i][j] });
         }
       }
+    }
+    
+    // Add step showing updates
+    if (updatedCells.length > 0) {
+      steps.push({
+        stepNumber: stepNumber++,
+        description: `Updates found using vertex ${k}`,
+        action: `Updated ${updatedCells.length} distance(s): ${updatedCells.map(cell => 
+          `D[${cell.i}][${cell.j}]: ${cell.oldValue === INF ? '∞' : cell.oldValue} → ${cell.newValue}`
+        ).join(', ')}`,
+        currentK: k,
+        matrix: dist.map(row => [...row]),
+        matrixSections: createMatrixSections(dist, k),
+        updatedCells,
+        highlightedNodes: [k],
+        highlightedPaths: updatedCells.map(cell => [cell.i, k, cell.j])
+      });
+    } else {
+      steps.push({
+        stepNumber: stepNumber++,
+        description: `No improvements found`,
+        action: `No shorter paths found using vertex ${k} as intermediate`,
+        currentK: k,
+        matrix: dist.map(row => [...row]),
+        matrixSections: createMatrixSections(dist, k),
+        highlightedNodes: [k]
+      });
     }
   }
   
@@ -455,10 +556,29 @@ export function floydWarshall(graph: number[][]): FloydWarshallResult {
   for (let i = 0; i < n; i++) {
     if (dist[i][i] < 0) {
       hasNegativeCycle = true;
-      steps.push(`Negative cycle detected at vertex ${i}`);
+      steps.push({
+        stepNumber: stepNumber++,
+        description: `Negative cycle detected`,
+        action: `Found negative cycle at vertex ${i} (diagonal element < 0)`,
+        currentK: n,
+        matrix: dist.map(row => [...row]),
+        highlightedNodes: [i]
+      });
       break;
     }
   }
+  
+  // Final step
+  steps.push({
+    stepNumber: stepNumber++,
+    description: "Algorithm completed",
+    action: hasNegativeCycle ? 
+      "Floyd-Warshall completed - Negative cycle detected" :
+      "Floyd-Warshall completed - All-pairs shortest paths computed",
+    currentK: n,
+    matrix: dist.map(row => [...row]),
+    isFinal: true
+  });
   
   return {
     distances: dist,
