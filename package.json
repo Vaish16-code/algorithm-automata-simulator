@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test-bot": "node simple-bot.js",
+    "test-bot-advanced": "node run-bot.js",
+    "demo-bot": "node demo-bot.js"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
@@ -29,6 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "postcss": "^8.5.4",
+    "puppeteer": "^22.15.0",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",
     "typescript": "^5"

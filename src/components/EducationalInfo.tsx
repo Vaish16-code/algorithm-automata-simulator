@@ -26,6 +26,32 @@ interface EducationalInfoProps {
 }
 
 export default function EducationalInfo({ topic, description, theory, university, algorithm }: EducationalInfoProps) {
+  // Provide default values to prevent runtime errors
+  const defaultTheory = {
+    definition: '',
+    keyPoints: [],
+    applications: []
+  };
+  
+  const defaultUniversity = {
+    syllabus: [],
+    marks: 'N/A',
+    commonQuestions: [],
+    examTips: []
+  };
+  
+  const defaultAlgorithm = {
+    steps: [],
+    complexity: {
+      time: 'N/A',
+      space: 'N/A'
+    }
+  };
+
+  const safeTheory = theory || defaultTheory;
+  const safeUniversity = university || defaultUniversity;
+  const safeAlgorithm = algorithm || defaultAlgorithm;
+
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
       {/* Header */}
@@ -34,9 +60,9 @@ export default function EducationalInfo({ topic, description, theory, university
           <div className="bg-white/20 backdrop-blur-sm p-2 rounded-lg">
             <BookOpen className="h-6 w-6" />
           </div>
-          <h2 className="text-2xl font-bold">{topic}</h2>
+          <h2 className="text-2xl font-bold">{topic || 'Topic'}</h2>
         </div>
-        <p className="text-blue-100">{description}</p>
+        <p className="text-blue-100">{description || 'Description'}</p>
       </div>
 
       <div className="p-6 space-y-6">
@@ -48,14 +74,14 @@ export default function EducationalInfo({ topic, description, theory, university
           </h3>
           <div className="bg-blue-50 rounded-lg p-4 mb-4">
             <h4 className="font-semibold text-blue-900 mb-2">Definition:</h4>
-            <p className="text-blue-800 text-sm leading-relaxed">{theory.definition}</p>
+            <p className="text-blue-800 text-sm leading-relaxed">{safeTheory.definition}</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-2 text-sm">Key Points:</h4>
               <ul className="space-y-1">
-                {theory.keyPoints.map((point, index) => (
+                {safeTheory.keyPoints.map((point, index) => (
                   <li key={index} className="flex items-start text-sm text-black">
                     <CheckCircle2 className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                     {point}
@@ -67,7 +93,7 @@ export default function EducationalInfo({ topic, description, theory, university
             <div>
               <h4 className="font-semibold text-gray-900 mb-2 text-sm">Applications:</h4>
               <ul className="space-y-1">
-                {theory.applications.map((app, index) => (
+                {safeTheory.applications.map((app, index) => (
                   <li key={index} className="flex items-start text-sm text-black">
                     <div className="w-2 h-2 bg-purple-400 rounded-full mr-2 mt-2 flex-shrink-0"></div>
                     {app}
@@ -92,7 +118,7 @@ export default function EducationalInfo({ topic, description, theory, university
                 <span className="font-semibold text-purple-900">Exam Weightage</span>
               </div>
               <span className="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
-                {university.marks} Marks
+                {safeUniversity.marks} Marks
               </span>
             </div>
           </div>
@@ -104,7 +130,7 @@ export default function EducationalInfo({ topic, description, theory, university
                 Syllabus Coverage:
               </h4>
               <ul className="space-y-1 mb-4">
-                {university.syllabus.map((item: string, index: number) => (
+                {safeUniversity.syllabus.map((item: string, index: number) => (
                   <li key={index} className="text-sm text-black bg-gray-50 px-3 py-1 rounded">
                     {item}
                   </li>
@@ -118,7 +144,7 @@ export default function EducationalInfo({ topic, description, theory, university
                 Common Questions:
               </h4>
               <ul className="space-y-1 mb-4">
-                {university.commonQuestions.map((question: string, index: number) => (
+                {safeUniversity.commonQuestions.map((question: string, index: number) => (
                   <li key={index} className="text-sm text-gray-900 bg-orange-50 px-3 py-1 rounded border-l-2 border-orange-300 font-medium">
                     {question}
                   </li>
@@ -133,7 +159,7 @@ export default function EducationalInfo({ topic, description, theory, university
               Exam Tips:
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {university.examTips.map((tip: string, index: number) => (
+              {safeUniversity.examTips.map((tip: string, index: number) => (
                 <div key={index} className="flex items-start text-sm text-green-700 bg-green-50 px-3 py-2 rounded">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-2 mt-2 flex-shrink-0"></div>
                   {tip}
@@ -153,11 +179,11 @@ export default function EducationalInfo({ topic, description, theory, university
           <div className="bg-indigo-50 rounded-lg p-4 mb-4">
             <div className="grid grid-cols-2 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold text-indigo-800">{algorithm.complexity.time}</div>
+                <div className="text-2xl font-bold text-indigo-800">{safeAlgorithm.complexity.time}</div>
                 <div className="text-sm text-indigo-600">Time Complexity</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-indigo-800">{algorithm.complexity.space}</div>
+                <div className="text-2xl font-bold text-indigo-800">{safeAlgorithm.complexity.space}</div>
                 <div className="text-sm text-indigo-600">Space Complexity</div>
               </div>
             </div>
@@ -166,7 +192,7 @@ export default function EducationalInfo({ topic, description, theory, university
           <div>
             <h4 className="font-semibold text-gray-900 mb-3 text-sm">Algorithm Steps:</h4>
             <ol className="space-y-2">
-              {algorithm.steps.map((step, index) => (
+              {safeAlgorithm.steps.map((step, index) => (
                 <li key={index} className="flex items-start text-sm text-black font-medium">
                   <span className="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0">
                     {index + 1}

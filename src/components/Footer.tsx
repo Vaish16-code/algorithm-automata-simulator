@@ -9,17 +9,27 @@ export default function Footer() {
       { name: 'Automata Theory', href: '/auto' },
       { name: 'Algorithm Design', href: '/daa' },
       { name: 'Operating Systems', href: '/os' },
+      { name: 'Computer Networks', href: '/cn' },
     ],
     algorithms: [
       { name: 'Finite Automata', href: '/auto/finite-automata/dfa' },
       { name: 'Greedy Algorithms', href: '/daa/greedy' },
       { name: 'Dynamic Programming', href: '/daa/dynamic/knapsack' },
       { name: 'Disk Scheduling', href: '/os/disk' },
+      { name: 'IP Addressing', href: '/cn/ip-addressing' },
+      { name: 'Routing Algorithms', href: '/cn/routing' },
     ],
     resources: [
-      { name: 'About Project', href: '#about' },
-      { name: 'Collaboration', href: '#collaboration' },
-      { name: 'Documentation', href: '#docs' },
+      { name: 'About Us', href: '/about' },
+      { name: 'Privacy Policy', href: '/privacy' },
+      { name: 'Terms of Service', href: '/terms' },
+      { name: 'Contact', href: '/contact' },
+    ],
+    legal: [
+      { name: 'AdSense Policy', href: '/privacy' },
+      { name: 'Cookie Policy', href: '/privacy' },
+      { name: 'GDPR Compliance', href: '/privacy' },
+      { name: 'Disclaimer', href: '/terms' },
     ]
   };
 
@@ -101,6 +111,23 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-cyan-300">Legal</h3>
+            <ul className="space-y-2">
+              {footerLinks.legal.map((link) => (
+                <li key={link.name}>
+                  <Link 
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors duration-200 text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Bottom Section */}
@@ -111,14 +138,14 @@ export default function Footer() {
               <Heart className="inline h-4 w-4 text-red-500" /> and dedication.
             </p>
             <div className="flex space-x-6 text-sm">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors duration-200">
                 Terms of Service
               </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
-                Contact
+              <Link href="/about" className="text-gray-400 hover:text-white transition-colors duration-200">
+                About Us
               </Link>
             </div>
           </div>

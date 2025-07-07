@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { DFAChart } from "../../../components/DFAChart";
+import { InteractiveDFAChart } from "../../../components/InteractiveDFAChart";
 import { simulateDFA, FiniteAutomaton, State, Transition, FAResult } from "../../../utils/automataTheory";
 import EducationalInfo from "@/components/EducationalInfo";
 import ExamResult from "@/components/ExamResult";
@@ -24,6 +25,7 @@ export default function DFASimulatorPage() {
   const [inputString, setInputString] = useState("101");
   const [result, setResult] = useState<FAResult | null>(null);
   const [showEducationalInfo, setShowEducationalInfo] = useState(true);
+  const [useInteractiveMode, setUseInteractiveMode] = useState(true);
 
   const educationalData = {
     topic: "Deterministic Finite Automaton (DFA)",
@@ -45,7 +47,7 @@ export default function DFASimulatorPage() {
         "Tokenization in programming languages"
       ]
     },
-    mumbaiUniversity: {
+    university: {
       syllabus: [
         "DFA Definition and Components",
         "State Transition Diagrams",
@@ -212,14 +214,24 @@ export default function DFASimulatorPage() {
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold">DFA Simulator</h1>
                 <p className="text-blue-100">Deterministic Finite Automaton Interactive Tool</p>
+                {useInteractiveMode && (
+                  <p className="text-blue-200 text-sm mt-1">✨ Interactive Mode: Create states and transitions visually!</p>
+                )}
               </div>
             </div>
             <button
               onClick={() => setShowEducationalInfo(!showEducationalInfo)}
-              className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors"
+              className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors mr-2"
             >
               <BookOpen className="h-5 w-5 mr-2" />
               {showEducationalInfo ? 'Hide' : 'Show'} Theory
+            </button>
+            <button
+              onClick={() => setUseInteractiveMode(!useInteractiveMode)}
+              className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors"
+            >
+              <Settings className="h-5 w-5 mr-2" />
+              {useInteractiveMode ? 'Classic' : 'Interactive'} Mode
             </button>
           </div>
         </div>
@@ -236,6 +248,24 @@ export default function DFASimulatorPage() {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           {/* Configuration Panel */}
           <div className="space-y-6">
+            {useInteractiveMode && (
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 border-l-4 border-green-500 p-4 rounded-lg">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-green-800">Interactive Mode Active!</h3>
+                    <p className="text-sm text-green-700 mt-1">
+                      You can now create states and transitions directly on the diagram. Use the configuration panels below for fine-tuning.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             {/* States Configuration */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-4 text-white">
@@ -284,6 +314,7 @@ export default function DFASimulatorPage() {
                 <button
                   onClick={addState}
                   className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                  data-testid="add-state-button"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Add State
@@ -392,10 +423,12 @@ export default function DFASimulatorPage() {
                     onChange={(e) => setInputString(e.target.value)}
                     className="flex-1 border-4 border-gray-800 rounded-lg px-4 py-3 font-mono text-lg text-black font-bold bg-white focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
                     placeholder="Enter string to test..."
+                    data-testid="test-string-input"
                   />
                   <button
                     onClick={handleSimulate}
                     className="flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-lg transition-colors font-semibold"
+                    data-testid="simulate-button"
                   >
                     <Play className="h-5 w-5 mr-2" />
                     Simulate
@@ -410,10 +443,26 @@ export default function DFASimulatorPage() {
             {/* DFA Diagram */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-4 text-white">
-                <h2 className="text-xl font-bold">State Diagram</h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold">State Diagram</h2>
+                  <span className="text-sm bg-white/20 px-3 py-1 rounded-full">
+                    {useInteractiveMode ? 'Interactive Mode' : 'Classic Mode'}
+                  </span>
+                </div>
               </div>
               <div className="p-6">
-                <DFAChart states={states} transitions={transitions} />
+                {useInteractiveMode ? (
+                  <InteractiveDFAChart 
+                    states={states} 
+                    transitions={transitions} 
+                    alphabet={alphabet}
+                    result={result}
+                    onStatesChange={setStates}
+                    onTransitionsChange={setTransitions}
+                  />
+                ) : (
+                  <DFAChart states={states} transitions={transitions} result={result} />
+                )}
               </div>
             </div>
 
@@ -461,7 +510,7 @@ export default function DFASimulatorPage() {
 
         {/* Results */}
         {result && (
-          <div className="mt-8">
+          <div className="mt-8" data-testid="result-section">
             {getExamResult()}
           </div>
         )}

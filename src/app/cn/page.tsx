@@ -1,27 +1,79 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Globe, Network, Shield, Clock, Cpu, Users, Play, Star, CheckCircle2, Award, BookOpen } from "lucide-react";
+import { Globe, Network, Shield, Clock, Cpu, Users, Play, Star, CheckCircle2, Award, BookOpen, MessageSquare } from "lucide-react";
+
+// Ad Components
+const AdBanner = ({ slot, format = "horizontal" }: { slot: string; format?: "horizontal" | "vertical" | "square" }) => {
+  const adStyles = {
+    horizontal: "w-full h-24 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg flex items-center justify-center border-2 border-dashed border-blue-300",
+    vertical: "w-48 h-80 bg-gradient-to-b from-green-100 to-blue-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300",
+    square: "w-64 h-64 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-lg flex items-center justify-center border-2 border-dashed border-yellow-300"
+  };
+
+  return (
+    <div className={adStyles[format]}>
+      <div className="text-center">
+        <div className="text-sm font-medium text-gray-600 mb-1">Advertisement</div>
+        <div className="text-xs text-gray-500">AdSense - {slot}</div>
+        {/* Replace with actual AdSense code */}
+        <div className="text-xs text-gray-400 mt-1">
+          {format === "horizontal" ? "728x90" : format === "vertical" ? "160x600" : "300x250"}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SponsoredContent = () => {
+  return (
+    <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border-l-4 border-purple-400">
+      <div className="flex items-center mb-3">
+        <div className="bg-purple-100 p-2 rounded-full mr-3">
+          <Star className="h-5 w-5 text-purple-600" />
+        </div>
+        <div>
+          <h3 className="font-semibold text-purple-900">Sponsored: Ace Your CS Interviews</h3>
+          <p className="text-sm text-purple-600">Learn algorithms that top tech companies ask</p>
+        </div>
+      </div>
+      <div className="text-sm text-purple-700 mb-3">
+        Master data structures and algorithms with our comprehensive course designed for FAANG interviews.
+      </div>
+      <button className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
+        Learn More →
+      </button>
+    </div>
+  );
+};
 
 export default function ComputerNetworksPage() {
-  const getTopicIcon = (iconName: string) => {
-    const iconMap: { [key: string]: React.ComponentType<any> } = {
-      Globe,
-      Network,
-      Shield,
-      Clock,
-      Cpu
-    };
-    return iconMap[iconName];
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case "Beginner": return "bg-green-100 text-green-800";
+      case "Intermediate": return "bg-yellow-100 text-yellow-800";
+      case "Advanced": return "bg-orange-100 text-orange-800";
+      case "Expert": return "bg-red-100 text-red-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getExamWeightColor = (weight: string) => {
+    switch (weight) {
+      case "Very High": return "bg-red-100 text-red-800";
+      case "High": return "bg-orange-100 text-orange-800";
+      case "Medium": return "bg-yellow-100 text-yellow-800";
+      case "Low": return "bg-green-100 text-green-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
   };
 
   const topics = [
     {
-      title: "Introduction to Networking",
-      description: "Network fundamentals, applications, and architecture",
-      icon: "Globe",
-      color: "from-green-500 to-emerald-500",
+      title: "Network Fundamentals",
+      description: "Network architecture, protocols, and performance analysis",
+      icon: Globe,
+      color: "from-blue-500 to-cyan-500",
       difficulty: "Beginner",
       examWeight: "High",
       categories: [
@@ -51,566 +103,637 @@ export default function ComputerNetworksPage() {
       ],
       examInfo: {
         marks: "10-15",
-        topics: ["Network Types", "OSI Model", "TCP/IP Model"],
-        questions: "Compare OSI vs TCP/IP, Calculate network performance metrics"
+        topics: ["OSI Model", "TCP/IP", "Network Types"],
+        questions: "Explain OSI layers, Compare network topologies"
       }
     },
     {
-      title: "Physical Layer",
-      description: "Transmission media and communication fundamentals",
-      icon: "Cpu",
-      color: "from-orange-500 to-red-500",
-      difficulty: "Intermediate",
-      examWeight: "Medium",
-      categories: [
-        {
-          name: "Transmission Media",
-          href: "/cn/physical-layer",
-          description: "Guided and unguided transmission media characteristics",
-          examTips: "Know properties of copper, fiber optic, and wireless media"
-        },
-        {
-          name: "Signal Encoding",
-          href: "/cn/physical-layer",
-          description: "Digital and analog signal encoding techniques",
-          examTips: "Understand NRZ, Manchester, and differential encoding"
-        },
-        {
-          name: "Multiplexing Techniques",
-          href: "/cn/physical-layer",
-          description: "FDM, TDM, and WDM techniques",
-          examTips: "Calculate channel capacity and multiplexing efficiency"
-        }
-      ],
-      applications: [
-        "Cable and Wireless Networks",
-        "Telecommunication Systems",
-        "Data Center Connectivity"
-      ],
-      examInfo: {
-        marks: "8-12",
-        topics: ["Transmission Media", "Signal Encoding", "Multiplexing"],
-        questions: "Compare transmission media, Analyze encoding schemes"
-      }
-    },
-    {
-      title: "Data Link Layer",
-      description: "Error detection, correction, and framing techniques",
-      icon: "Shield",
-      color: "from-blue-500 to-cyan-500",
-      difficulty: "Intermediate",
-      examWeight: "High",
-      categories: [
-        {
-          name: "Error Detection & CRC",
-          href: "/cn/data-link-layer",
-          description: "Parity, CRC, and checksum algorithms with interactive tools",
-          examTips: "Practice CRC division and polynomial calculations"
-        },
-        {
-          name: "Error Correction & Hamming",
-          href: "/cn/data-link-layer",
-          description: "Hamming code and forward error correction with simulator",
-          examTips: "Master Hamming code encoding and single-bit error correction"
-        },
-        {
-          name: "Flow Control Protocols",
-          href: "/cn/data-link-layer",
-          description: "Stop-and-wait, sliding window protocols",
-          examTips: "Understand window size and sequence number calculations"
-        }
-      ],
-      applications: [
-        "Ethernet and Wi-Fi Networks",
-        "Error-Prone Communication",
-        "Reliable Data Transfer"
-      ],
-      examInfo: {
-        marks: "12-18",
-        topics: ["CRC", "Hamming Code", "Sliding Window"],
-        questions: "Calculate CRC remainder, Design Hamming code"
-      }
-    },
-    {
-      title: "Medium Access Control",
-      description: "Channel access methods and collision protocols",
-      icon: "Network",
-      color: "from-purple-500 to-pink-500",
-      difficulty: "Intermediate",
-      examWeight: "Medium",
-      categories: [
-        {
-          name: "ALOHA Protocols",
-          href: "/cn/medium-access-control",
-          description: "Pure and Slotted ALOHA performance analysis with simulator",
-          examTips: "Calculate throughput and efficiency for ALOHA variants"
-        },
-        {
-          name: "CSMA/CD Protocols",
-          href: "/cn/medium-access-control",
-          description: "Carrier sense multiple access with collision detection",
-          examTips: "Understand CSMA/CD operation and binary exponential backoff"
-        },
-        {
-          name: "Token Ring Protocol",
-          href: "/cn/medium-access-control",
-          description: "Token passing protocol and ring topology",
-          examTips: "Know token passing mechanism and ring maintenance"
-        }
-      ],
-      applications: [
-        "Ethernet Networks",
-        "Wireless LANs",
-        "Token Ring Networks"
-      ],
-      examInfo: {
-        marks: "8-12",
-        topics: ["ALOHA", "CSMA/CD", "Token Passing"],
-        questions: "Calculate ALOHA throughput, Explain CSMA operation"
-      }
-    },
-    {
-      title: "Network Layer",
-      description: "Routing algorithms and IP addressing",
-      icon: "Network",
-      color: "from-blue-500 to-cyan-500",
-      difficulty: "Intermediate",
+      title: "IP Addressing & Routing",
+      description: "Internet protocols and routing algorithms",
+      icon: Network,
+      color: "from-purple-500 to-violet-500",
+      difficulty: "Advanced",
       examWeight: "Very High",
       categories: [
         {
-          name: "Routing Algorithms",
-          href: "/cn/network-layer",
-          description: "Dijkstra's shortest path and distance vector routing",
-          examTips: "Focus on step-by-step execution and time complexity O(V²) or O(V log V)"
-        },
-        {
           name: "IP Addressing & Subnetting",
-          href: "/cn/network-layer/ip-addressing",
-          description: "IPv4/IPv6 addressing and subnet calculations with calculator",
-          examTips: "Master binary conversion and CIDR notation"
+          href: "/cn/ip-addressing",
+          description: "CIDR, VLSM, subnet calculations with interactive calculator",
+          examTips: "Master binary conversion and subnet mask calculations"
         },
         {
-          name: "Network Forwarding",
+          name: "Routing Algorithms",
+          href: "/cn/routing",
+          description: "Dijkstra, Bellman-Ford, distance vector protocols",
+          examTips: "Practice shortest path calculations and convergence analysis"
+        },
+        {
+          name: "Network Address Translation",
           href: "/cn/network-layer",
-          description: "Packet forwarding and routing table operations",
-          examTips: "Know count-to-infinity problem and split horizon solution"
+          description: "NAT, CIDR, address aggregation techniques",
+          examTips: "Understand private vs public IP ranges and NAT operations"
         }
       ],
       applications: [
-        "Internet Routing Protocols (OSPF, RIP)",
-        "Network Path Selection",
-        "IP Address Management"
+        "Internet Routing",
+        "Corporate Networks",
+        "ISP Infrastructure"
       ],
       examInfo: {
         marks: "15-20",
-        topics: ["Shortest Path", "Routing Tables", "IP Addressing"],
-        questions: "Apply Dijkstra on given graph, Calculate subnet addresses"
+        topics: ["Dijkstra", "IP Addressing", "Subnetting"],
+        questions: "Find shortest path, Calculate subnet masks"
       }
     },
     {
       title: "Transport Layer",
       description: "TCP/UDP protocols and connection management",
-      icon: "Globe",
-      color: "from-indigo-500 to-purple-500",
-      difficulty: "Advanced",
+      icon: Clock,
+      color: "from-orange-500 to-red-500",
+      difficulty: "Intermediate",
       examWeight: "High",
       categories: [
         {
-          name: "TCP Protocol & Flow Control",
-          href: "/cn/transport-layer/tcp",
-          description: "TCP connection management and flow control with simulator",
-          examTips: "Understand 3-way handshake and window size calculations"
-        },
-        {
-          name: "UDP Protocol",
-          href: "/cn/transport-layer/udp",
-          description: "Connectionless transport protocol with packet simulator",
-          examTips: "Know UDP header structure and compare with TCP"
-        },
-        {
-          name: "Reliability & Congestion",
+          name: "TCP Protocol Analysis",
           href: "/cn/transport-layer",
-          description: "Congestion control and reliability mechanisms",
-          examTips: "Understand congestion window dynamics and algorithms"
+          description: "Connection establishment, flow control, congestion control",
+          examTips: "Understand 3-way handshake and sliding window protocol"
+        },
+        {
+          name: "UDP vs TCP Comparison",
+          href: "/cn/transport-layer",
+          description: "Protocol comparison with performance analysis",
+          examTips: "Know when to use TCP vs UDP and their trade-offs"
+        },
+        {
+          name: "Socket Programming",
+          href: "/cn/transport-layer",
+          description: "Client-server communication patterns",
+          examTips: "Understand port numbers and socket API fundamentals"
         }
       ],
       applications: [
-        "Web Applications (HTTP)",
-        "File Transfer (FTP)",
-        "Real-time Communication"
+        "Web Applications",
+        "Real-time Communication",
+        "File Transfer Protocols"
       ],
       examInfo: {
-        marks: "12-15",
-        topics: ["TCP Protocol", "Flow Control", "Congestion Control"],
-        questions: "Analyze TCP handshake, Calculate window sizes"
-      }
-    },
-    {
-      title: "Data Compression",
-      description: "Huffman encoding and compression techniques",
-      icon: "Cpu",
-      color: "from-purple-500 to-pink-500",
-      difficulty: "Intermediate",
-      examWeight: "Medium",
-      categories: [
-        {
-          name: "Huffman Encoding",
-          href: "/cn/compression/huffman",
-          description: "Optimal prefix-free encoding for data compression",
-          examTips: "Build Huffman tree and calculate compression ratio"
-        },
-        {
-          name: "LZW Compression",
-          href: "/cn/compression/lzw",
-          description: "Dictionary-based compression algorithm",
-          examTips: "Understand dictionary building and encoding process"
-        },
-        {
-          name: "Run Length Encoding",
-          href: "/cn/compression/rle",
-          description: "Simple compression for repetitive data",
-          examTips: "Calculate compression efficiency for different data types"
-        }
-      ],
-      applications: [
-        "File Compression (ZIP, RAR)",
-        "Image Compression (JPEG)",
-        "Network Data Optimization"
-      ],
-      examInfo: {
-        marks: "10-12",
-        topics: ["Huffman Tree", "Compression Ratio", "Entropy"],
-        questions: "Build Huffman tree, Calculate average code length"
+        marks: "10-15",
+        topics: ["TCP", "UDP", "Flow Control"],
+        questions: "Explain TCP handshake, Compare TCP/UDP"
       }
     },
     {
       title: "Network Security",
-      description: "Cryptography and network security algorithms",
-      icon: "Shield",
-      color: "from-red-500 to-orange-500",
+      description: "Cryptography, authentication, and security protocols",
+      icon: Shield,
+      color: "from-red-500 to-pink-500",
       difficulty: "Advanced",
       examWeight: "Medium",
       categories: [
         {
-          name: "Cryptography Fundamentals",
+          name: "Symmetric & Asymmetric Cryptography",
           href: "/cn/security",
-          description: "Symmetric/asymmetric encryption, RSA, hash functions",
-          examTips: "Practice RSA key generation and encryption/decryption steps"
+          description: "DES, AES, RSA algorithms with interactive demonstrations",
+          examTips: "Practice RSA key generation and encryption/decryption"
+        },
+        {
+          name: "Digital Signatures & Certificates",
+          href: "/cn/security",
+          description: "PKI, certificate authorities, signature verification",
+          examTips: "Understand hash functions and digital signature process"
         },
         {
           name: "Network Security Protocols",
           href: "/cn/security",
-          description: "SSL/TLS, VPNs, firewalls, and authentication",
-          examTips: "Understand SSL handshake and firewall operations"
-        },
-        {
-          name: "Security Threats & Defense",
-          href: "/cn/security",
-          description: "Common attacks, vulnerabilities, and countermeasures",
-          examTips: "Know DoS, MITM attacks and defense strategies"
+          description: "IPSec, SSL/TLS, VPN technologies",
+          examTips: "Know protocol layers and security mechanisms"
         }
       ],
       applications: [
         "Secure Communication",
-        "Digital Certificates",
-        "VPN Implementation"
+        "E-commerce Security",
+        "VPN Technologies"
       ],
       examInfo: {
-        marks: "8-12",
-        topics: ["Encryption", "Authentication", "Key Management"],
-        questions: "Apply RSA algorithm, Explain security protocols"
+        marks: "10-12",
+        topics: ["RSA", "Digital Signatures", "SSL/TLS"],
+        questions: "Implement RSA, Explain PKI, Design secure protocols"
+      }
+    },
+    {
+      title: "Data Compression",
+      description: "Compression algorithms and encoding techniques",
+      icon: Cpu,
+      color: "from-green-500 to-emerald-500",
+      difficulty: "Intermediate",
+      examWeight: "Medium",
+      categories: [
+        {
+          name: "Huffman Coding",
+          href: "/cn/compression",
+          description: "Optimal prefix-free encoding algorithm",
+          examTips: "Practice building Huffman trees and calculating compression ratios"
+        },
+        {
+          name: "Run Length Encoding",
+          href: "/cn/compression",
+          description: "Simple lossless compression technique",
+          examTips: "Understand when RLE is effective and its limitations"
+        },
+        {
+          name: "LZW Compression",
+          href: "/cn/compression",
+          description: "Dictionary-based compression algorithm",
+          examTips: "Master the dictionary building process in LZW"
+        }
+      ],
+      applications: [
+        "File Compression",
+        "Image Processing",
+        "Network Optimization"
+      ],
+      examInfo: {
+        marks: "8-10",
+        topics: ["Huffman", "RLE", "LZW"],
+        questions: "Build Huffman tree, Calculate compression ratio"
       }
     }
   ];
 
-  const learningPath = [
-    { step: 1, title: "Introduction to Networking", description: "Learn network fundamentals, models, and performance", duration: "2-3 hours" },
-    { step: 2, title: "Physical Layer", description: "Understand transmission media and signal encoding", duration: "2-3 hours" },
-    { step: 3, title: "Data Link Layer", description: "Master error detection, CRC, and Hamming codes", duration: "3-4 hours" },
-    { step: 4, title: "Medium Access Control", description: "Study ALOHA, CSMA/CD, and token protocols", duration: "2-3 hours" },
-    { step: 5, title: "Network Layer", description: "Learn routing algorithms and IP addressing", duration: "3-4 hours" },
-    { step: 6, title: "Transport Layer", description: "Explore TCP/UDP and connection management", duration: "3-4 hours" },
-    { step: 7, title: "Network Security", description: "Understand cryptography and security protocols", duration: "2-3 hours" }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-      <div className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 text-blue-300 text-sm font-medium mb-6">
-            <Globe className="h-4 w-4 mr-2" />
-            Computer Networks
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            Master Computer
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              Networks
-            </span>
-          </h1>
-          <p className="text-xl text-gray-200 max-w-4xl mx-auto mb-8">
-            Comprehensive interactive tools for routing algorithms, IP addressing, network protocols, 
-            and security concepts with step-by-step visualizations designed for engineering students.
-          </p>
-          
-          {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto mb-12">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-400">25+</div>
-              <div className="text-sm text-gray-300">Interactive Tools</div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-cyan-300 text-sm font-medium mb-6">
+              <Network className="h-4 w-4 mr-2" />
+              Computer Networks
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-400">15</div>
-              <div className="text-sm text-gray-300">Core Topics</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-400">6</div>
-              <div className="text-sm text-gray-300">Syllabus Modules</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-orange-400">120+</div>
-              <div className="text-sm text-gray-300">Exam Questions</div>
-            </div>
-          </div>          </div>
-
-        {/* Quick Module Navigation */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4">Quick Module Access</h2>
-            <p className="text-gray-300 max-w-2xl mx-auto">
-              Jump directly to any module for focused learning
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Computer Networks
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                Simulator
+              </span>
+            </h1>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+              Master network protocols, routing algorithms, IP addressing, and security concepts 
+              with interactive simulations designed for Mumbai University examinations.
             </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            <Link href="/cn/introduction">
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
-                <Globe className="h-6 w-6" />
-                <span className="text-xs font-medium">Introduction</span>
-              </Button>
-            </Link>
-            <Link href="/cn/physical-layer">
-              <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
-                <Cpu className="h-6 w-6" />
-                <span className="text-xs font-medium">Physical Layer</span>
-              </Button>
-            </Link>
-            <Link href="/cn/data-link-layer">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
-                <Shield className="h-6 w-6" />
-                <span className="text-xs font-medium">Data Link</span>
-              </Button>
-            </Link>
-            <Link href="/cn/medium-access-control">
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
-                <Network className="h-6 w-6" />
-                <span className="text-xs font-medium">MAC Layer</span>
-              </Button>
-            </Link>
-            <Link href="/cn/network-layer">
-              <Button className="w-full bg-cyan-600 hover:bg-cyan-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
-                <Network className="h-6 w-6" />
-                <span className="text-xs font-medium">Network Layer</span>
-              </Button>
-            </Link>
-            <Link href="/cn/transport-layer">
-              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
-                <Globe className="h-6 w-6" />
-                <span className="text-xs font-medium">Transport</span>
-              </Button>
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 max-w-md mx-auto">
-            <Link href="/cn/security">
-              <Button className="w-full bg-red-600 hover:bg-red-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
-                <Shield className="h-6 w-6" />
-                <span className="text-xs font-medium">Security</span>
-              </Button>
-            </Link>
-            <Link href="/cn/compression">
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white p-4 h-auto flex flex-col items-center space-y-2">
-                <Cpu className="h-6 w-6" />
-                <span className="text-xs font-medium">Compression</span>
-              </Button>
-            </Link>
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <CheckCircle2 className="h-4 w-4 text-green-400" />
+                <span className="text-sm">Exam-Focused Content</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Star className="h-4 w-4 text-yellow-400" />
+                <span className="text-sm">Mumbai University Syllabus</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                <Users className="h-4 w-4 text-purple-400" />
+                <span className="text-sm">Step-by-Step Solutions</span>
+              </div>
+            </div>
+            <div className="flex justify-center gap-4">
+              <Link
+                href="/"
+                className="bg-white/10 backdrop-blur-sm border border-white/20 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/20 transition-all duration-200"
+              >
+                ← Back to Home
+              </Link>
+              <Link
+                href="/about"
+                className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:from-cyan-600 hover:to-blue-600 transition-all duration-200"
+              >
+                Learn More →
+              </Link>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Learning Path */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4">Recommended Learning Path</h2>
-            <p className="text-gray-300 max-w-2xl mx-auto">
-              Follow this structured approach to master computer networks concepts step by step.
-            </p>
-          </div>
-          
-          <div className="relative">
-            <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-              {learningPath.map((item, index) => (
-                <div key={index} className="relative">
-                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 w-48 text-center hover:bg-gray-700 transition-colors">
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm mx-auto mb-3">
-                      {item.step}
-                    </div>
-                    <h3 className="font-semibold text-gray-200 text-sm mb-1">{item.title}</h3>
-                    <p className="text-xs text-gray-300 mb-2">{item.description}</p>
-                    <div className="text-xs text-blue-400 font-medium">{item.duration}</div>
-                  </div>
-                  {index < learningPath.length - 1 && (
-                    <div className="hidden md:block absolute top-1/2 -right-2 w-4 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Top Banner Ad */}
+        <div className="mb-8">
+          <AdBanner slot="top-banner" format="horizontal" />
         </div>
 
         {/* Topics Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {topics.map((topic, index) => {
-            const IconComponent = getTopicIcon(topic.icon);
-            return (
-              <div
-                key={index}
-                className="bg-gray-800 border border-gray-700 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-              >
-                {/* Topic Header */}
-                <div className={`bg-gradient-to-r ${topic.color} p-6 text-white`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
-                      <IconComponent className="h-8 w-8" />
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <Star className="h-4 w-4 fill-current" />
-                        <span className="text-sm font-medium">{topic.examWeight}</span>
+          {topics.map((topic, index) => (
+            <div 
+              key={index}
+              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden border border-gray-100"
+            >
+              {/* Card Header */}
+              <div className={`bg-gradient-to-r ${topic.color} p-6 text-white`}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+                    <topic.icon className="h-8 w-8" />
+                  </div>
+                  <div className="flex space-x-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(topic.difficulty)}`}>
+                      {topic.difficulty}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getExamWeightColor(topic.examWeight)}`}>
+                      {topic.examWeight} Weight
+                    </span>
+                  </div>
+                </div>
+                <h2 className="text-2xl font-bold mb-2">{topic.title}</h2>
+                <p className="text-white/90">{topic.description}</p>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                {/* Categories */}
+                <div className="space-y-3 mb-6">
+                  {topic.categories.map((category, catIndex) => (
+                    <Link
+                      key={catIndex}
+                      href={category.href}
+                      className="block p-4 rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 group/item"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-800 group-hover/item:text-blue-700">
+                            {category.name}
+                          </h3>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {category.description}
+                          </p>
+                          <p className="text-xs text-blue-600 mt-1 font-medium">
+                            💡 {category.examTips}
+                          </p>
+                        </div>
+                        <Play className="h-5 w-5 text-blue-400 group-hover/item:text-blue-600 ml-4" />
                       </div>
-                      <div className="text-sm opacity-90">{topic.difficulty}</div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Exam Information */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-4">
+                  <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
+                    <Award className="h-4 w-4 mr-2 text-purple-600" />
+                    Mumbai University Exam Info
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <span className="font-medium text-gray-700">Expected Marks:</span>
+                      <span className="text-purple-700 ml-1">{topic.examInfo.marks}</span>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-700">Key Topics:</span>
+                      <div className="text-gray-600 text-xs mt-1">
+                        {topic.examInfo.topics.join(", ")}
+                      </div>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">{topic.title}</h3>
-                  <p className="text-white/90 text-sm leading-relaxed mb-4">{topic.description}</p>
-                  
-                  {/* Exam Info */}
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                    <div className="text-xs font-medium mb-1">📝 Exam Pattern:</div>
-                    <div className="text-xs opacity-90">{topic.examInfo.marks} marks • {topic.examInfo.questions}</div>
+                  <div className="mt-3">
+                    <span className="font-medium text-gray-700">Typical Questions:</span>
+                    <p className="text-gray-600 text-xs mt-1">{topic.examInfo.questions}</p>
                   </div>
                 </div>
 
-                {/* Categories */}
-                <div className="p-6">
-                  <div className="space-y-4 mb-6">
-                    {topic.categories.map((category, catIndex) => (
-                      <div key={catIndex} className="bg-gray-700 border border-gray-600 rounded-lg p-4 hover:bg-gray-600 transition-colors">
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="font-semibold text-gray-200">{category.name}</h4>
-                          {category.href && (
-                            <Link href={category.href}>
-                              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                                <Play className="h-3 w-3 mr-1" />
-                                Try
-                              </Button>
-                            </Link>
-                          )}
-                        </div>
-                        <p className="text-gray-300 text-sm mb-3">{category.description}</p>
-                        <div className="bg-yellow-800/20 border border-yellow-700/30 rounded p-2">
-                          <div className="text-xs text-yellow-300 font-medium">💡 Exam Tip:</div>
-                          <div className="text-xs text-yellow-200">{category.examTips}</div>
-                        </div>
-                      </div>
+                {/* Applications */}
+                <div className="border-t pt-4">
+                  <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
+                    <BookOpen className="h-4 w-4 mr-2 text-blue-600" />
+                    Real-World Applications
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {topic.applications.map((app, appIndex) => (
+                      <span 
+                        key={appIndex}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium"
+                      >
+                        {app}
+                      </span>
                     ))}
-                  </div>
-
-                  {/* Applications */}
-                  <div className="border-t border-gray-700 pt-4">
-                    <h4 className="font-semibold text-gray-200 text-sm mb-2">🔧 Real-world Applications</h4>
-                    <ul className="text-gray-300 text-xs space-y-1">
-                      {topic.applications.map((app, appIndex) => (
-                        <li key={appIndex}>• {app}</li>
-                      ))}
-                    </ul>
                   </div>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
-        {/* Exam Preparation Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white mb-16">
+        {/* Mid-Content Sponsored Section */}
+        <div className="mb-16">
+          <SponsoredContent />
+        </div>
+
+        {/* Quick Stats */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-16">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">Exam Preparation Guide</h2>
-            <p className="text-blue-100 max-w-2xl mx-auto">
-              Master Computer Networks concepts with our comprehensive exam-focused approach covering all Mumbai University syllabus topics.
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Complete CN Algorithm Coverage
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              From basic network protocols to advanced security algorithms, 
+              master every concept with interactive tools and comprehensive explanations.
             </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl">
+              <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">15+</h3>
+              <p className="text-gray-600">Interactive Algorithms</p>
+            </div>
+            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl">
+              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">5</h3>
+              <p className="text-gray-600">Core Topics</p>
+            </div>
+            <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-violet-100 rounded-xl">
+              <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">100%</h3>
+              <p className="text-gray-600">Exam Coverage</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Study Tips */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-16">
+          {/* Main Study Tips Content */}
+          <div className="lg:col-span-3">
+            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                📚 Study Tips for Mumbai University CN Exam
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-yellow-700">
+                <div>
+                  <h3 className="font-semibold mb-3">🎯 High Priority Topics</h3>
+                  <ul className="space-y-2 text-sm">
+                    <li>• Master IP addressing and subnetting calculations</li>
+                    <li>• Practice Dijkstra and Bellman-Ford algorithms</li>
+                    <li>• Understand TCP/UDP protocol differences</li>
+                    <li>• Learn RSA encryption/decryption steps</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-3">💡 Exam Strategies</h3>
+                  <ul className="space-y-2 text-sm">
+                    <li>• Focus on numerical problems and calculations</li>
+                    <li>• Practice drawing network diagrams and topologies</li>
+                    <li>• Memorize protocol stack layers and functions</li>
+                    <li>• Understand real-world applications of concepts</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-              <BookOpen className="h-8 w-8 mb-4" />
-              <h3 className="text-xl font-bold mb-3">Theory Concepts</h3>
-              <ul className="space-y-2 text-sm text-blue-100">
-                <li>• OSI and TCP/IP Models (7 layers)</li>
-                <li>• Network Topologies & Types</li>
-                <li>• Error Detection & Correction (CRC, Hamming)</li>
-                <li>• Flow Control & MAC Protocols</li>
-                <li>• Routing Algorithms (Dijkstra)</li>
-                <li>• TCP/UDP Protocol Operations</li>
-                <li>• Security & Cryptography</li>
-              </ul>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-              <Cpu className="h-8 w-8 mb-4" />
-              <h3 className="text-xl font-bold mb-3">Interactive Tools</h3>
-              <ul className="space-y-2 text-sm text-blue-100">
-                <li>• IP Address & Subnet Calculator</li>
-                <li>• CRC & Hamming Code Generators</li>
-                <li>• TCP Flow Control Simulator</li>
-                <li>• ALOHA Throughput Calculator</li>
-                <li>• Dijkstra Algorithm Visualizer</li>
-                <li>• RSA Encryption Tool</li>
-                <li>• Network Performance Calculator</li>
-              </ul>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-              <Award className="h-8 w-8 mb-4" />
-              <h3 className="text-xl font-bold mb-3">Exam Strategy</h3>
-              <ul className="space-y-2 text-sm text-blue-100">
-                <li>• Practice numerical problems daily</li>
-                <li>• Master CRC & Hamming calculations</li>
-                <li>• Memorize all protocol headers</li>
-                <li>• Draw network diagrams clearly</li>
-                <li>• Memorize protocol formats</li>
-                <li>• Understand algorithm complexities</li>
-              </ul>
+          {/* Sidebar Ad */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-4">
+              <AdBanner slot="sidebar" format="vertical" />
             </div>
           </div>
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center">
-          <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              Ready to Master Computer Networks?
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Start with IP addressing fundamentals and progress through advanced routing algorithms 
-              with our step-by-step interactive simulators.
-            </p>
-            <Link
-              href="/cn/ip-addressing/calculator"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:opacity-90 transition-all duration-200 group"
-            >
-              Start with IP Addressing
-              <Play className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+        {/* Complete Course Navigation */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+            📖 Complete Computer Networks Course
+          </h2>
+          <p className="text-lg text-gray-600 text-center mb-8 max-w-3xl mx-auto">
+            Master every aspect of computer networks with our comprehensive, Mumbai University aligned curriculum.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Physical Layer */}
+            <Link href="/cn/physical-layer" className="group block p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl border-2 border-orange-200 hover:border-orange-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-orange-500 p-2 rounded-lg mr-3">
+                  <Network className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-orange-900">Physical Layer</h3>
+              </div>
+              <p className="text-sm text-orange-700 mb-3">Transmission media, encoding, multiplexing</p>
+              <div className="text-xs text-orange-600 font-medium">
+                💡 Media types, signal encoding, bandwidth calculations
+              </div>
+            </Link>
+
+            {/* Data Link Layer */}
+            <Link href="/cn/data-link-layer" className="group block p-6 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border-2 border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-blue-500 p-2 rounded-lg mr-3">
+                  <Shield className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-blue-900">Data Link Layer</h3>
+              </div>
+              <p className="text-sm text-blue-700 mb-3">Error detection, flow control, MAC protocols</p>
+              <div className="text-xs text-blue-600 font-medium">
+                💡 CRC, HDLC, Ethernet, CSMA/CD
+              </div>
+            </Link>
+
+            {/* Medium Access Control */}
+            <Link href="/cn/medium-access-control" className="group block p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200 hover:border-purple-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-purple-500 p-2 rounded-lg mr-3">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-purple-900">MAC Protocols</h3>
+              </div>
+              <p className="text-sm text-purple-700 mb-3">ALOHA, CSMA, Token Ring protocols</p>
+              <div className="text-xs text-purple-600 font-medium">
+                💡 Collision detection, efficiency analysis
+              </div>
+            </Link>
+
+            {/* Network Layer */}
+            <Link href="/cn/network-layer" className="group block p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border-2 border-green-200 hover:border-green-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-green-500 p-2 rounded-lg mr-3">
+                  <Globe className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-green-900">Network Layer</h3>
+              </div>
+              <p className="text-sm text-green-700 mb-3">IP addressing, routing, ICMP</p>
+              <div className="text-xs text-green-600 font-medium">
+                💡 Subnetting, NAT, routing algorithms
+              </div>
+            </Link>
+
+            {/* Transport Layer */}
+            <Link href="/cn/transport-layer" className="group block p-6 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl border-2 border-yellow-200 hover:border-yellow-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-yellow-500 p-2 rounded-lg mr-3">
+                  <Clock className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-yellow-900">Transport Layer</h3>
+              </div>
+              <p className="text-sm text-yellow-700 mb-3">TCP, UDP, flow control, congestion control</p>
+              <div className="text-xs text-yellow-600 font-medium">
+                💡 3-way handshake, sliding window
+              </div>
+            </Link>
+
+            {/* Network Security */}
+            <Link href="/cn/security" className="group block p-6 bg-gradient-to-br from-red-50 to-pink-50 rounded-xl border-2 border-red-200 hover:border-red-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-red-500 p-2 rounded-lg mr-3">
+                  <Shield className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-red-900">Network Security</h3>
+              </div>
+              <p className="text-sm text-red-700 mb-3">Cryptography, authentication, SSL/TLS</p>
+              <div className="text-xs text-red-600 font-medium">
+                💡 RSA, DES, digital signatures, PKI
+              </div>
+            </Link>
+
+            {/* Data Compression */}
+            <Link href="/cn/compression" className="group block p-6 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl border-2 border-indigo-200 hover:border-indigo-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-indigo-500 p-2 rounded-lg mr-3">
+                  <Cpu className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-indigo-900">Data Compression</h3>
+              </div>
+              <p className="text-sm text-indigo-700 mb-3">Huffman coding, RLE, LZW algorithms</p>
+              <div className="text-xs text-indigo-600 font-medium">
+                💡 Compression ratios, tree construction
+              </div>
+            </Link>
+
+            {/* IP Addressing */}
+            <Link href="/cn/ip-addressing" className="group block p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl border-2 border-teal-200 hover:border-teal-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-teal-500 p-2 rounded-lg mr-3">
+                  <Network className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-teal-900">IP Addressing</h3>
+              </div>
+              <p className="text-sm text-teal-700 mb-3">Subnetting, CIDR, VLSM calculations</p>
+              <div className="text-xs text-teal-600 font-medium">
+                💡 Binary conversion, subnet masks
+              </div>
+            </Link>
+
+            {/* Routing Algorithms */}
+            <Link href="/cn/routing" className="group block p-6 bg-gradient-to-br from-rose-50 to-red-50 rounded-xl border-2 border-rose-200 hover:border-rose-400 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center mb-3">
+                <div className="bg-rose-500 p-2 rounded-lg mr-3">
+                  <Globe className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-rose-900">Routing Algorithms</h3>
+              </div>
+              <p className="text-sm text-rose-700 mb-3">Dijkstra, Bellman-Ford, distance vector</p>
+              <div className="text-xs text-rose-600 font-medium">
+                💡 Shortest path, convergence analysis
+              </div>
             </Link>
           </div>
+          
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium">
+              <BookOpen className="h-5 w-5 mr-2" />
+              Complete course covers 100% Mumbai University syllabus
+            </div>
+          </div>
+        </div>
+
+        {/* Need Help Section */}
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8 mb-16 border border-indigo-200">
+          <div className="text-center">
+            <div className="bg-indigo-100 p-3 rounded-full w-16 h-16 mx-auto mb-4">
+              <MessageSquare className="h-10 w-10 text-indigo-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-indigo-900 mb-4">
+              Need Help with Computer Networks?
+            </h2>
+            <p className="text-indigo-700 mb-6 max-w-2xl mx-auto">
+              Stuck on a specific algorithm or need clarification on network concepts? 
+              Our team is here to help you succeed in your Mumbai University exams.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                href="/contact"
+                className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-all duration-200"
+              >
+                Get Support →
+              </Link>
+              <Link
+                href="/about"
+                className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-medium border-2 border-indigo-200 hover:border-indigo-400 transition-all duration-200"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Ad Section */}
+        <div className="mb-8">
+          <AdBanner slot="bottom-banner" format="horizontal" />
+        </div>
+
+        {/* Advertisement Banners */}
+        <div className="mt-16">
+          <AdBanner slot="top-banner" format="horizontal" />
+        </div>
+
+        {/* Sponsored Content */}
+        <div className="mt-8">
+          <SponsoredContent />
+        </div>
+
+        <div className="mt-8">
+          <AdBanner slot="sidebar-banner" format="vertical" />
+        </div>
+      </div>
+
+      {/* Important Links */}
+      <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Important Information
+          </h2>
+          <p className="text-gray-600">
+            Access essential information about our platform and policies
+          </p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Link
+            href="/privacy"
+            className="text-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200"
+          >
+            <div className="text-blue-600 font-medium">Privacy Policy</div>
+            <div className="text-xs text-blue-500 mt-1">Data protection & cookies</div>
+          </Link>
+          <Link
+            href="/terms"
+            className="text-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors duration-200"
+          >
+            <div className="text-green-600 font-medium">Terms of Service</div>
+            <div className="text-xs text-green-500 mt-1">Usage terms & conditions</div>
+          </Link>
+          <Link
+            href="/about"
+            className="text-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors duration-200"
+          >
+            <div className="text-purple-600 font-medium">About Us</div>
+            <div className="text-xs text-purple-500 mt-1">Our mission & team</div>
+          </Link>
+          <Link
+            href="/contact"
+            className="text-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200"
+          >
+            <div className="text-orange-600 font-medium">Contact</div>
+            <div className="text-xs text-orange-500 mt-1">Get support & feedback</div>
+          </Link>
         </div>
       </div>
     </div>
