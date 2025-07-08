@@ -263,3 +263,5 @@ export function MergeSortTreeView({ tree, currentStep, totalSteps }: MergeSortTr
     </div>
   );
 }
+
+export default MergeSortTreeView;

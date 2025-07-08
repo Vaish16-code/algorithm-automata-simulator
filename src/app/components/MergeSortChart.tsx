@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MergeSortResult } from '../utils/divideConquer';
-import { MergeSortTreeView } from './MergeSortTreeView';
+import MergeSortTreeView from './MergeSortTreeView';
 
 interface MergeSortChartProps {
   data: MergeSortResult;

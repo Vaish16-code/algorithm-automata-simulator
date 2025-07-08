@@ -314,7 +314,6 @@ export default function DFASimulatorPage() {
                 <button
                   onClick={addState}
                   className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
-                  data-testid="add-state-button"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Add State
@@ -423,12 +422,10 @@ export default function DFASimulatorPage() {
                     onChange={(e) => setInputString(e.target.value)}
                     className="flex-1 border-4 border-gray-800 rounded-lg px-4 py-3 font-mono text-lg text-black font-bold bg-white focus:border-orange-600 focus:ring-4 focus:ring-orange-200"
                     placeholder="Enter string to test..."
-                    data-testid="test-string-input"
                   />
                   <button
                     onClick={handleSimulate}
                     className="flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-lg transition-colors font-semibold"
-                    data-testid="simulate-button"
                   >
                     <Play className="h-5 w-5 mr-2" />
                     Simulate
@@ -510,7 +507,7 @@ export default function DFASimulatorPage() {
 
         {/* Results */}
         {result && (
-          <div className="mt-8" data-testid="result-section">
+          <div className="mt-8">
             {getExamResult()}
           </div>
         )}
