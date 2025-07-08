@@ -32,8 +32,8 @@ export function PDAChart({ states, transitions, acceptStates, startState, result
   );
 
   return (
-    <div className="space-y-4">
-      <svg width="300" height="300" className="border rounded bg-white">
+    <div className="space-y-3 lg:space-y-4">
+      <svg width="100%" height="300" className="border rounded bg-white max-w-full" viewBox="0 0 300 300">
         {/* Draw transitions */}
         {transitions.map((transition, index) => {
           const fromIndex = states.findIndex(s => s === transition.fromState);
@@ -60,7 +60,7 @@ export function PDAChart({ states, transitions, acceptStates, startState, result
                   x={fromPos.x}
                   y={fromPos.y - 30}
                   textAnchor="middle"
-                  fontSize="10"
+                  fontSize="9"
                   className="font-semibold"
                 >
                   {`${transition.inputSymbol},${transition.popSymbol}/${transition.pushSymbols.join('')}`}
@@ -84,7 +84,7 @@ export function PDAChart({ states, transitions, acceptStates, startState, result
                 x={(fromPos.x + toPos.x) / 2}
                 y={(fromPos.y + toPos.y) / 2 - 5}
                 textAnchor="middle"
-                fontSize="10"
+                fontSize="9"
                 className="font-semibold"
               >
                 {`${transition.inputSymbol},${transition.popSymbol}/${transition.pushSymbols.join('')}`}

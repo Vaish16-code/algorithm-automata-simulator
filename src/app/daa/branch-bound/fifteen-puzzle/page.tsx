@@ -238,7 +238,7 @@ export default function FifteenPuzzlePage() {
         "Optimization problems with constraints"
       ]
     },
-    mumbaiUniversity: {
+    university: {
       syllabus: [
         "Branch and bound technique",
         "A* algorithm and heuristics",

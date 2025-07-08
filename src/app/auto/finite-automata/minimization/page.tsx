@@ -290,7 +290,7 @@ export default function DFAMinimization() {
             "Digital circuit minimization"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: ["DFA Minimization", "Partition Refinement Algorithm", "Distinguishable States"],
           marks: "8-10 marks",
           commonQuestions: [

@@ -101,7 +101,7 @@ export default function PumpingLemmaPage() {
               "Compiler design and formal verification"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Regular Languages and their properties",
               "Pumping Lemma for Regular Languages",

@@ -133,35 +133,35 @@ export default function CPUSchedulingPage() {
   const selectedAlgInfo = algorithms.find(alg => alg.key === selectedAlgorithm);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">CPU Scheduling Algorithms</h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+        <div className="text-center mb-6 lg:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 lg:mb-4">CPU Scheduling Algorithms</h1>
+          <p className="text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
             Visualize and compare different CPU scheduling algorithms. Input processes and see step-by-step execution with Gantt charts.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Input Section */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 lg:space-y-6">
             {/* Algorithm Selection */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">Select Algorithm</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl lg:rounded-2xl shadow-lg p-4 lg:p-6">
+              <h2 className="text-lg lg:text-2xl font-semibold text-gray-800 mb-3 lg:mb-4">Select Algorithm</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
                 {algorithms.map((alg) => (
                   <button
                     key={alg.key}
                     onClick={() => setSelectedAlgorithm(alg.key)}
-                    className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                    className={`p-3 lg:p-4 rounded-lg lg:rounded-xl border-2 transition-all duration-200 text-left ${
                       selectedAlgorithm === alg.key
                         ? "border-blue-500 bg-blue-50"
                         : "border-gray-200 hover:border-blue-300"
                     }`}
                   >
-                    <h3 className="font-semibold text-gray-800">{alg.name}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{alg.description}</p>
+                    <h3 className="font-semibold text-gray-800 text-sm lg:text-base">{alg.name}</h3>
+                    <p className="text-xs lg:text-sm text-gray-600 mt-1">{alg.description}</p>
                     <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded mt-2 inline-block">
                       {alg.timeComplexity}
                     </span>
@@ -171,7 +171,7 @@ export default function CPUSchedulingPage() {
 
               {/* Time Quantum for Round Robin */}
               {selectedAlgorithm === "rr" && (
-                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                <div className="mt-3 lg:mt-4 p-3 lg:p-4 bg-blue-50 rounded-lg">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Time Quantum
                   </label>
@@ -180,19 +180,19 @@ export default function CPUSchedulingPage() {
                     min="1"
                     value={timeQuantum}
                     onChange={(e) => setTimeQuantum(parseInt(e.target.value) || 1)}
-                    className="w-20 px-3 py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-20 px-2 lg:px-3 py-1 lg:py-2 border-2 border-gray-400 rounded-md bg-white text-black font-medium text-sm lg:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               )}
             </div>
 
             {/* Process Input */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-semibold text-gray-800">Process Table</h2>
+            <div className="bg-white rounded-xl lg:rounded-2xl shadow-lg p-4 lg:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 lg:mb-4 gap-3">
+                <h2 className="text-lg lg:text-2xl font-semibold text-gray-800">Process Table</h2>
                 <button
                   onClick={addProcess}
-                  className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                  className="flex items-center justify-center space-x-2 bg-blue-500 text-white px-3 lg:px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm lg:text-base"
                 >
                   <Plus className="h-4 w-4" />
                   <span>Add Process</span>

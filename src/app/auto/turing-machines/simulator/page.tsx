@@ -114,7 +114,7 @@ export default function TuringMachineSimulatorPage() {
               "Understanding limits of computation"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Turing Machine definition and components",
               "Transition function and configurations",

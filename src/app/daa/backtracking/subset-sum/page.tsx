@@ -62,7 +62,7 @@ export default function SubsetSumPage() {
               "Combinatorial optimization problems"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Subset sum problem formulation",
               "Backtracking approach implementation",

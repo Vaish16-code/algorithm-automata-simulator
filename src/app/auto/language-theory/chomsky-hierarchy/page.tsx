@@ -139,7 +139,7 @@ export default function ChomskyHierarchyPage() {
               "Understanding computational complexity"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Chomsky hierarchy of grammars and languages",
               "Regular, context-free, context-sensitive, and recursive languages",

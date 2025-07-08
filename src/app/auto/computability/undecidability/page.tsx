@@ -261,7 +261,7 @@ q3 Y -> q3 Y R
             "Theoretical computer science"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: ["Theory of Computation", "Computability Theory", "Turing Machines"],
           marks: "10-15 marks",
           commonQuestions: [

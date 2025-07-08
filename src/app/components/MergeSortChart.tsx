@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MergeSortResult } from '../utils/divideConquer';
-import MergeSortTreeView from './MergeSortTreeView';
+import { useChatbot } from '../../contexts/ChatbotContext';
 
 interface MergeSortChartProps {
   data: MergeSortResult;
@@ -8,33 +8,47 @@ interface MergeSortChartProps {
 
 export function MergeSortChart({ data }: MergeSortChartProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const { setCurrentAlgorithm, setCurrentStep: setChatbotStep, setCurrentData } = useChatbot();
+
+  // Update chatbot context when component mounts or data changes
+  useEffect(() => {
+    setCurrentAlgorithm('Merge Sort');
+    setCurrentData(data);
+  }, [data, setCurrentAlgorithm, setCurrentData]);
+
+  // Update current step in chatbot context
+  useEffect(() => {
+    if (data && data.steps[currentStep]) {
+      setChatbotStep(data.steps[currentStep].action);
+    }
+  }, [currentStep, data, setChatbotStep]);
 
   if (!data || !data.steps.length) return null;
 
   const currentStepData = data.steps[currentStep];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 px-2 sm:px-0">
       {/* Step Navigator */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200 p-6">
-        <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200 p-3 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-gray-800 flex items-center">
           🔄 Step-by-Step Visualization
         </h3>
         
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
           <button
             onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
             disabled={currentStep === 0}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-3 sm:px-4 py-2 rounded-md text-sm sm:text-base"
           >
             Previous
           </button>
           
-          <div className="flex-1 text-center">
-            <div className="text-lg font-semibold text-gray-800">
+          <div className="flex-1 text-center order-first sm:order-none w-full sm:w-auto">
+            <div className="text-base sm:text-lg font-semibold text-gray-800">
               Step {currentStep + 1} of {data.steps.length}
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-xs sm:text-sm text-gray-600 mt-1">
               {currentStepData.action}
             </div>
           </div>
@@ -42,13 +56,13 @@ export function MergeSortChart({ data }: MergeSortChartProps) {
           <button
             onClick={() => setCurrentStep(Math.min(data.steps.length - 1, currentStep + 1))}
             disabled={currentStep === data.steps.length - 1}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-3 sm:px-4 py-2 rounded-md text-sm sm:text-base"
           >
             Next
           </button>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-3 sm:mb-4">
           <input
             type="range"
             min="0"
@@ -60,21 +74,21 @@ export function MergeSortChart({ data }: MergeSortChartProps) {
         </div>
 
         {/* Current Step Visualization */}
-        <div className="bg-white p-4 rounded-lg border border-blue-300">
-          <div className="mb-4">
-            <div className="text-sm font-medium text-gray-700 mb-2">
+        <div className="bg-white p-3 sm:p-4 rounded-lg border border-blue-300">
+          <div className="mb-3 sm:mb-4">
+            <div className="text-xs sm:text-sm font-medium text-gray-700 mb-2">
               Range: [{currentStepData.range[0]}, {currentStepData.range[1]}]
             </div>
             
             {/* Main Array */}
             {currentStepData.array.length > 0 && (
-              <div className="mb-4">
+              <div className="mb-3 sm:mb-4">
                 <div className="text-xs font-medium text-gray-600 mb-1">Current Array:</div>
                 <div className="flex flex-wrap gap-1">
                   {currentStepData.array.map((num, index) => (
                     <div
                       key={index}
-                      className="w-10 h-10 bg-blue-100 border-2 border-blue-300 rounded flex items-center justify-center text-sm font-bold text-blue-800"
+                      className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 border-2 border-blue-300 rounded flex items-center justify-center text-xs sm:text-sm font-bold text-blue-800"
                     >
                       {num}
                     </div>
@@ -85,14 +99,14 @@ export function MergeSortChart({ data }: MergeSortChartProps) {
 
             {/* Left and Right arrays for merge operations */}
             {currentStepData.left && currentStepData.right && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 mb-3 sm:mb-4">
                 <div>
                   <div className="text-xs font-medium text-gray-600 mb-1">Left Array:</div>
                   <div className="flex flex-wrap gap-1">
                     {currentStepData.left.map((num, index) => (
                       <div
                         key={index}
-                        className="w-10 h-10 bg-green-100 border-2 border-green-300 rounded flex items-center justify-center text-sm font-bold text-green-800"
+                        className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 border-2 border-green-300 rounded flex items-center justify-center text-xs sm:text-sm font-bold text-green-800"
                       >
                         {num}
                       </div>
@@ -106,7 +120,7 @@ export function MergeSortChart({ data }: MergeSortChartProps) {
                     {currentStepData.right.map((num, index) => (
                       <div
                         key={index}
-                        className="w-10 h-10 bg-red-100 border-2 border-red-300 rounded flex items-center justify-center text-sm font-bold text-red-800"
+                        className="w-8 h-8 sm:w-10 sm:h-10 bg-red-100 border-2 border-red-300 rounded flex items-center justify-center text-xs sm:text-sm font-bold text-red-800"
                       >
                         {num}
                       </div>
@@ -118,13 +132,13 @@ export function MergeSortChart({ data }: MergeSortChartProps) {
 
             {/* Merged result */}
             {currentStepData.merged && (
-              <div className="mb-4">
+              <div className="mb-3 sm:mb-4">
                 <div className="text-xs font-medium text-gray-600 mb-1">Merged Result:</div>
                 <div className="flex flex-wrap gap-1">
                   {currentStepData.merged.map((num, index) => (
                     <div
                       key={index}
-                      className="w-10 h-10 bg-purple-100 border-2 border-purple-300 rounded flex items-center justify-center text-sm font-bold text-purple-800"
+                      className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 border-2 border-purple-300 rounded flex items-center justify-center text-xs sm:text-sm font-bold text-purple-800"
                     >
                       {num}
                     </div>

@@ -138,7 +138,7 @@ export default function PostCorrespondenceProblem() {
             "Formal verification"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: ["Theory of Computation", "Undecidability", "Computability Theory"],
           marks: "10-15 marks",
           commonQuestions: [

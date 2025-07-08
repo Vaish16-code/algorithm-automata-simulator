@@ -159,7 +159,7 @@ export default function CFGParserPage() {
               "Natural language processing systems"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Context-Free Grammar definition and components",
               "Derivations: leftmost and rightmost",

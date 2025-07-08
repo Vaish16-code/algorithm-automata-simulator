@@ -1,0 +1,62 @@
+# Robots.txt for AlgoMaster - Interactive Algorithm Learning Platform
+
+User-agent: *
+Allow: /
+
+# Main pages
+Allow: /auto
+Allow: /daa
+Allow: /os
+Allow: /cn
+Allow: /about
+Allow: /contact
+
+# Algorithm pages
+Allow: /auto/finite-automata/dfa
+Allow: /auto/finite-automata/nfa
+Allow: /auto/pushdown-automata/pda
+Allow: /auto/turing-machines/tm
+Allow: /daa/divide-conquer/merge-sort
+Allow: /daa/divide-conquer/quick-sort
+Allow: /daa/dynamic/knapsack
+Allow: /daa/greedy/dijkstra
+Allow: /daa/greedy/kruskal
+Allow: /daa/backtracking/n-queens
+Allow: /os/cpu-scheduling
+Allow: /os/memory-allocation
+Allow: /os/page-replacement
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /private/
+
+# Allow CSS, JS, and images for proper crawling
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.webp
+
+# Sitemap location
+Sitemap: https://algomaster.dev/sitemap.xml
+
+# Crawl delay (optional - be respectful to search engines)
+Crawl-delay: 1
+
+# Special rules for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Slurp
+Allow: /

@@ -96,7 +96,7 @@ export default function TSPPage() {
               "Tourist itinerary planning"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Travelling Salesman Problem formulation",
               "Branch and bound technique",

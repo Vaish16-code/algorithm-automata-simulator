@@ -204,61 +204,63 @@ export default function DFASimulatorPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8 lg:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
-                <Cpu className="h-8 w-8" />
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+            <div className="flex items-center space-x-3 lg:space-x-4">
+              <div className="bg-white/20 backdrop-blur-sm p-2 lg:p-3 rounded-xl">
+                <Cpu className="h-6 w-6 lg:h-8 lg:w-8" />
               </div>
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold">DFA Simulator</h1>
-                <p className="text-blue-100">Deterministic Finite Automaton Interactive Tool</p>
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">DFA Simulator</h1>
+                <p className="text-blue-100 text-sm lg:text-base">Deterministic Finite Automaton Interactive Tool</p>
                 {useInteractiveMode && (
-                  <p className="text-blue-200 text-sm mt-1">✨ Interactive Mode: Create states and transitions visually!</p>
+                  <p className="text-blue-200 text-xs lg:text-sm mt-1">✨ Interactive Mode: Create states and transitions visually!</p>
                 )}
               </div>
             </div>
-            <button
-              onClick={() => setShowEducationalInfo(!showEducationalInfo)}
-              className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors mr-2"
-            >
-              <BookOpen className="h-5 w-5 mr-2" />
-              {showEducationalInfo ? 'Hide' : 'Show'} Theory
-            </button>
-            <button
-              onClick={() => setUseInteractiveMode(!useInteractiveMode)}
-              className="flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors"
-            >
-              <Settings className="h-5 w-5 mr-2" />
-              {useInteractiveMode ? 'Classic' : 'Interactive'} Mode
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 lg:gap-0 lg:space-x-4">
+              <button
+                onClick={() => setShowEducationalInfo(!showEducationalInfo)}
+                className="flex items-center justify-center px-3 lg:px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors text-sm lg:text-base"
+              >
+                <BookOpen className="h-4 w-4 lg:h-5 lg:w-5 mr-2" />
+                {showEducationalInfo ? 'Hide' : 'Show'} Theory
+              </button>
+              <button
+                onClick={() => setUseInteractiveMode(!useInteractiveMode)}
+                className="flex items-center justify-center px-3 lg:px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors text-sm lg:text-base"
+              >
+                <Settings className="h-4 w-4 lg:h-5 lg:w-5 mr-2" />
+                {useInteractiveMode ? 'Classic' : 'Interactive'} Mode
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         {/* Educational Information */}
         {showEducationalInfo && (
-          <div className="mb-8">
+          <div className="mb-6 lg:mb-8">
             <EducationalInfo {...educationalData} />
           </div>
         )}
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
           {/* Configuration Panel */}
-          <div className="space-y-6">
+          <div className="space-y-4 lg:space-y-6">
             {useInteractiveMode && (
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 border-l-4 border-green-500 p-4 rounded-lg">
-                <div className="flex items-center">
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 border-l-4 border-green-500 p-3 lg:p-4 rounded-lg">
+                <div className="flex items-start lg:items-center">
                   <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                    <svg className="h-4 w-4 lg:h-5 lg:w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
                   </div>
                   <div className="ml-3">
                     <h3 className="text-sm font-medium text-green-800">Interactive Mode Active!</h3>
-                    <p className="text-sm text-green-700 mt-1">
+                    <p className="text-xs lg:text-sm text-green-700 mt-1">
                       You can now create states and transitions directly on the diagram. Use the configuration panels below for fine-tuning.
                     </p>
                   </div>
@@ -267,55 +269,58 @@ export default function DFASimulatorPage() {
             )}
             
             {/* States Configuration */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-4 text-white">
-                <h2 className="text-xl font-bold flex items-center">
-                  <Settings className="h-5 w-5 mr-2" />
+            <div className="bg-white rounded-xl lg:rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-3 lg:p-4 text-white">
+                <h2 className="text-lg lg:text-xl font-bold flex items-center">
+                  <Settings className="h-4 w-4 lg:h-5 lg:w-5 mr-2" />
                   States Configuration
                 </h2>
               </div>
-              <div className="p-6">
+              <div className="p-4 lg:p-6">
                 {states.map((state, index) => (
-                  <div key={index} className="flex items-center gap-4 mb-4 p-4 bg-gray-50 rounded-lg border">
+                  <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-3 lg:gap-4 mb-3 lg:mb-4 p-3 lg:p-4 bg-gray-50 rounded-lg border">
                     <input
                       type="text"
                       value={state.name}
                       onChange={(e) => updateState(index, 'name', e.target.value)}
-                      className="w-20 border-4 border-gray-800 rounded-lg px-3 py-2 text-center font-mono text-black text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
+                      className="w-full sm:w-16 lg:w-20 border-2 lg:border-4 border-gray-800 rounded-lg px-2 lg:px-3 py-1 lg:py-2 text-center font-mono text-black text-base lg:text-lg font-bold bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-200"
                       placeholder="q0"
                     />
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={state.isStart}
-                        onChange={(e) => updateState(index, 'isStart', e.target.checked)}
-                        className="w-4 h-4 text-blue-600 rounded"
-                      />
-                      <span className="text-sm font-medium text-gray-700">Start State</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={state.isAccept}
-                        onChange={(e) => updateState(index, 'isAccept', e.target.checked)}
-                        className="w-4 h-4 text-green-600 rounded"
-                      />
-                      <span className="text-sm font-medium text-gray-700">Final State</span>
-                    </label>
+                    <div className="flex flex-col sm:flex-row gap-2 lg:gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={state.isStart}
+                          onChange={(e) => updateState(index, 'isStart', e.target.checked)}
+                          className="w-4 h-4 text-blue-600 rounded"
+                        />
+                        <span className="text-xs lg:text-sm font-medium text-gray-700">Start State</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={state.isAccept}
+                          onChange={(e) => updateState(index, 'isAccept', e.target.checked)}
+                          className="w-4 h-4 text-green-600 rounded"
+                        />
+                        <span className="text-xs lg:text-sm font-medium text-gray-700">Accept State</span>
+                      </label>
+                    </div>
                     <button
                       onClick={() => removeState(index)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                       disabled={states.length <= 1}
+                      className="sm:ml-auto px-2 lg:px-3 py-1 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white rounded-lg text-xs lg:text-sm"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-3 w-3 lg:h-4 lg:w-4" />
                     </button>
                   </div>
                 ))}
+                
                 <button
                   onClick={addState}
-                  className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                  className="w-full mt-3 lg:mt-4 px-3 lg:px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg text-sm lg:text-base flex items-center justify-center"
                 >
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-4 w-4 lg:h-5 lg:w-5 mr-2" />
                   Add State
                 </button>
               </div>

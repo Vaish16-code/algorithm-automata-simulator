@@ -124,7 +124,7 @@ export default function CflProperties() {
             "Formal verification of systems"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: [
             "Context-Free Languages and their properties",
             "Pumping lemma for context-free languages",

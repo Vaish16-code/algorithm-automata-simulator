@@ -35,7 +35,7 @@ export function NQueensChart({ data, boardSize }: NQueensChartProps) {
               return (
                 <div
                   key={colIndex}
-                  className={`w-8 h-8 border border-gray-400 flex items-center justify-center text-lg font-bold ${bgColor}`}
+                  className={`w-6 h-6 sm:w-8 sm:h-8 border border-gray-400 flex items-center justify-center text-sm sm:text-lg font-bold ${bgColor}`}
                 >
                   {isQueen ? '♛' : ''}
                 </div>
@@ -47,24 +47,23 @@ export function NQueensChart({ data, boardSize }: NQueensChartProps) {
     );
   };
 
-  return (
-    <div className="space-y-6">
+  return (      <div className="space-y-4 lg:space-y-6">
       {/* Solutions Display */}
       {data.solutions.length > 0 && (
-        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border-2 border-green-200 p-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center">
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border-2 border-green-200 p-4 lg:p-6">
+          <h3 className="text-lg lg:text-xl font-bold mb-3 lg:mb-4 text-gray-800 flex items-center">
             🏆 Solutions Found ({data.solutions.length})
           </h3>
           
           {data.solutions.length > 1 && (
-            <div className="mb-4">
+            <div className="mb-3 lg:mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Select Solution:
               </label>
               <select
                 value={selectedSolution}
                 onChange={(e) => setSelectedSolution(parseInt(e.target.value))}
-                className="border border-gray-300 rounded-md px-3 py-2"
+                className="border border-gray-300 rounded-md px-2 lg:px-3 py-1 lg:py-2 text-sm lg:text-base"
               >
                 {data.solutions.map((_, index) => (
                   <option key={index} value={index}>
@@ -82,22 +81,22 @@ export function NQueensChart({ data, boardSize }: NQueensChartProps) {
       )}
 
       {/* Step-by-Step Visualization */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200 p-6">
-        <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200 p-4 lg:p-6">
+        <h3 className="text-lg lg:text-xl font-bold mb-3 lg:mb-4 text-gray-800 flex items-center">
           🔄 Step-by-Step Backtracking Process
         </h3>
         
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 lg:gap-4 mb-3 lg:mb-4">
           <button
             onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
             disabled={currentStep === 0}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md"
+            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-3 lg:px-4 py-2 rounded-md text-sm lg:text-base"
           >
             Previous
           </button>
           
           <div className="flex-1 text-center">
-            <div className="text-lg font-semibold text-gray-800">
+            <div className="text-base lg:text-lg font-semibold text-gray-800">
               Step {currentStep + 1} of {data.steps.length}
             </div>
             <div className="text-sm text-gray-600">
@@ -108,13 +107,13 @@ export function NQueensChart({ data, boardSize }: NQueensChartProps) {
           <button
             onClick={() => setCurrentStep(Math.min(data.steps.length - 1, currentStep + 1))}
             disabled={currentStep === data.steps.length - 1}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md"
+            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-3 lg:px-4 py-2 rounded-md text-sm lg:text-base"
           >
             Next
           </button>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-3 lg:mb-4">
           <input
             type="range"
             min="0"

@@ -260,7 +260,7 @@ export default function RicesTheorem() {
             "Theoretical foundations of computability"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: ["Rice's Theorem", "Undecidable Properties", "Semantic vs Syntactic Properties"],
           marks: "10-15 marks",
           commonQuestions: [

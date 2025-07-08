@@ -378,7 +378,7 @@ export default function CFGNormalForms() {
             "Compiler design and implementation"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: ["CNF Conversion", "GNF Conversion", "Normal Forms", "CFG Simplification"],
           marks: "10-15 marks",
           commonQuestions: [

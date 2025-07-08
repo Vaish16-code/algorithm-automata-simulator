@@ -244,7 +244,7 @@ export default function NFAtoDFAConverter() {
             "Formal verification tools"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: ["NFA to DFA Conversion", "Subset Construction Algorithm", "Epsilon Closure"],
           marks: "8-10 marks",
           commonQuestions: [

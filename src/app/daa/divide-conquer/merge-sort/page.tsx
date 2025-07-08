@@ -80,12 +80,12 @@ export default function MergeSortPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+      <div className="max-w-7xl mx-auto px-4 py-6 lg:py-8">
+        <div className="text-center mb-6 lg:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 mb-3 lg:mb-4">
             Merge Sort <span className="text-blue-600">(Divide & Conquer)</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base lg:text-xl text-gray-600 max-w-3xl mx-auto">
             Visualize the divide and conquer approach of merge sort with step-by-step breakdown
           </p>
         </div>
@@ -145,20 +145,20 @@ export default function MergeSortPage() {
           }}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
           {/* Input Section */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Input Array</h2>
+          <div className="space-y-4 lg:space-y-6">
+            <div className="bg-white rounded-lg shadow-md p-4 lg:p-6">
+              <h2 className="text-lg lg:text-xl font-semibold mb-3 lg:mb-4 text-gray-700">Input Array</h2>
               
-              <div className="space-y-4">
+              <div className="space-y-3 lg:space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Array Elements (comma-separated):
                   </label>
                   <input
                     type="text"
-                    className={`w-full border-4 rounded-md px-4 py-3 text-lg font-bold text-black bg-white focus:ring-4 ${
+                    className={`w-full border-2 lg:border-4 rounded-md px-3 lg:px-4 py-2 lg:py-3 text-base lg:text-lg font-bold text-black bg-white focus:ring-2 lg:focus:ring-4 ${
                       inputError ? 'border-red-500 focus:border-red-600 focus:ring-red-200' : 'border-gray-800 focus:border-blue-600 focus:ring-blue-200'
                     }`}
                     value={inputText}
@@ -175,16 +175,16 @@ export default function MergeSortPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
                   <button
                     onClick={generateRandomArray}
-                    className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md"
+                    className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 lg:px-4 py-2 rounded-md text-sm lg:text-base"
                   >
                     Generate Random Array
                   </button>
                   <button
                     onClick={handleSolve}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium px-6 py-2 rounded-md"
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium px-4 lg:px-6 py-2 rounded-md text-sm lg:text-base"
                     disabled={inputArray.length === 0 || isProcessing}
                   >
                     {isProcessing ? "Sorting..." : "Sort Array"}
@@ -192,16 +192,16 @@ export default function MergeSortPage() {
                 </div>
 
                 {inputArray.length > 0 && !inputError && (
-                  <div className="p-4 bg-gray-50 rounded-lg border-l-4 border-green-500">
+                  <div className="p-3 lg:p-4 bg-gray-50 rounded-lg border-l-4 border-green-500">
                     <div className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                       <span className="text-green-600 mr-2">✓</span>
                       Current Array ({inputArray.length} elements):
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1 lg:gap-2">
                       {inputArray.map((num: number, index: number) => (
                         <div
                           key={index}
-                          className="w-12 h-12 bg-blue-100 border-2 border-blue-300 rounded-lg flex items-center justify-center font-bold text-blue-800"
+                          className="w-8 h-8 lg:w-12 lg:h-12 bg-blue-100 border-2 border-blue-300 rounded-lg flex items-center justify-center font-bold text-blue-800 text-xs lg:text-base"
                         >
                           {num}
                         </div>
@@ -214,7 +214,7 @@ export default function MergeSortPage() {
           </div>
 
           {/* Results Section */}
-          <div className="space-y-6">
+          <div className="space-y-4 lg:space-y-6">
             {result && (
               <ExamResult
                 title="Merge Sort Analysis"
@@ -251,13 +251,13 @@ export default function MergeSortPage() {
             )}
 
             {result && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold mb-4 text-gray-800">Sorting Visualization</h3>
+              <div className="bg-white rounded-lg shadow-md p-4 lg:p-6">
+                <h3 className="text-base lg:text-lg font-semibold mb-3 lg:mb-4 text-gray-800">Sorting Visualization</h3>
                 <MergeSortChart data={result} />
                 
-                <div className="mt-4 bg-green-50 rounded-lg p-4">
+                <div className="mt-3 lg:mt-4 bg-green-50 rounded-lg p-3 lg:p-4">
                   <h4 className="font-medium text-green-800 mb-2">Algorithm Performance:</h4>
-                  <div className="grid grid-cols-2 gap-4 text-sm text-green-700">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:gap-4 text-sm text-green-700">
                     <div>
                       <span className="font-medium">Comparisons:</span> {result.comparisons}
                     </div>

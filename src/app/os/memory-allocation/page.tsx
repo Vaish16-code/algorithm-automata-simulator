@@ -174,35 +174,34 @@ export default function MemoryAllocationPage() {
   const freeMemory = totalMemory - allocatedMemory;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Memory Allocation Algorithms</h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+        <div className="text-center mb-6 lg:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 lg:mb-4">Memory Allocation Algorithms</h1>
+          <p className="text-base lg:text-lg text-gray-600 max-w-3xl mx-auto">
             Visualize how different memory allocation strategies work with dynamic memory management and fragmentation analysis.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Input Section */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 lg:space-y-6">
             {/* Algorithm Selection */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">Select Algorithm</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-xl lg:rounded-2xl shadow-lg p-4 lg:p-6">
+              <h2 className="text-lg lg:text-2xl font-semibold text-gray-800 mb-3 lg:mb-4">Select Algorithm</h2>                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
                 {algorithms.map((alg) => (
                   <button
                     key={alg.key}
                     onClick={() => setSelectedAlgorithm(alg.key)}
-                    className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                    className={`p-3 lg:p-4 rounded-lg lg:rounded-xl border-2 transition-all duration-200 text-left ${
                       selectedAlgorithm === alg.key
                         ? "border-purple-500 bg-purple-50"
                         : "border-gray-200 hover:border-purple-300"
                     }`}
                   >
-                    <h3 className="font-semibold text-gray-800">{alg.name}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{alg.description}</p>
+                    <h3 className="font-semibold text-gray-800 text-sm lg:text-base">{alg.name}</h3>
+                    <p className="text-xs lg:text-sm text-gray-600 mt-1">{alg.description}</p>
                   </button>
                 ))}
               </div>

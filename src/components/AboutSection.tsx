@@ -37,7 +37,7 @@ export default function AboutSection() {
   ];
 
   const stats = [
-    { number: '500+', label: 'Students Helped' },
+    { number: '4', label: 'Core Subjects' },
     { number: '15+', label: 'Algorithm Tools' },
     { number: '3', label: 'Core Subjects' },
     { number: '100%', label: 'Success Rate' }

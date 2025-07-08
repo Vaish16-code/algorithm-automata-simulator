@@ -55,7 +55,7 @@ export default function NQueensPage() {
               "Combinatorial optimization"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Backtracking algorithm design",
               "State space tree representation",

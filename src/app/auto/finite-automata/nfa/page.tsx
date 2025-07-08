@@ -45,7 +45,7 @@ export default function NFASimulatorPage() {
         "Natural language processing"
       ]
     },
-    mumbaiUniversity: {
+    university: {
       syllabus: [
         "NFA Definition and Components",
         "ε-NFA and its significance",

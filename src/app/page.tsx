@@ -164,10 +164,10 @@ export default function Home() {
           <div className="text-center">
             {/* Main Heading */}
             <div className="mb-8">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-cyan-300 text-sm font-medium mb-6">
+              {/* <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-cyan-300 text-sm font-medium mb-6">
                 <Zap className="h-4 w-4 mr-2" />
                 India's #1 Engineering Algorithm Platform
-              </div>
+              </div> */}
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
                 Master Computer Science
                 <span className="block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
@@ -175,7 +175,7 @@ export default function Home() {
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-                Interactive algorithm simulators trusted by <span className="text-cyan-400 font-bold">10,000+ engineering students</span> across India! 
+                Interactive algorithm simulators for <span className="text-cyan-400 font-bold">engineering students</span> across India! 
                 Master Automata Theory, Algorithm Design, Operating Systems, and Computer Networks with 
                 <span className="text-yellow-400 font-bold"> step-by-step visual learning</span>.
               </p>
@@ -184,7 +184,7 @@ export default function Home() {
               <div className="mt-6 p-4 bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-sm rounded-lg border border-red-400/30">
             
                 <p className="text-white">
-                  🎯 Perfect for VTU, AKTU & all Indian engineering curricula
+                  🎯 Perfect for all Indian engineering curricula
                 </p>
               </div>
             </div>
@@ -221,7 +221,7 @@ export default function Home() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center">
                   <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${stat.color} rounded-xl mb-3 shadow-lg`}>
@@ -262,7 +262,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
                 <div className="text-3xl font-bold text-yellow-300">📈 95%</div>
-                <div className="text-sm">Students see grade improvement</div>
+                <div className="text-sm">Focus on conceptual learning</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
                 <div className="text-3xl font-bold text-green-300">⚡ 5x</div>
@@ -275,7 +275,7 @@ export default function Home() {
             </div>
 
             <div className="bg-yellow-400 text-gray-900 rounded-lg p-4 mb-6 font-bold text-lg animate-pulse">
-              🔥 HOT: 2,000+ students used AlgoMaster to ace their last semester exams!
+              🔥 HOT: Perfect for exam preparation and conceptual understanding!
             </div>
 
             <Link
@@ -581,7 +581,7 @@ export default function Home() {
               🎯 Your Algorithm Mastery Journey Starts NOW!
             </h2>
             <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-6">
-              Join <span className="text-cyan-400 font-bold">successful students</span> who transformed their CS journey with AlgoMaster. 
+              Join <span className="text-cyan-400 font-bold">engineering students</span> who are transforming their CS journey with AlgoMaster. 
               Don't let another semester pass struggling with algorithms!
             </p>
             
@@ -604,7 +604,7 @@ export default function Home() {
           
 
           <div className="text-lg text-gray-400">
-            🔥 <span className="text-yellow-400 font-bold">TRENDING:</span> Most students see grade improvement within 2 weeks! • 
+            🔥 <span className="text-yellow-400 font-bold">TRENDING:</span> Interactive learning helps improve understanding! • 
             <span className="text-green-400 font-bold">100% Free</span> • No Hidden Costs • 
             <span className="text-cyan-400 font-bold">University Focused</span>
           </div>

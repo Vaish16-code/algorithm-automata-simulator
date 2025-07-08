@@ -134,10 +134,14 @@ git push origin feature/algorithm-name
 
 ## 🤝 Team Members
 
-- **[Your Name]** - Project Lead & Core Development
-- **[Friend 1]** - Algorithm Implementation
-- **[Friend 2]** - UI/UX Design
-- **[Friend 3]** - Testing & Documentation
+- **Yash Jadhav** - Project Lead & Core Development ([LinkedIn](https://www.linkedin.com/in/yash-jadhav-a8a02426b/))
+- **Vaishnavi Sawant** - Algorithm Implementation & UI/UX Design ([LinkedIn](https://www.linkedin.com/in/vaishnavi-sawant-38a547289/))
+
+## 📧 Contact
+
+For questions, suggestions, or collaboration:
+- **Email**: help.algomaster@gmail.com
+- **Project**: AlgoMaster - Engineering Algorithm Simulator
 
 ## 📝 License
 

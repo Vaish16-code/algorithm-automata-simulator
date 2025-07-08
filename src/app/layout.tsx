@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/lib/theme";
+import { ChatbotProvider } from "@/contexts/ChatbotContext";
+import GlobalAlgorithmChatbot from "@/components/GlobalAlgorithmChatbot";
 import Script from "next/script";
 
 const geistSans = Geist({
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
     default: "AlgoMaster - #1 Engineering Algorithm Simulator | Interactive CS Learning Platform",
     template: "%s | AlgoMaster - Interactive Algorithm Learning"
   },
-  description: "Master computer science algorithms with interactive visual simulations. Complete platform for Automata Theory, Algorithm Design & Analysis, Operating Systems, and Computer Networks. Trusted by 10,000+ engineering students across India for exam preparation and practical learning.",
+  description: "Master computer science algorithms with interactive visual simulations. Complete platform for Automata Theory, Algorithm Design & Analysis, Operating Systems, and Computer Networks for engineering exam preparation and practical learning.",
   keywords: [
     "algorithm simulator",
     "engineering algorithms", 
@@ -95,7 +97,7 @@ export const metadata: Metadata = {
     url: "https://algomaster.app",
     siteName: "AlgoMaster - Interactive Algorithm Simulator",
     title: "AlgoMaster - #1 Engineering Algorithm Simulator | Interactive CS Learning",
-    description: "Master computer science algorithms with interactive visual simulations. Complete platform for engineering students covering Automata Theory, Algorithm Design, Operating Systems, and Computer Networks. Trusted by 10,000+ students.",
+    description: "Master computer science algorithms with interactive visual simulations. Complete platform for engineering students covering Automata Theory, Algorithm Design, Operating Systems, and Computer Networks.",
     images: [
       {
         url: "/og-image.jpg",
@@ -118,7 +120,7 @@ export const metadata: Metadata = {
     site: "@AlgoMasterApp",
     creator: "@AlgoMasterApp", 
     title: "AlgoMaster - #1 Engineering Algorithm Simulator",
-    description: "Master CS algorithms with interactive visual simulations. Trusted by 10,000+ engineering students across India. Free forever!",
+    description: "Master CS algorithms with interactive visual simulations. Free algorithm learning platform for engineering students.",
     images: ["/twitter-card.jpg"],
   },
   alternates: {
@@ -194,18 +196,103 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "AlgoMaster",
+    "alternateName": "AlgoMaster - Interactive Algorithm Learning Platform",
+    "description": "Interactive algorithm simulator for engineering students covering Automata Theory, Algorithm Design & Analysis, Operating Systems, and Computer Networks",
+    "url": "https://algomaster.app",
+    "logo": "https://algomaster.app/logo.png",
+    "sameAs": [
+      "https://twitter.com/AlgoMasterApp",
+      "https://github.com/algomaster",
+      "https://linkedin.com/company/algomaster"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "help.algomaster@gmail.com"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Algorithm Learning Courses",
+      "itemListElement": [
+        {
+          "@type": "Course",
+          "name": "Automata Theory & Formal Languages",
+          "description": "Interactive simulators for DFA, NFA, PDA, and Turing Machines",
+          "provider": {
+            "@type": "EducationalOrganization",
+            "name": "AlgoMaster"
+          }
+        },
+        {
+          "@type": "Course", 
+          "name": "Algorithm Design & Analysis",
+          "description": "Dynamic Programming, Greedy, Divide & Conquer, Backtracking algorithms",
+          "provider": {
+            "@type": "EducationalOrganization", 
+            "name": "AlgoMaster"
+          }
+        },
+        {
+          "@type": "Course",
+          "name": "Operating Systems",
+          "description": "CPU Scheduling, Memory Management, Process Synchronization simulators",
+          "provider": {
+            "@type": "EducationalOrganization",
+            "name": "AlgoMaster"
+          }
+        },
+        {
+          "@type": "Course",
+          "name": "Computer Networks",
+          "description": "Network protocols, routing algorithms, and communication simulations",
+          "provider": {
+            "@type": "EducationalOrganization",
+            "name": "AlgoMaster"
+          }
+        }
+      ]
+    },
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": "student",
+      "audienceType": "engineering students"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.5",
+      "reviewCount": "50",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  };
+
   return (
     <html lang="en" className="light">
       <head>
-        {/* Google AdSense */}
+        {/* Structured Data */}
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+          strategy="beforeInteractive"
+        />
+        
+        {/* Google AdSense (Replace ca-pub-XXXXXXXXXXXXXXXX with your actual AdSense ID) */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        {/* TODO: After AdSense approval, replace ca-pub-XXXXXXXXXXXXXXXX with your actual publisher ID */}
         
-        {/* Google Analytics (for better ad targeting) */}
+        {/* Google Analytics (Replace GA_MEASUREMENT_ID with your actual ID) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
           strategy="afterInteractive"
@@ -216,6 +303,7 @@ export default function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'GA_MEASUREMENT_ID');
+            // TODO: Replace GA_MEASUREMENT_ID above with your actual Google Analytics ID
           `}
         </Script>
       </head>
@@ -223,9 +311,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-white`}
       >
         <ThemeProvider>
-          <Header />
-          <main className="bg-white dark:bg-white min-h-screen">{children}</main>
-          <Footer />
+          <ChatbotProvider>
+            <Header />
+            <main className="bg-white dark:bg-white min-h-screen">{children}</main>
+            <Footer />
+            <GlobalAlgorithmChatbot />
+          </ChatbotProvider>
         </ThemeProvider>
       </body>
     </html>

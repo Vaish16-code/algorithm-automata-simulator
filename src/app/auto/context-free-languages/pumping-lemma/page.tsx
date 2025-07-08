@@ -234,7 +234,7 @@ export default function CFLPumpingLemma() {
             "Formal language classification"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: ["Pumping Lemma for CFL", "Non-Context-Free Languages", "Language Hierarchy"],
           marks: "10-15 marks",
           commonQuestions: [

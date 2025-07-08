@@ -128,7 +128,7 @@ export default function PdaToCfgConverter() {
             "Natural language processing systems"
           ]
         }}
-        mumbaiUniversity={{
+        university={{
           syllabus: ["Theory of Computation", "Context-Free Languages", "Pushdown Automata"],
           marks: "15-20 marks",
           commonQuestions: [

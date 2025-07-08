@@ -1,19 +1,45 @@
-# Contact Form Backend Setup Guide
+# 📧 Contact Form Setup Guide - URGENT FIX NEEDED
 
-## Overview
-The contact form backend is now set up to receive and process messages from your AlgoMaster website. Here's how to configure it:
+## 🚨 CURRENT ERROR: Missing credentials for "PLAIN"
 
-## 📧 Email Configuration
+**QUICK FIX (5 minutes):**
 
-### 1. Environment Variables
-Update the `.env.local` file with your email credentials:
+### Step 1: Set Up Gmail App Password
+1. **Create/Access Gmail:** `help.algomaster@gmail.com`
+2. **Enable 2FA:** Go to https://myaccount.google.com/security
+3. **Generate App Password:**
+   - Click "App passwords" (only appears after 2FA)
+   - Select "Mail" → Generate
+   - Copy the 16-character password
+
+### Step 2: Update .env.local
+```bash
+# Find this line in .env.local:
+SMTP_PASS=your-gmail-app-password-here
+# Replace with your actual app password:
+SMTP_PASS=abcd efgh ijkl mnop
+```
+
+### Step 3: Restart Server
+```bash
+npm run dev
+```
+
+**✅ Contact form will work after this!**
+
+---
+
+## 📧 Full Email Configuration
+
+### Environment Variables (Already Set)
+The `.env.local` file already contains:
 
 ```env
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-CONTACT_EMAIL=support@algomaster.dev
+SMTP_USER=help.algomaster@gmail.com
+SMTP_PASS=your-gmail-app-password-here  # ← UPDATE THIS
+CONTACT_EMAIL=help.algomaster@gmail.com
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```
 
@@ -166,4 +192,6 @@ Consider adding:
 
 ---
 
-**Need Help?** The contact form is ready to receive messages! Users will get confirmation emails and you'll receive formatted notifications.
+**📧 Contact Email: help.algomaster@gmail.com**
+
+**Need Help?** The contact form is ready to receive messages! Users will get confirmation emails and you'll receive formatted notifications at help.algomaster@gmail.com.

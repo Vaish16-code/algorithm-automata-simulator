@@ -88,7 +88,7 @@ export default function PrivacyPolicy() {
                 If you have any questions about this Privacy Policy, please contact us at:
               </p>
               <ul className="list-disc list-inside space-y-1 mt-2">
-                <li>Email: privacy@algomaster.com</li>
+                <li>Email: help.algomaster@gmail.com</li>
                 <li>Website: https://algomaster.com/contact</li>
               </ul>
             </section>

@@ -78,7 +78,7 @@ export default function PDASimulatorPage() {
         "Balanced parentheses and bracket checking"
       ]
     },
-    mumbaiUniversity: {
+    university: {
       syllabus: [
         "PDA Definition and Components",
         "Stack Operations (Push, Pop)",

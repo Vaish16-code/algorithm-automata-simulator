@@ -262,8 +262,10 @@ export function InteractiveDFAChart({
       <div className="relative">
         <svg 
           ref={svgRef}
-          width="500" 
+          width="100%" 
           height="400" 
+          viewBox="0 0 500 400"
+          preserveAspectRatio="xMidYMid meet"
           className="border-2 border-gray-300 rounded-lg bg-white cursor-crosshair"
           onClick={handleSVGClick}
           onMouseMove={handleMouseMove}

@@ -75,7 +75,7 @@ export default function RegexMatcherPage() {
               "Programming language lexical analysis"
             ]
           }}
-          mumbaiUniversity={{
+          university={{
             syllabus: [
               "Regular expression definition and syntax",
               "Metacharacters and quantifiers",

@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     // Email content
     const mailOptions = {
       from: process.env.SMTP_USER,
-      to: process.env.CONTACT_EMAIL || 'support@algomaster.dev', // Where you want to receive messages
+      to: process.env.CONTACT_EMAIL || 'help.algomaster@gmail.com', // Where you want to receive messages
       subject: `[AlgoMaster Contact] ${sanitizedData.subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -216,7 +216,7 @@ Submitted on: ${new Date().toLocaleString()}
     
     return NextResponse.json(
       { 
-        error: 'Failed to send message. Please try again later or contact us directly at support@algomaster.dev',
+        error: 'Failed to send message. Please try again later or contact us directly at help.algomaster@gmail.com',
         success: false 
       },
       { status: 500 }
