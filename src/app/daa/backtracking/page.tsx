@@ -62,7 +62,7 @@ export default function BacktrackingAlgorithmsPage() {
       "Hamiltonian path problem",
       "Knight's tour problem"
     ],
-    examPattern: "Mumbai University typically asks 1-2 questions on backtracking (10-15 marks), focusing on N-Queens problem and algorithm design."
+    examPattern: "Universities typically ask 1-2 questions on backtracking (10-15 marks), focusing on N-Queens problem and algorithm design."
   };
 
   return (
@@ -170,7 +170,7 @@ export default function BacktrackingAlgorithmsPage() {
 
         {/* Exam Preparation */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">University Exam Preparation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>

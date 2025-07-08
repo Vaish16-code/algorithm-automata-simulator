@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { multistageGraphAlgorithm, MultistageGraphResult } from "@/app/utils/dynamicProgramming";
 import { EducationalInfo, ExamResult } from "@/components";
 
@@ -19,25 +19,62 @@ interface Edge {
 }
 
 export default function MultistageGraphPage() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [numStages, setNumStages] = useState<number>(4);
   const [nodesPerStage, setNodesPerStage] = useState<number[]>([1, 2, 2, 1]);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [selectedNode, setSelectedNode] = useState<number | null>(null);
-  const [isDrawingMode, setIsDrawingMode] = useState<'edge' | 'none'>('none');
+  const [isDrawingMode, setIsDrawingMode] = useState<'node' | 'edge' | 'delete' | 'none'>('none');
   const [edgeStart, setEdgeStart] = useState<number | null>(null);
   const [edgeWeight, setEdgeWeight] = useState<string>('1');
   const [result, setResult] = useState<MultistageGraphResult | null>(null);
   const [animationStep, setAnimationStep] = useState<number>(-1);
+  const [currentStage, setCurrentStage] = useState<number>(0);
+  
+  // New state for drag and drop
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragOffset, setDragOffset] = useState<{x: number, y: number}>({x: 0, y: 0});
+  const [dragStarted, setDragStarted] = useState<boolean>(false);
+  
+  // New state for undo functionality
+  const [history, setHistory] = useState<{nodes: Node[], edges: Edge[]}[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
 
   useEffect(() => {
     generateGraph();
   }, [numStages, nodesPerStage]);
 
-  useEffect(() => {
-    drawGraph();
-  }, [nodes, edges, selectedNode, animationStep, result]);
+  // Save state to history for undo functionality
+  const saveToHistory = (newNodes: Node[], newEdges: Edge[]) => {
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push({ nodes: [...newNodes], edges: [...newEdges] });
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  };
+
+  // Undo function
+  const undo = () => {
+    if (historyIndex > 0) {
+      const prevState = history[historyIndex - 1];
+      setNodes(prevState.nodes);
+      setEdges(prevState.edges);
+      setHistoryIndex(historyIndex - 1);
+      setResult(null);
+      setAnimationStep(-1);
+    }
+  };
+
+  // Redo function
+  const redo = () => {
+    if (historyIndex < history.length - 1) {
+      const nextState = history[historyIndex + 1];
+      setNodes(nextState.nodes);
+      setEdges(nextState.edges);
+      setHistoryIndex(historyIndex + 1);
+      setResult(null);
+      setAnimationStep(-1);
+    }
+  };
 
   const generateGraph = () => {
     const newNodes: Node[] = [];
@@ -85,173 +122,204 @@ export default function MultistageGraphPage() {
     setEdges(newEdges);
     setResult(null);
     setAnimationStep(-1);
+    saveToHistory(newNodes, newEdges);
   };
 
-  const drawGraph = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  // Mouse down handler for dragging
+  const handleNodeMouseDown = (nodeId: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+    console.log('Node mouse down:', nodeId, 'Mode:', isDrawingMode);
     
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw stage lines
-    for (let stage = 0; stage < numStages; stage++) {
-      const x = 100 + stage * 120;
-      ctx.beginPath();
-      ctx.moveTo(x, 50);
-      ctx.lineTo(x, 250);
-      ctx.strokeStyle = '#e5e7eb';
-      ctx.lineWidth = 1;
-      ctx.stroke();
+    // Only allow dragging when not in edge mode
+    if (isDrawingMode !== 'edge') {
+      setIsDragging(true);
+      setSelectedNode(nodeId);
       
-      // Stage label
-      ctx.fillStyle = '#6b7280';
-      ctx.font = '12px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(`Stage ${stage}`, x, 40);
+      const node = nodes.find(n => n.id === nodeId);
+      if (node) {
+        const svg = event.currentTarget.closest('svg');
+        if (svg) {
+          const rect = svg.getBoundingClientRect();
+          setDragOffset({
+            x: event.clientX - rect.left - node.x,
+            y: event.clientY - rect.top - node.y
+          });
+        }
+      }
+      setDragStarted(false);
+      event.preventDefault();
+    }
+  };
+
+  // SVG mouse move handler for dragging
+  const handleSvgMouseMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    if (!isDragging || selectedNode === null) return;
+
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const newX = Math.max(25, Math.min(575, event.clientX - rect.left - dragOffset.x));
+    const newY = Math.max(25, Math.min(275, event.clientY - rect.top - dragOffset.y));
+
+    if (!dragStarted) {
+      setDragStarted(true);
     }
 
-    // Draw edges
-    edges.forEach((edge) => {
-      const fromNode = nodes.find(n => n.id === edge.from);
-      const toNode = nodes.find(n => n.id === edge.to);
-      
-      if (fromNode && toNode) {
-        ctx.beginPath();
-        ctx.moveTo(fromNode.x, fromNode.y);
-        ctx.lineTo(toNode.x, toNode.y);
-        
-        // Highlight edge if it's in optimal path
-        if (result && result.optimalPath && animationStep >= 0) {
-          const isInPath = result.optimalPath.some((pathNodeId, index) => 
-            index < result.optimalPath.length - 1 && 
-            pathNodeId === edge.from && 
-            result.optimalPath[index + 1] === edge.to
-          );
-          
-          if (isInPath) {
-            ctx.strokeStyle = '#22c55e';
-            ctx.lineWidth = 4;
-          } else {
-            ctx.strokeStyle = '#6b7280';
-            ctx.lineWidth = 2;
-          }
-        } else {
-          ctx.strokeStyle = '#6b7280';
-          ctx.lineWidth = 2;
-        }
-        
-        ctx.stroke();
-
-        // Draw arrow
-        const angle = Math.atan2(toNode.y - fromNode.y, toNode.x - fromNode.x);
-        const arrowLength = 10;
-        const arrowAngle = Math.PI / 6;
-        
-        ctx.beginPath();
-        ctx.moveTo(toNode.x - 20 * Math.cos(angle), toNode.y - 20 * Math.sin(angle));
-        ctx.lineTo(
-          toNode.x - 20 * Math.cos(angle) - arrowLength * Math.cos(angle - arrowAngle),
-          toNode.y - 20 * Math.sin(angle) - arrowLength * Math.sin(angle - arrowAngle)
-        );
-        ctx.moveTo(toNode.x - 20 * Math.cos(angle), toNode.y - 20 * Math.sin(angle));
-        ctx.lineTo(
-          toNode.x - 20 * Math.cos(angle) - arrowLength * Math.cos(angle + arrowAngle),
-          toNode.y - 20 * Math.sin(angle) - arrowLength * Math.sin(angle + arrowAngle)
-        );
-        ctx.stroke();
-
-        // Draw weight
-        const midX = (fromNode.x + toNode.x) / 2;
-        const midY = (fromNode.y + toNode.y) / 2;
-        ctx.fillStyle = '#1f2937';
-        ctx.font = 'bold 12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(edge.weight.toString(), midX, midY - 5);
-      }
-    });
-
-    // Draw nodes
-    nodes.forEach(node => {
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, 18, 0, 2 * Math.PI);
-      
-      // Node colors
-      if (node.stage === 0) {
-        ctx.fillStyle = '#ef4444'; // Source - red
-      } else if (node.stage === numStages - 1) {
-        ctx.fillStyle = '#22c55e'; // Target - green
-      } else if (selectedNode === node.id) {
-        ctx.fillStyle = '#3b82f6'; // Selected - blue
-      } else if (result && result.optimalPath && result.optimalPath.includes(node.id)) {
-        ctx.fillStyle = '#f59e0b'; // In optimal path - orange
-      } else {
-        ctx.fillStyle = '#e5e7eb'; // Default - gray
-      }
-      
-      ctx.fill();
-      ctx.strokeStyle = '#374151';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Draw label
-      ctx.fillStyle = '#1f2937';
-      ctx.font = 'bold 12px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(node.label, node.x, node.y + 4);
-
-      // Draw cost if algorithm is running
-      if (result && animationStep >= 0) {
-        const step = result.steps[animationStep];
-        if (step && step.costs && step.costs[node.id] !== undefined && step.costs[node.id] !== Infinity) {
-          ctx.fillStyle = '#dc2626';
-          ctx.font = 'bold 10px Arial';
-          ctx.fillText(step.costs[node.id].toString(), node.x, node.y - 25);
-        }
-      }
-    });
+    const newNodes = nodes.map(node => 
+      node.id === selectedNode 
+        ? { ...node, x: newX, y: newY }
+        : node
+    );
+    
+    setNodes(newNodes);
+    event.preventDefault();
   };
 
-  const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  // SVG mouse up handler
+  const handleSvgMouseUp = (event: React.MouseEvent<SVGSVGElement>) => {
+    if (isDragging) {
+      setIsDragging(false);
+      if (dragStarted) {
+        saveToHistory(nodes, edges);
+        setDragStarted(false);
+        setSelectedNode(null);
+        return;
+      }
+      setSelectedNode(null);
+    }
 
-    const rect = canvas.getBoundingClientRect();
+    // If not dragging, handle as regular click for adding nodes/edges
+    if (!dragStarted && !isDragging && isDrawingMode === 'node') {
+      handleSvgClickInternal(event);
+    }
+  };
+
+  // SVG mouse leave handler
+  const handleSvgMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      if (dragStarted) {
+        saveToHistory(nodes, edges);
+        setDragStarted(false);
+      }
+      setSelectedNode(null);
+    }
+  };
+
+  // Handle node clicks directly
+  const handleNodeClick = (nodeId: number, event: React.MouseEvent) => {
+    console.log('=== NODE CLICK EVENT ===');
+    console.log('Node clicked:', nodeId, 'Mode:', isDrawingMode, 'EdgeStart:', edgeStart);
+    
+    if (dragStarted) {
+      console.log('⚠️ Ignoring click because drag just finished');
+      return;
+    }
+    
+    event.stopPropagation();
+    
+    if (isDrawingMode === 'edge') {
+      console.log('🎯 In edge creation mode');
+      if (edgeStart === null) {
+        setEdgeStart(nodeId);
+        console.log('✅ First node selected for edge:', nodeId);
+      } else if (edgeStart !== nodeId) {
+        const fromNode = nodes.find(n => n.id === edgeStart);
+        const toNode = nodes.find(n => n.id === nodeId);
+        
+        // Only allow edges to next stage in multistage graph
+        if (fromNode && toNode && toNode.stage === fromNode.stage + 1) {
+          const weight = parseInt(edgeWeight) || 1;
+          
+          // Check if edge already exists
+          const existingEdge = edges.find(e => 
+            e.from === edgeStart && e.to === nodeId
+          );
+          
+          if (!existingEdge) {
+            const newEdge: Edge = {
+              from: edgeStart,
+              to: nodeId,
+              weight
+            };
+            const newEdges = [...edges, newEdge];
+            setEdges(newEdges);
+            saveToHistory(nodes, newEdges);
+            console.log('✅ Edge created:', edgeStart, 'to', nodeId, 'weight:', weight);
+          } else {
+            console.log('❌ Edge already exists from', edgeStart, 'to', nodeId);
+          }
+        } else {
+          console.log('❌ Can only create edges to next stage');
+        }
+        setEdgeStart(null);
+      } else {
+        console.log('🔄 Same node clicked twice, canceling edge creation');
+        setEdgeStart(null);
+      }
+    } else if (isDrawingMode === 'delete') {
+      // Delete node and all connected edges
+      const newNodes = nodes.filter(n => n.id !== nodeId);
+      const newEdges = edges.filter(e => e.from !== nodeId && e.to !== nodeId);
+      
+      // Renumber nodes to maintain sequential IDs
+      const renumberedNodes = newNodes.map((node, index) => ({
+        ...node,
+        id: index,
+        label: node.stage === 0 ? 'S' : node.stage === numStages - 1 ? 'T' : `${node.stage}-${index + 1}`
+      }));
+      
+      // Update edge references to match renumbered nodes
+      const renumberedEdges = newEdges.map(edge => {
+        const fromIndex = newNodes.findIndex(n => n.id === edge.from);
+        const toIndex = newNodes.findIndex(n => n.id === edge.to);
+        return {
+          ...edge,
+          from: fromIndex,
+          to: toIndex
+        };
+      }).filter(edge => edge.from >= 0 && edge.to >= 0);
+      
+      setNodes(renumberedNodes);
+      setEdges(renumberedEdges);
+      saveToHistory(renumberedNodes, renumberedEdges);
+      if (selectedNode === nodeId) setSelectedNode(null);
+      console.log('Node deleted:', nodeId);
+    } else if (isDrawingMode === 'none') {
+      setSelectedNode(nodeId);
+      console.log('Node selected:', nodeId);
+    }
+  };
+
+  // SVG click logic for adding nodes
+  const handleSvgClickInternal = (event: React.MouseEvent<SVGSVGElement>) => {
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    if (isDrawingMode === 'edge') {
-      const clickedNode = nodes.find(node => 
-        Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
-      );
-
-      if (clickedNode) {
-        if (edgeStart === null) {
-          setEdgeStart(clickedNode.id);
-        } else if (edgeStart !== clickedNode.id) {
-          const fromNode = nodes.find(n => n.id === edgeStart);
-          const toNode = clickedNode;
-          
-          // Only allow edges to next stage
-          if (fromNode && toNode && toNode.stage === fromNode.stage + 1) {
-            const weight = parseInt(edgeWeight) || 1;
-            const newEdge: Edge = {
-              from: edgeStart,
-              to: clickedNode.id,
-              weight
-            };
-            setEdges([...edges, newEdge]);
-          }
-          setEdgeStart(null);
-        }
-      }
+    if (isDrawingMode === 'node') {
+      // Determine which stage this node should be in based on x position
+      const stageWidth = 120;
+      const stageIndex = Math.floor((x - 50) / stageWidth);
+      const targetStage = Math.max(0, Math.min(numStages - 1, stageIndex));
+      
+      // Add new node to the determined stage
+      const newNode: Node = {
+        id: nodes.length,
+        stage: targetStage,
+        x,
+        y,
+        label: targetStage === 0 ? 'S' : targetStage === numStages - 1 ? 'T' : `${targetStage}-${nodes.filter(n => n.stage === targetStage).length + 1}`
+      };
+      const newNodes = [...nodes, newNode];
+      setNodes(newNodes);
+      saveToHistory(newNodes, edges);
+    } else if (isDrawingMode === 'edge') {
+      // Reset edge start if clicking on empty space
+      setEdgeStart(null);
     } else {
-      const clickedNode = nodes.find(node => 
-        Math.sqrt(Math.pow(node.x - x, 2) + Math.pow(node.y - y, 2)) < 25
-      );
-      setSelectedNode(clickedNode ? clickedNode.id : null);
+      // Select nothing if clicking on empty space
+      setSelectedNode(null);
     }
   };
 
@@ -264,6 +332,46 @@ export default function MultistageGraphPage() {
     const multistageResult = multistageGraphAlgorithm(edges, nodes, sourceNode, targetNode, numStages);
     setResult(multistageResult);
     setAnimationStep(0);
+  };
+
+  const clearGraph = () => {
+    const newNodes: Node[] = [];
+    const newEdges: Edge[] = [];
+    setNodes(newNodes);
+    setEdges(newEdges);
+    setResult(null);
+    setAnimationStep(-1);
+    setSelectedNode(null);
+    setEdgeStart(null);
+    saveToHistory(newNodes, newEdges);
+  };
+
+  const loadSampleGraph = () => {
+    const sampleNodes: Node[] = [
+      { id: 0, stage: 0, x: 100, y: 150, label: 'S' },
+      { id: 1, stage: 1, x: 220, y: 100, label: '1-1' },
+      { id: 2, stage: 1, x: 220, y: 200, label: '1-2' },
+      { id: 3, stage: 2, x: 340, y: 100, label: '2-1' },
+      { id: 4, stage: 2, x: 340, y: 200, label: '2-2' },
+      { id: 5, stage: 3, x: 460, y: 150, label: 'T' }
+    ];
+    
+    const sampleEdges: Edge[] = [
+      { from: 0, to: 1, weight: 4 },
+      { from: 0, to: 2, weight: 8 },
+      { from: 1, to: 3, weight: 6 },
+      { from: 1, to: 4, weight: 9 },
+      { from: 2, to: 3, weight: 8 },
+      { from: 2, to: 4, weight: 2 },
+      { from: 3, to: 5, weight: 4 },
+      { from: 4, to: 5, weight: 2 }
+    ];
+
+    setNodes(sampleNodes);
+    setEdges(sampleEdges);
+    setResult(null);
+    setAnimationStep(-1);
+    saveToHistory(sampleNodes, sampleEdges);
   };
 
   const updateStageConfig = (stage: number, count: number) => {
@@ -406,6 +514,17 @@ export default function MultistageGraphPage() {
 
               <div className="flex gap-2 flex-wrap">
                 <button
+                  onClick={() => setIsDrawingMode(isDrawingMode === 'node' ? 'none' : 'node')}
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                    isDrawingMode === 'node' 
+                      ? 'bg-indigo-600 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  Add Node
+                </button>
+
+                <button
                   onClick={() => setIsDrawingMode(isDrawingMode === 'edge' ? 'none' : 'edge')}
                   className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
                     isDrawingMode === 'edge' 
@@ -413,7 +532,18 @@ export default function MultistageGraphPage() {
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
-                  Edit Edges
+                  Add Edge
+                </button>
+
+                <button
+                  onClick={() => setIsDrawingMode(isDrawingMode === 'delete' ? 'none' : 'delete')}
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                    isDrawingMode === 'delete' 
+                      ? 'bg-red-600 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  Delete
                 </button>
                 
                 {isDrawingMode === 'edge' && (
@@ -428,42 +558,286 @@ export default function MultistageGraphPage() {
                 )}
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 <button
-                  onClick={generateGraph}
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                  onClick={clearGraph}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                 >
-                  Regenerate Graph
+                  Clear Graph
                 </button>
                 
                 <button
-                  onClick={runMultistageGraph}
-                  disabled={nodes.length === 0}
-                  className="flex-1 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-semibold disabled:bg-gray-400"
+                  onClick={loadSampleGraph}
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                 >
-                  Find Shortest Path
+                  Load Sample
+                </button>
+
+                <button
+                  onClick={undo}
+                  disabled={historyIndex <= 0}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:bg-gray-400"
+                >
+                  ↶ Undo
+                </button>
+
+                <button
+                  onClick={redo}
+                  disabled={historyIndex >= history.length - 1}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:bg-gray-400"
+                >
+                  ↷ Redo
+                </button>
+
+                <button
+                  onClick={generateGraph}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  Regenerate Graph
                 </button>
               </div>
+
+              <button
+                onClick={runMultistageGraph}
+                disabled={nodes.length === 0}
+                className="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold disabled:bg-gray-400"
+              >
+                Find Shortest Path
+              </button>
             </div>
 
-            <div className="border border-gray-300 rounded-lg">
-              <canvas
-                ref={canvasRef}
+            <div className="border border-gray-300 rounded-lg bg-gray-50">
+              <svg
                 width={600}
                 height={300}
-                className="border rounded-lg cursor-pointer bg-gray-50"
-                onClick={handleCanvasClick}
-              />
+                className={`border rounded-lg bg-gray-50 ${
+                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
+                }`}
+                onMouseMove={handleSvgMouseMove}
+                onMouseUp={handleSvgMouseUp}
+                onMouseLeave={handleSvgMouseLeave}
+                style={{ userSelect: 'none' }}
+              >
+                {/* Define arrowhead markers */}
+                <defs>
+                  <marker
+                    id="arrowhead"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="9"
+                    refY="3.5"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 10 3.5, 0 7"
+                      fill="#6b7280"
+                    />
+                  </marker>
+                  <marker
+                    id="arrowhead-highlighted"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="9"
+                    refY="3.5"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 10 3.5, 0 7"
+                      fill="#22c55e"
+                    />
+                  </marker>
+                </defs>
+
+                {/* Draw stage lines */}
+                {Array.from({ length: numStages }, (_, stage) => {
+                  const x = 100 + stage * 120;
+                  return (
+                    <g key={`stage-${stage}`}>
+                      <line
+                        x1={x}
+                        y1={50}
+                        x2={x}
+                        y2={250}
+                        stroke="#e5e7eb"
+                        strokeWidth={1}
+                        style={{ pointerEvents: 'none' }}
+                      />
+                      <text
+                        x={x}
+                        y={40}
+                        textAnchor="middle"
+                        fill="#6b7280"
+                        fontSize="12"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        Stage {stage}
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {/* Draw edges */}
+                {edges.map((edge, index) => {
+                  const fromNode = nodes.find(n => n.id === edge.from);
+                  const toNode = nodes.find(n => n.id === edge.to);
+                  
+                  if (!fromNode || !toNode) return null;
+                  
+                  // Highlight edge if it's in optimal path
+                  let strokeColor = '#6b7280';
+                  let strokeWidth = 2;
+                  let isHighlighted = false;
+                  
+                  if (result && result.optimalPath && animationStep >= 0) {
+                    const isInPath = result.optimalPath.some((pathNodeId, pathIndex) => 
+                      pathIndex < result.optimalPath.length - 1 && 
+                      pathNodeId === edge.from && 
+                      result.optimalPath[pathIndex + 1] === edge.to
+                    );
+                    
+                    if (isInPath) {
+                      strokeColor = '#22c55e';
+                      strokeWidth = 4;
+                      isHighlighted = true;
+                    }
+                  }
+
+                  // Calculate arrow position
+                  const dx = toNode.x - fromNode.x;
+                  const dy = toNode.y - fromNode.y;
+                  const length = Math.sqrt(dx * dx + dy * dy);
+                  const unitX = dx / length;
+                  const unitY = dy / length;
+                  
+                  // Adjust end point to stop at node border (radius 20)
+                  const endX = toNode.x - unitX * 20;
+                  const endY = toNode.y - unitY * 20;
+                  
+                  return (
+                    <g key={`edge-${index}`}>
+                      <line
+                        x1={fromNode.x}
+                        y1={fromNode.y}
+                        x2={endX}
+                        y2={endY}
+                        stroke={strokeColor}
+                        strokeWidth={strokeWidth}
+                        markerEnd={isHighlighted ? 'url(#arrowhead-highlighted)' : 'url(#arrowhead)'}
+                        style={{ pointerEvents: 'none' }}
+                      />
+                      
+                      {/* Draw weight */}
+                      <text
+                        x={(fromNode.x + toNode.x) / 2}
+                        y={(fromNode.y + toNode.y) / 2 - 5}
+                        textAnchor="middle"
+                        fill="#1f2937"
+                        fontSize="12"
+                        fontWeight="bold"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        {edge.weight}
+                      </text>
+                    </g>
+                  );
+                })}
+                
+                {/* Draw nodes */}
+                {nodes.map(node => {
+                  // Node colors based on stage and algorithm state
+                  let fillColor = '#e5e7eb'; // Default - gray
+                  
+                  if (node.stage === 0) {
+                    fillColor = '#ef4444'; // Source - red
+                  } else if (node.stage === numStages - 1) {
+                    fillColor = '#22c55e'; // Target - green
+                  } else if (selectedNode === node.id) {
+                    fillColor = '#3b82f6'; // Selected - blue
+                  } else if (result && result.optimalPath && result.optimalPath.includes(node.id)) {
+                    fillColor = '#f59e0b'; // In optimal path - orange
+                  } else {
+                    // Add special highlighting for drawing modes
+                    if (isDrawingMode === 'edge' && edgeStart === node.id) {
+                      fillColor = '#fbbf24'; // Selected for edge creation - yellow
+                    }
+                  }
+                  
+                  return (
+                    <g key={`node-${node.id}`}>
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={20}
+                        fill={fillColor}
+                        stroke="#374151"
+                        strokeWidth={2}
+                        style={{ cursor: 'grab' }}
+                        onMouseDown={(e) => handleNodeMouseDown(node.id, e)}
+                        onClick={(e) => handleNodeClick(node.id, e)}
+                      />
+                      <text
+                        x={node.x}
+                        y={node.y + 5}
+                        textAnchor="middle"
+                        fill="#1f2937"
+                        fontSize="12"
+                        fontWeight="bold"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        {node.label}
+                      </text>
+                      
+                      {/* Draw cost if algorithm is running */}
+                      {result && animationStep >= 0 && result.steps[animationStep] && (
+                        (() => {
+                          const step = result.steps[animationStep];
+                          if (step.costs && step.costs[node.id] !== undefined && step.costs[node.id] !== Infinity) {
+                            return (
+                              <text
+                                x={node.x}
+                                y={node.y - 25}
+                                textAnchor="middle"
+                                fill="#dc2626"
+                                fontSize="10"
+                                fontWeight="bold"
+                                style={{ pointerEvents: 'none' }}
+                              >
+                                {step.costs[node.id]}
+                              </text>
+                            );
+                          }
+                          return null;
+                        })()
+                      )}
+                    </g>
+                  );
+                })}
+              </svg>
             </div>
 
             <div className="mt-4 text-sm text-gray-600">
               <p><strong>Instructions:</strong></p>
               <ul className="list-disc list-inside space-y-1">
-                <li>Configure stages and nodes per stage</li>
-                <li>Click &quot;Edit Edges&quot; to modify edge weights</li>
-                <li>Click two consecutive stage nodes to add/modify edges</li>
-                <li>Red node = Source, Green node = Target</li>
+                <li>Click &quot;Add Node&quot; then click on canvas to add vertices (nodes are assigned to stages based on position)</li>
+                <li><strong>Add Edge:</strong> Click &quot;Add Edge&quot;, set weight, then click two consecutive stage nodes</li>
+                <li>Only edges between consecutive stages are allowed (stage N to stage N+1)</li>
+                <li>Click &quot;Delete&quot; then click nodes to remove them (can be undone)</li>
+                <li>Drag nodes to move them around (not available in edge mode)</li>
+                <li>Use Undo/Redo to restore accidentally deleted items</li>
+                <li>Configure stages and nodes per stage using the dropdowns above</li>
+                <li>Red node = Source (Stage 0), Green node = Target (Last Stage)</li>
+                <li>Orange nodes show the optimal path after running the algorithm</li>
               </ul>
+              {isDrawingMode === 'edge' && (
+                <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                  <p className="text-yellow-800 font-medium">
+                    🎯 Edge Creation Mode: {edgeStart !== null ? 
+                      `First node selected (${nodes.find(n => n.id === edgeStart)?.label}). Now click a node in the next stage to create an edge.` : 
+                      'Click a node to start creating an edge to the next stage.'
+                    }
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 

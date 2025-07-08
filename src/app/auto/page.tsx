@@ -246,7 +246,7 @@ export default function AutomataTheoryPage() {
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
               Master finite automata, regular expressions, context-free grammars, and Turing machines 
-              with interactive simulations designed for Mumbai University examinations.
+              with interactive simulations designed for university examinations.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
@@ -255,7 +255,7 @@ export default function AutomataTheoryPage() {
               </div>
               <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Star className="h-4 w-4 text-yellow-400" />
-                <span className="text-sm">Mumbai University Syllabus</span>
+                <span className="text-sm">University Syllabus</span>
               </div>
               <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Users className="h-4 w-4 text-purple-400" />
@@ -325,7 +325,7 @@ export default function AutomataTheoryPage() {
                 <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-4">
                   <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
                     <Award className="h-4 w-4 mr-2 text-purple-600" />
-                    Mumbai University Exam Info
+                    University Exam Info
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <div>
@@ -370,12 +370,12 @@ export default function AutomataTheoryPage() {
           ))}
         </div>
 
-        {/* Mumbai University Focus Section */}
+        {/* University Focus Section */}
         <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white mb-16">
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4">Mumbai University Focused</h2>
+            <h2 className="text-3xl font-bold mb-4">University Focused</h2>
             <p className="text-purple-100 mb-6 max-w-3xl mx-auto">
-              All simulations include detailed step-by-step solutions formatted for Mumbai University 
+              All simulations include detailed step-by-step solutions formatted for university 
               examination answers, with proper mathematical notation and required explanations.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

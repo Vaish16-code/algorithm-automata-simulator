@@ -279,7 +279,7 @@ export default function ComputerNetworksPage() {
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
               Master network protocols, routing algorithms, IP addressing, and security concepts 
-              with interactive simulations designed for Mumbai University examinations.
+              with interactive simulations designed for university examinations.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
@@ -288,7 +288,7 @@ export default function ComputerNetworksPage() {
               </div>
               <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Star className="h-4 w-4 text-yellow-400" />
-                <span className="text-sm">Mumbai University Syllabus</span>
+                <span className="text-sm">University Syllabus</span>
               </div>
               <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <Users className="h-4 w-4 text-purple-400" />
@@ -377,7 +377,7 @@ export default function ComputerNetworksPage() {
                 <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-4">
                   <h4 className="font-semibold text-gray-800 mb-2 flex items-center">
                     <Award className="h-4 w-4 mr-2 text-purple-600" />
-                    Mumbai University Exam Info
+                    University Exam Info
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <div>
@@ -467,7 +467,7 @@ export default function ComputerNetworksPage() {
           <div className="lg:col-span-3">
             <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                📚 Study Tips for Mumbai University CN Exam
+                📚 Study Tips for University CN Exam
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-yellow-700">
                 <div>
@@ -506,7 +506,7 @@ export default function ComputerNetworksPage() {
             📖 Complete Computer Networks Course
           </h2>
           <p className="text-lg text-gray-600 text-center mb-8 max-w-3xl mx-auto">
-            Master every aspect of computer networks with our comprehensive, Mumbai University aligned curriculum.
+            Master every aspect of computer networks with our comprehensive, university aligned curriculum.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -640,7 +640,7 @@ export default function ComputerNetworksPage() {
           <div className="mt-8 text-center">
             <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium">
               <BookOpen className="h-5 w-5 mr-2" />
-              Complete course covers 100% Mumbai University syllabus
+              Complete course covers 100% university syllabus
             </div>
           </div>
         </div>
@@ -656,7 +656,7 @@ export default function ComputerNetworksPage() {
             </h2>
             <p className="text-indigo-700 mb-6 max-w-2xl mx-auto">
               Stuck on a specific algorithm or need clarification on network concepts? 
-              Our team is here to help you succeed in your Mumbai University exams.
+              Our team is here to help you succeed in your university exams.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link

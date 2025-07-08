@@ -41,7 +41,7 @@ export default function AboutPage() {
                 <Globe className="h-8 w-8 text-green-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">University Aligned</h3>
-              <p className="text-gray-600">Content specifically designed for Mumbai University and other Indian engineering curricula.</p>
+              <p className="text-gray-600">Content specifically designed for Indian engineering curricula and university courses.</p>
             </div>
             
             <div className="text-center">

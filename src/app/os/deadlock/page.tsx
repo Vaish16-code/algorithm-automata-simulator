@@ -103,15 +103,34 @@ export default function DeadlockPage() {
     const finished = Array(processes.length).fill(false);
     let foundProcess = true;
 
-    executionSteps.push(`Initial available resources: [${currentAvailable.join(', ')}]`);
+    // Calculate total allocated resources
+    const totalAllocated = Array(numResources).fill(0);
+    processesWithNeed.forEach(process => {
+      process.allocation.forEach((alloc, idx) => {
+        totalAllocated[idx] += alloc;
+      });
+    });
 
+    // Show initial resource calculation
+    executionSteps.push(`📊 Initial Resource Calculation:`);
+    executionSteps.push(`Total System Resources: [${available.map((avail, idx) => avail + totalAllocated[idx]).join(', ')}]`);
+    executionSteps.push(`Total Allocated Resources: [${totalAllocated.join(', ')}]`);
+    executionSteps.push(`Available Resources = Total - Allocated = [${available.join(', ')}]`);
+    executionSteps.push(`\n🔄 Starting Banker's Algorithm Execution:`);
+
+    let stepCount = 1;
     while (foundProcess && safeSequence.length < processes.length) {
       foundProcess = false;
+      executionSteps.push(`\n--- Step ${stepCount} ---`);
+      executionSteps.push(`Current Available: [${currentAvailable.join(', ')}]`);
+      executionSteps.push(`Looking for a process that can execute...`);
 
       for (let i = 0; i < processesWithNeed.length; i++) {
         if (!finished[i]) {
           const process = processesWithNeed[i];
           const need = process.need!;
+
+          executionSteps.push(`Checking ${process.id}: Need [${need.join(', ')}] vs Available [${currentAvailable.join(', ')}]`);
 
           if (canAllocate(need, currentAvailable)) {
             // Process can complete
@@ -119,30 +138,52 @@ export default function DeadlockPage() {
             foundProcess = true;
             safeSequence.push(process.id);
 
-            // Release resources
+            // Show resource calculation before updating
+            executionSteps.push(`✅ ${process.id} can execute (Need ≤ Available)`);
+            executionSteps.push(`📊 Resource Update Calculation for ${process.id}:`);
+            executionSteps.push(`Current Available: [${currentAvailable.join(', ')}]`);
+            executionSteps.push(`${process.id} Allocation: [${process.allocation.join(', ')}]`);
+            
+            // Store the old available for calculation display
+            const oldAvailable = [...currentAvailable];
+            
+            // Release resources and show calculation step by step
             for (let j = 0; j < numResources; j++) {
               currentAvailable[j] += process.allocation[j];
             }
 
-            executionSteps.push(
-              `Process ${process.id} can execute (Need: [${need.join(', ')}] <= Available: [${currentAvailable.map((a, idx) => a - process.allocation[idx]).join(', ')}])`
+            // Show detailed calculation
+            const calculationSteps = Array.from({ length: numResources }, (_, j) => 
+              `R${j}: ${oldAvailable[j]} + ${process.allocation[j]} = ${currentAvailable[j]}`
             );
-            executionSteps.push(
-              `After ${process.id} completes, available: [${currentAvailable.join(', ')}]`
-            );
+            executionSteps.push(`Formula: Available = Available + Allocation`);
+            executionSteps.push(`Calculation: [${calculationSteps.join(', ')}]`);
+            executionSteps.push(`New Available: [${currentAvailable.join(', ')}]`);
+            executionSteps.push(`${process.id} added to safe sequence: [${safeSequence.join(', ')}]`);
             
+            stepCount++;
             break;
+          } else {
+            executionSteps.push(`❌ ${process.id} cannot execute (Need > Available)`);
           }
         }
+      }
+
+      if (!foundProcess && safeSequence.length < processes.length) {
+        executionSteps.push(`⚠️ No process can execute with current available resources`);
       }
     }
 
     const isSafe = safeSequence.length === processes.length;
 
     if (!isSafe) {
-      executionSteps.push("No safe sequence found - System is in deadlock!");
+      executionSteps.push(`\n🚨 DEADLOCK DETECTED!`);
+      executionSteps.push(`No safe sequence found - System is in deadlock!`);
+      executionSteps.push(`Safe sequence: NONE (Deadlock)`);
     } else {
+      executionSteps.push(`\n✅ SAFE STATE DETECTED!`);
       executionSteps.push(`Safe sequence found: ${safeSequence.join(' → ')}`);
+      executionSteps.push(`All processes can complete successfully`);
     }
 
     setResult({
@@ -402,9 +443,9 @@ export default function DeadlockPage() {
               </div>
             )}
 
-            {/* Mumbai University Tips */}
+            {/* University Exam Tips */}
             <div className="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl shadow-lg p-6 text-white">
-              <h3 className="text-xl font-semibold mb-4">Mumbai University Tips</h3>
+              <h3 className="text-xl font-semibold mb-4">University Exam Tips</h3>
               <ul className="space-y-2 text-sm">
                 <li>• Show Need matrix calculation</li>
                 <li>• Draw resource allocation graph</li>
@@ -418,47 +459,201 @@ export default function DeadlockPage() {
         {/* Results Section */}
         {result && (
           <div className="mt-8 space-y-6">
-            {/* Need Matrix */}
+            {/* System State Summary */}
+            <div className={`rounded-2xl shadow-lg p-6 ${result.isSafe ? 'bg-green-50 border-2 border-green-200' : 'bg-red-50 border-2 border-red-200'}`}>
+              <div className="flex items-center space-x-3 mb-4">
+                {result.isSafe ? (
+                  <CheckCircle className="text-green-600 w-8 h-8" />
+                ) : (
+                  <AlertTriangle className="text-red-600 w-8 h-8" />
+                )}
+                <h2 className={`text-2xl font-bold ${result.isSafe ? 'text-green-800' : 'text-red-800'}`}>
+                  {result.isSafe ? 'SAFE STATE' : 'UNSAFE STATE (DEADLOCK)'}
+                </h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-2">Safe Sequence:</p>
+                  <p className={`text-lg font-mono ${result.isSafe ? 'text-green-700' : 'text-red-700'}`}>
+                    {result.safeSequence ? result.safeSequence.join(' → ') : 'NONE (Deadlock)'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-2">System Status:</p>
+                  <p className={`text-lg font-semibold ${result.isSafe ? 'text-green-700' : 'text-red-700'}`}>
+                    {result.isSafe ? 'All processes can complete' : 'Deadlock detected'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Comprehensive Process Table */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Need Matrix</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+                System State Table (Process Analysis)
+              </h2>
               
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse border-2 border-gray-400">
                   <thead>
                     <tr className="bg-gray-800 text-white">
                       <th className="border-2 border-gray-400 px-4 py-3 text-left font-bold">Process</th>
-                      {Array.from({ length: numResources }, (_, i) => (
-                        <th key={i} className="border-2 border-gray-400 px-4 py-3 text-center font-bold">R{i}</th>
-                      ))}
+                      <th className="border-2 border-gray-400 px-4 py-3 text-center font-bold">
+                        Allocation
+                        <div className="text-xs font-normal mt-1">
+                          [{Array.from({ length: numResources }, (_, i) => `R${i}`).join(', ')}]
+                        </div>
+                      </th>
+                      <th className="border-2 border-gray-400 px-4 py-3 text-center font-bold">
+                        Max Demand
+                        <div className="text-xs font-normal mt-1">
+                          [{Array.from({ length: numResources }, (_, i) => `R${i}`).join(', ')}]
+                        </div>
+                      </th>
+                      <th className="border-2 border-gray-400 px-4 py-3 text-center font-bold">
+                        Need
+                        <div className="text-xs font-normal mt-1">
+                          [{Array.from({ length: numResources }, (_, i) => `R${i}`).join(', ')}]
+                        </div>
+                      </th>
+                      <th className="border-2 border-gray-400 px-4 py-3 text-center font-bold">
+                        Can Execute?
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {result.processes.map((process, index) => (
-                      <tr key={process.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}>
-                        <td className="border-2 border-gray-400 px-4 py-3 font-semibold text-black">{process.id}</td>
-                        {process.need!.map((need, index) => (
-                          <td key={index} className="border-2 border-gray-400 px-4 py-3 text-center text-black font-medium">
-                            {need}
+                    {result.processes.map((process, index) => {
+                      const canExecute = canAllocate(process.need!, result.available);
+                      return (
+                        <tr key={process.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}>
+                          <td className="border-2 border-gray-400 px-4 py-3 font-semibold text-blue-800 text-lg">
+                            {process.id}
                           </td>
-                        ))}
-                      </tr>
-                    ))}
+                          <td className="border-2 border-gray-400 px-4 py-3 text-center">
+                            <div className="font-mono text-sm bg-blue-100 px-2 py-1 rounded">
+                              [{process.allocation.join(', ')}]
+                            </div>
+                          </td>
+                          <td className="border-2 border-gray-400 px-4 py-3 text-center">
+                            <div className="font-mono text-sm bg-purple-100 px-2 py-1 rounded">
+                              [{process.max.join(', ')}]
+                            </div>
+                          </td>
+                          <td className="border-2 border-gray-400 px-4 py-3 text-center">
+                            <div className="font-mono text-sm bg-orange-100 px-2 py-1 rounded">
+                              [{process.need!.join(', ')}]
+                            </div>
+                          </td>
+                          <td className="border-2 border-gray-400 px-4 py-3 text-center">
+                            <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                              canExecute 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-red-100 text-red-800'
+                            }`}>
+                              {canExecute ? '✅ Yes' : '❌ No'}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
             </div>
 
-            {/* Execution Steps */}
+            {/* Available Resources Table */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">Algorithm Execution Steps</h2>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+                Available Resources Calculation
+              </h2>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
+                {/* Resource Calculation Formula */}
+                <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
+                  <h3 className="font-semibold text-blue-800 mb-2">Formula:</h3>
+                  <p className="text-blue-700 font-mono text-sm">
+                    Available = Total System Resources - Total Allocated Resources
+                  </p>
+                </div>
+
+                {/* Resource Breakdown Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border-2 border-gray-400">
+                    <thead>
+                      <tr className="bg-indigo-600 text-white">
+                        <th className="border-2 border-gray-400 px-4 py-3 text-left font-bold">Resource Type</th>
+                        <th className="border-2 border-gray-400 px-4 py-3 text-center font-bold">Total System</th>
+                        <th className="border-2 border-gray-400 px-4 py-3 text-center font-bold">Total Allocated</th>
+                        <th className="border-2 border-gray-400 px-4 py-3 text-center font-bold">Available</th>
+                        <th className="border-2 border-gray-400 px-4 py-3 text-center font-bold">Calculation</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array.from({ length: numResources }, (_, i) => {
+                        const totalAllocated = result.processes.reduce((sum, process) => {
+                          const allocation = process.allocation[i];
+                          return sum + (typeof allocation === 'number' && !isNaN(allocation) ? allocation : 0);
+                        }, 0);
+                        const availableValue = typeof result.available[i] === 'number' && !isNaN(result.available[i]) ? result.available[i] : 0;
+                        const totalSystem = availableValue + totalAllocated;
+                        return (
+                          <tr key={i} className={`${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}>
+                            <td className="border-2 border-gray-400 px-4 py-3 font-semibold text-indigo-800">
+                              Resource R{i}
+                            </td>
+                            <td className="border-2 border-gray-400 px-4 py-3 text-center">
+                              <div className="font-mono text-lg bg-green-100 px-2 py-1 rounded font-bold text-green-800">
+                                {totalSystem}
+                              </div>
+                            </td>
+                            <td className="border-2 border-gray-400 px-4 py-3 text-center">
+                              <div className="font-mono text-lg bg-red-100 px-2 py-1 rounded font-bold text-red-800">
+                                {totalAllocated}
+                              </div>
+                            </td>
+                            <td className="border-2 border-gray-400 px-4 py-3 text-center">
+                              <div className="font-mono text-lg bg-blue-100 px-2 py-1 rounded font-bold text-blue-800">
+                                {availableValue}
+                              </div>
+                            </td>
+                            <td className="border-2 border-gray-400 px-4 py-3 text-center">
+                              <div className="font-mono text-sm text-gray-700">
+                                {totalSystem} - {totalAllocated} = {availableValue}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* Algorithm Execution Steps */}
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+                Algorithm Execution Steps
+              </h2>
+              
+              <div className="space-y-3 max-h-96 overflow-y-auto">
                 {result.executionSteps.map((step, index) => (
                   <div key={index} className="flex items-start space-x-3">
                     <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded min-w-fit">
                       {index + 1}
                     </span>
-                    <p className="text-gray-700">{step}</p>
+                    <p className={`text-gray-700 ${
+                      step.includes('✅') ? 'text-green-700 font-semibold' :
+                      step.includes('❌') ? 'text-red-700 font-semibold' :
+                      step.includes('🚨') ? 'text-red-800 font-bold' :
+                      step.includes('📊') ? 'text-blue-700 font-semibold' :
+                      step.includes('🔄') ? 'text-purple-700 font-semibold' :
+                      step.includes('Available =') ? 'text-indigo-700 font-mono' :
+                      'text-gray-700'
+                    }`}>
+                      {step}
+                    </p>
                   </div>
                 ))}
               </div>
