@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "interactive learning platform",
     "engineering exam preparation",
     "CS algorithm visualization",
-    "Mumbai University algorithms",
+    "University algorithms",
     "VTU computer science",
     "AKTU engineering",
     "finite automata simulator",

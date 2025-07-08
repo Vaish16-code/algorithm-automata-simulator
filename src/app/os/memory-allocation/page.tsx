@@ -427,7 +427,7 @@ export default function MemoryAllocationPage() {
 
             {/* Quick Tips */}
             <div className="bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl shadow-lg p-6 text-white">
-              <h3 className="text-xl font-semibold mb-4">Mumbai University Tips</h3>
+              <h3 className="text-xl font-semibold mb-4">University Exam Tips</h3>
               <ul className="space-y-2 text-sm">
                 <li>• Draw memory layout diagrams</li>
                 <li>• Calculate fragmentation percentages</li>

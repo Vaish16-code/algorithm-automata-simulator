@@ -62,7 +62,7 @@ export default function BranchBoundPage() {
       "Graph coloring with chromatic bounds",
       "Puzzle solving with heuristic bounds"
     ],
-    examPattern: "Mumbai University typically asks 1-2 questions on branch and bound worth 10-15 marks total, focusing on algorithm design, bounding functions, and optimization."
+    examPattern: "Universities typically ask 1-2 questions on branch and bound worth 10-15 marks total, focusing on algorithm design, bounding functions, and optimization."
   };
 
   return (
@@ -74,7 +74,7 @@ export default function BranchBoundPage() {
             Branch & Bound
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Master branch and bound optimization techniques with interactive simulators designed for Mumbai University curriculum
+            Master branch and bound optimization techniques with interactive simulators designed for university curriculum
           </p>
         </div>
 
@@ -161,7 +161,7 @@ export default function BranchBoundPage() {
 
         {/* Exam Preparation */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Mumbai University Exam Preparation</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">University Exam Preparation</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Question Types</h3>

@@ -656,7 +656,7 @@ export default function IOSchedulingPage() {
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-800 mb-2">Mumbai University Exam Tips</h4>
+              <h4 className="font-semibold text-gray-800 mb-2">University Exam Tips</h4>
               <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
                 <li>Draw disk track diagrams showing head movement</li>
                 <li>Calculate total seek time step by step</li>

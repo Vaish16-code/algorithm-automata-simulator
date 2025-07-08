@@ -328,7 +328,7 @@ export default function CPUSchedulingPage() {
 
             {/* Quick Tips */}
             <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-lg p-6 text-white">
-              <h3 className="text-xl font-semibold mb-4">Mumbai University Tips</h3>
+              <h3 className="text-xl font-semibold mb-4">University Exam Tips</h3>
               <ul className="space-y-2 text-sm">
                 <li>• Always draw the Gantt chart</li>
                 <li>• Calculate waiting time = turnaround time - burst time</li>

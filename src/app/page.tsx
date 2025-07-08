@@ -184,7 +184,7 @@ export default function Home() {
               <div className="mt-6 p-4 bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-sm rounded-lg border border-red-400/30">
             
                 <p className="text-white">
-                  🎯 Perfect for Mumbai University, VTU, AKTU & all Indian engineering curricula
+                  🎯 Perfect for VTU, AKTU & all Indian engineering curricula
                 </p>
               </div>
             </div>

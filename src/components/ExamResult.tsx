@@ -143,7 +143,7 @@ export default function ExamResult({ title, input, result, steps, finalAnswer, e
         )}
       </div>
 
-      {/* Mumbai University Exam Format */}
+      {/* University Exam Format */}
       {showExamFormat && (
         <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl border-2 border-purple-200 overflow-hidden">
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 text-white">
