@@ -5,7 +5,11 @@
 Contact form error: [Error: Missing credentials for "PLAIN"]
 ```
 
-## 5-Minute Fix:
+## ⚠️ IMPORTANT: Production Deployment Notice
+**Your app is being deployed to Vercel!** Environment variables from `.env.local` won't work in production. 
+**See `PRODUCTION_ENV_SETUP.md` for Vercel environment variable setup.**
+
+## 5-Minute Fix (Local Development):
 
 ### 1. Create Gmail App Password
 - Go to: https://myaccount.google.com/security
