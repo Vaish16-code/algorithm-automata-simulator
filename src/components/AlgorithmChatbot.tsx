@@ -132,19 +132,19 @@ export default function AlgorithmChatbot({
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 sm:p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 z-50"
+        className="fixed bottom-6 right-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 z-50"
       >
-        <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+        <MessageCircle className="h-6 w-6" />
       </button>
     );
   }
 
   return (
-    <div className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-white rounded-lg shadow-2xl border border-gray-200 z-50 transition-all duration-300 ${
-      isMinimized ? 'w-72 sm:w-80 h-16' : 'w-72 sm:w-80 lg:w-96 h-[500px] sm:h-[600px] max-h-[80vh] max-w-[calc(100vw-2rem)]'
-    } flex flex-col`}>
+    <div className={`fixed bottom-6 right-6 bg-white rounded-lg shadow-2xl border border-gray-200 z-50 transition-all duration-300 ${
+      isMinimized ? 'w-80 h-16' : 'w-96 h-[600px]'
+    }`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between flex-shrink-0">
+      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Bot className="h-5 w-5" />
           <span className="font-semibold">Algorithm Tutor</span>
@@ -168,7 +168,7 @@ export default function AlgorithmChatbot({
       {!isMinimized && (
         <>
           {/* Quick Actions */}
-          <div className="p-3 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+          <div className="p-3 border-b border-gray-200 bg-gray-50">
             <div className="text-xs text-gray-600 mb-2">Quick Help:</div>
             <div className="flex flex-wrap gap-2">
               <button
@@ -209,13 +209,13 @@ export default function AlgorithmChatbot({
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 h-96">
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`max-w-[85%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
+                <div className={`max-w-[80%] ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
                   <div
                     className={`flex items-start space-x-2 ${
                       message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''
@@ -235,13 +235,13 @@ export default function AlgorithmChatbot({
                       )}
                     </div>
                     <div
-                      className={`px-4 py-2 rounded-lg break-words ${
+                      className={`px-4 py-2 rounded-lg ${
                         message.role === 'user'
                           ? 'bg-blue-600 text-white'
                           : 'bg-gray-100 text-gray-800'
                       }`}
                     >
-                      <div className="text-sm whitespace-pre-wrap break-words">{message.content}</div>
+                      <div className="text-sm whitespace-pre-wrap">{message.content}</div>
                       {message.timestamp && (
                         <div
                           className={`text-xs mt-1 ${
@@ -276,7 +276,7 @@ export default function AlgorithmChatbot({
           </div>
 
           {/* Input */}
-          <div className="border-t border-gray-200 p-4 flex-shrink-0">
+          <div className="border-t border-gray-200 p-4">
             <div className="flex space-x-2">
               <input
                 ref={inputRef}
@@ -285,7 +285,7 @@ export default function AlgorithmChatbot({
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me anything about algorithms..."
-                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent min-w-0"
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 disabled={isLoading}
               />
               <button

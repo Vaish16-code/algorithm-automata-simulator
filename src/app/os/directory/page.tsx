@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Folder, File, Tree, Users, Home, FolderPlus } from "lucide-react";
+import { ArrowLeft, Folder, File, Users, Home, FolderPlus } from "lucide-react";
 
 export default function DirectoryManagementPage() {
   const [directoryType, setDirectoryType] = useState("single");
@@ -141,7 +141,7 @@ export default function DirectoryManagementPage() {
           
           <div className="flex items-center space-x-4 mb-6">
             <div className="bg-white/20 p-3 rounded-xl">
-              <Tree className="h-8 w-8" />
+              <Folder className="h-8 w-8" />
             </div>
             <div>
               <h1 className="text-4xl font-bold">Directory Management</h1>

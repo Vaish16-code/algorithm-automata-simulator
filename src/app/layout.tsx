@@ -283,14 +283,13 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
         
-        {/* Google AdSense (Replace ca-pub-XXXXXXXXXXXXXXXX with your actual AdSense ID) */}
+        {/* Google AdSense */}
         <Script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4129567846154688"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-        {/* TODO: After AdSense approval, replace ca-pub-XXXXXXXXXXXXXXXX with your actual publisher ID */}
         
         {/* Google Analytics (Replace GA_MEASUREMENT_ID with your actual ID) */}
         <Script
