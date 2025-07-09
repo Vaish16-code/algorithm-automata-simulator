@@ -14,8 +14,6 @@ const nextConfig: NextConfig = {
   experimental: {
     typedRoutes: false,
   },
-  // Skip linting in build process
-  swcMinify: false, // Disable SWC minification which can sometimes trigger type checks
   /* config options here */
 };
 
