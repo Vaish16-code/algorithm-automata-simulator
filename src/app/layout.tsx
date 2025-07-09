@@ -166,6 +166,7 @@ export const metadata: Metadata = {
     "DC.language": "en-IN",
     "DC.coverage": "India",
     "DC.rights": "© 2024 AlgoMaster",
+    "google-adsense-account": "ca-pub-4129567846154688",
   },
   verification: {
     google: "your-google-verification-code",
@@ -273,9 +274,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <head>
-        {/* Google AdSense Account Verification */}
-        <meta name="google-adsense-account" content="ca-pub-4129567846154688" />
-        
         {/* Structured Data */}
         <Script
           id="structured-data"
