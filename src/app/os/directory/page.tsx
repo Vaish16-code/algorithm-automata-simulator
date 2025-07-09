@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Folder, File, Users, Home, FolderPlus } from "lucide-react";
+import { ArrowLeft, Folder, File, GitBranch, Users, Home, FolderPlus } from "lucide-react";
 
 export default function DirectoryManagementPage() {
   const [directoryType, setDirectoryType] = useState("single");
