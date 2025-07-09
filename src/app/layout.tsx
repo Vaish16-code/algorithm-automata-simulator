@@ -273,6 +273,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <head>
+        {/* Google AdSense Account Verification */}
+        <meta name="google-adsense-account" content="ca-pub-4129567846154688" />
+        
         {/* Structured Data */}
         <Script
           id="structured-data"
