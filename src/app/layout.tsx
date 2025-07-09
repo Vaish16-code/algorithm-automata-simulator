@@ -174,6 +174,7 @@ export const metadata: Metadata = {
     other: {
       bing: ["your-bing-verification-code"],
       yahoo: ["your-yahoo-verification-code"],
+      "google-adsense-account": "ca-pub-4129567846154688",
     }
   },
   appleWebApp: {
