@@ -24,6 +24,17 @@ Your live site is at: **https://algomaster-alpha.vercel.app/**
 />
 ```
 
+### **✅ NEW OPTION: ads.txt Verification**
+
+Your ads.txt file is now properly configured and live at: https://algomaster-alpha.vercel.app/ads.txt
+
+**In your Google AdSense dashboard:**
+1. **Choose "ads.txt" verification method**
+2. **Your ads.txt contains**: `google.com, pub-4129567846154688, DIRECT, f08c47fec0942fa0`
+3. **Click "Verify"** - this should work immediately
+
+You can verify your ads.txt is live by visiting: https://algomaster-alpha.vercel.app/ads.txt
+
 ### **🚀 How to Fix AdSense Application:**
 
 1. **Go to your Google AdSense dashboard**
