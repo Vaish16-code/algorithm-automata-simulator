@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:ai-guard": "eslint ."
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -31,6 +32,7 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
+    "eslint-plugin-ai-guard": "^1.2.1",
     "postcss": "^8.5.4",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",

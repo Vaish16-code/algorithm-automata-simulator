@@ -1,0 +1,6 @@
+module.exports = {
+  plugins: ['ai-guard'],
+  extends: ['plugin:ai-guard/recommended', ],
+  rules: {},
+  ignorePatterns: ['node_modules/', '.next/', 'dist/', 'build/', 'coverage/'],
+};

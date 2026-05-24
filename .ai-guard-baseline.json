@@ -1,0 +1,1154 @@
+{
+  "createdAt": "2026-04-09T14:16:28.012Z",
+  "preset": "recommended",
+  "totalIssues": 152,
+  "entries": [
+    {
+      "filePath": "src\\app\\api\\contact\\route.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 78,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 131,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "message": "Async function does not contain `await`. AI tools frequently add `async` unnecessarily, which can mislead callers and mask intent. Remove `async` or add proper await logic.",
+          "line": 228,
+          "column": 8
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\utils\\backtracking.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 116,
+          "column": 19
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 235,
+          "column": 19
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\utils\\backtracking_clean.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 116,
+          "column": 19
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 235,
+          "column": 19
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\utils\\divideConquer.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 423,
+          "column": 22
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 453,
+          "column": 22
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\utils\\dynamicProgramming.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 80,
+          "column": 14
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 236,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 257,
+          "column": 19
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 679,
+          "column": 19
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 725,
+          "column": 15
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\utils\\greedyAlgorithms.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 203,
+          "column": 18
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 312,
+          "column": 14
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 336,
+          "column": 18
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 395,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 423,
+          "column": 20
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 447,
+          "column": 22
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 448,
+          "column": 17
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\utils\\pageReplacement.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 318,
+          "column": 11
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 319,
+          "column": 11
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\utils\\scheduling.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 238,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "filePath": "src\\lib\\gemini.ts",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "message": "Async function does not contain `await`. AI tools frequently add `async` unnecessarily, which can mislead callers and mask intent. Remove `async` or add proper await logic.",
+          "line": 83,
+          "column": 25
+        },
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "message": "Async function does not contain `await`. AI tools frequently add `async` unnecessarily, which can mislead callers and mask intent. Remove `async` or add proper await logic.",
+          "line": 91,
+          "column": 26
+        },
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "message": "Async function does not contain `await`. AI tools frequently add `async` unnecessarily, which can mislead callers and mask intent. Remove `async` or add proper await logic.",
+          "line": 96,
+          "column": 29
+        },
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "message": "Async function does not contain `await`. AI tools frequently add `async` unnecessarily, which can mislead callers and mask intent. Remove `async` or add proper await logic.",
+          "line": 102,
+          "column": 26
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\computability\\undecidability\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 218,
+          "column": 31
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\context-free-grammar\\parser\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 364,
+          "column": 29
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 376,
+          "column": 23
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 377,
+          "column": 23
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\context-free-languages\\properties\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 89,
+          "column": 18
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 92,
+          "column": 18
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\finite-automata\\dfa\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 164,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 189,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 196,
+          "column": 15
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 197,
+          "column": 15
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\finite-automata\\minimization\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 157,
+          "column": 22
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 233,
+          "column": 16
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\finite-automata\\nfa\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 163,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 164,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 188,
+          "column": 13
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\pushdown-automata\\simulator\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 273,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 316,
+          "column": 13
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\regular-expressions\\matcher\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 226,
+          "column": 29
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 235,
+          "column": 31
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\auto\\regular-languages\\pumping-lemma\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 298,
+          "column": 34
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 303,
+          "column": 34
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 327,
+          "column": 21
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 331,
+          "column": 21
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\cn\\compression\\huffman\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 142,
+          "column": 22
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\cn\\compression\\huffman\\page_new.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 142,
+          "column": 22
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\cn\\network-layer\\dijkstra\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 77,
+          "column": 20
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\cn\\network-layer\\distance-vector\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-await-in-loop",
+          "message": "Unexpected `await` inside a while loop. AI tools frequently generate sequential awaits in loops, causing O(n) latency. Consider collecting promises and using `Promise.all()` for parallel execution.",
+          "line": 137,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\cn\\routing\\dijkstra\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 53,
+          "column": 20
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 78,
+          "column": 22
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 98,
+          "column": 26
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\cn\\transport-layer\\udp\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 67,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\cn\\transport-layer\\udp\\page_new.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 67,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\components\\InteractiveDFAChart.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 319,
+          "column": 21
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\components\\JobSequencingChart.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 65,
+          "column": 23
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\backtracking\\n-queens\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "message": "Async function does not contain `await`. AI tools frequently add `async` unnecessarily, which can mislead callers and mask intent. Remove `async` or add proper await logic.",
+          "line": 13,
+          "column": 23
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\backtracking\\subset-sum\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 351,
+          "column": 17
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\divide-conquer\\closest-pair\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 99,
+          "column": 18
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\divide-conquer\\min-max\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 88,
+          "column": 24
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 106,
+          "column": 24
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 182,
+          "column": 24
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 199,
+          "column": 22
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\dynamic\\bellman-ford\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 61,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 160,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 179,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 222,
+          "column": 11
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 258,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 293,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 321,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 347,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 738,
+          "column": 23
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 940,
+          "column": 15
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 947,
+          "column": 25
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 965,
+          "column": 17
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\dynamic\\floyd-warshall\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 59,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 60,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 77,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 90,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 182,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 201,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 244,
+          "column": 11
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 245,
+          "column": 11
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 282,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 283,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 310,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 311,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 338,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 358,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 361,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 770,
+          "column": 23
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 1151,
+          "column": 29
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\dynamic\\knapsack\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 271,
+          "column": 23
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 275,
+          "column": 33
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\dynamic\\lcs\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 292,
+          "column": 17
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\dynamic\\matrix-chain\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 315,
+          "column": 17
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 316,
+          "column": 17
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\dynamic\\multistage-graph\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 125,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 182,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 201,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 246,
+          "column": 13
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 284,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 316,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 346,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 374,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 835,
+          "column": 23
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\dynamic\\single-source-shortest-path\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 737,
+          "column": 17
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 745,
+          "column": 25
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 764,
+          "column": 17
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\greedy\\dijkstra\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 62,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 160,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 179,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 229,
+          "column": 11
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 247,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 274,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 325,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 366,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 789,
+          "column": 23
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 1160,
+          "column": 26
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 1166,
+          "column": 25
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 1180,
+          "column": 27
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\daa\\greedy\\kruskal\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 156,
+          "column": 20
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\os\\buffer-management\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 136,
+          "column": 20
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 165,
+          "column": 20
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 194,
+          "column": 20
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\os\\deadlock\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 142,
+          "column": 33
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 143,
+          "column": 33
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 167,
+          "column": 33
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\os\\memory-allocation\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-await-in-loop",
+          "message": "Unexpected `await` inside a for loop. AI tools frequently generate sequential awaits in loops, causing O(n) latency. Consider collecting promises and using `Promise.all()` for parallel execution.",
+          "line": 147,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "filePath": "src\\app\\os\\synchronization\\page.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-await-in-loop",
+          "message": "Unexpected `await` inside a for loop. AI tools frequently generate sequential awaits in loops, causing O(n) latency. Consider collecting promises and using `Promise.all()` for parallel execution.",
+          "line": 160,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 169,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 173,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-await-in-loop",
+          "message": "Unexpected `await` inside a for loop. AI tools frequently generate sequential awaits in loops, causing O(n) latency. Consider collecting promises and using `Promise.all()` for parallel execution.",
+          "line": 182,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "filePath": "src\\components\\AlgorithmChatbot.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 127,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "filePath": "src\\components\\GlobalAlgorithmChatbot.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 193,
+          "column": 7
+        }
+      ]
+    },
+    {
+      "filePath": "src\\components\\GraphBuilder.tsx",
+      "issues": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 96,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 130,
+          "column": 11
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 173,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 219,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 239,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 258,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 274,
+          "column": 5
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 308,
+          "column": 7
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 321,
+          "column": 9
+        },
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "message": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result.",
+          "line": 406,
+          "column": 15
+        },
+        {
+          "ruleId": "ai-guard/no-sql-string-concat",
+          "message": "Potential SQL injection: string concatenation or interpolation detected in a SQL query. AI tools frequently generate this pattern. Use parameterized queries (e.g., `db.query(\"SELECT * FROM users WHERE id = $1\", [id])`) instead.",
+          "line": 420,
+          "column": 15
+        }
+      ]
+    }
+  ]
+}

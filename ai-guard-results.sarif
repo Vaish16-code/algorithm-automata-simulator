@@ -1,0 +1,270 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "ai-guard",
+          "version": "1.3.0",
+          "informationUri": "https://github.com/YashJadhav21/eslint-plugin-ai-guard",
+          "rules": [
+            {
+              "id": "ai-guard/no-async-without-await",
+              "shortDescription": {
+                "text": "Async function contains no await expressions"
+              },
+              "fullDescription": {
+                "text": "Async function contains no await expressions"
+              },
+              "help": {
+                "text": "Remove `async` if no async operations are needed, or add an `await` expression.",
+                "markdown": "**Async function contains no await expressions**\n**Fix:** Remove `async` if no async operations are needed, or add an `await` expression.\n[View rule documentation](https://github.com/YashJadhav21/eslint-plugin-ai-guard/blob/main/docs/rules/no-async-without-await.md)"
+              },
+              "helpUri": "https://github.com/YashJadhav21/eslint-plugin-ai-guard/blob/main/docs/rules/no-async-without-await.md",
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "async",
+                  "async-reliability",
+                  "async-reliability"
+                ],
+                "confidence": "informational",
+                "category": "Async Reliability",
+                "problem.severity": "recommendation"
+              }
+            },
+            {
+              "id": "ai-guard/no-empty-catch",
+              "shortDescription": {
+                "text": "Empty catch block silently swallows errors"
+              },
+              "fullDescription": {
+                "text": "Empty catch block silently swallows errors"
+              },
+              "help": {
+                "text": "Add error handling in the catch block, or at minimum log the error.",
+                "markdown": "**Empty catch block silently swallows errors**\n**Fix:** Add error handling in the catch block, or at minimum log the error.\n[View rule documentation](https://github.com/YashJadhav21/eslint-plugin-ai-guard/blob/main/docs/rules/no-empty-catch.md)"
+              },
+              "helpUri": "https://github.com/YashJadhav21/eslint-plugin-ai-guard/blob/main/docs/rules/no-empty-catch.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "reliability",
+                  "reliability"
+                ],
+                "confidence": "high",
+                "category": "Reliability",
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "ai-guard/no-floating-promise",
+              "shortDescription": {
+                "text": "Promise not awaited or error-handled — async failures will be silently swallowed"
+              },
+              "fullDescription": {
+                "text": "Promise not awaited or error-handled — async failures will be silently swallowed"
+              },
+              "help": {
+                "text": "Add `await` before the call, assign to a variable, or add `.catch()` to handle rejection.",
+                "markdown": "**Promise not awaited or error-handled — async failures will be silently swallowed**\n**Fix:** Add `await` before the call, assign to a variable, or add `.catch()` to handle rejection.\n[View rule documentation](https://github.com/YashJadhav21/eslint-plugin-ai-guard/blob/main/docs/rules/no-floating-promise.md)"
+              },
+              "helpUri": "https://github.com/YashJadhav21/eslint-plugin-ai-guard/blob/main/docs/rules/no-floating-promise.md",
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "async",
+                  "async-reliability",
+                  "async-reliability"
+                ],
+                "confidence": "high",
+                "category": "Async Reliability",
+                "problem.severity": "high"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "ai-guard/no-floating-promise",
+          "level": "error",
+          "kind": "fail",
+          "rank": 90,
+          "message": {
+            "text": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/lib/ai-guard-ci/ci-high-confidence.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 3,
+                  "endLine": 2,
+                  "endColumn": 20
+                }
+              },
+              "message": {
+                "text": "This async call is not awaited, returned, or error-handled (.catch). AI tools frequently generate floating promises, causing errors to be silently lost. Add `await`, `.catch()`, or assign the result."
+              }
+            }
+          ],
+          "properties": {
+            "confidence": "high",
+            "asyncRiskType": "floating-promise",
+            "category": "Async Reliability"
+          }
+        },
+        {
+          "ruleId": "ai-guard/no-empty-catch",
+          "level": "error",
+          "kind": "fail",
+          "rank": 90,
+          "message": {
+            "text": "Catch block is empty. AI tools frequently generate empty catch blocks that silently swallow errors. Handle the error (log, rethrow, or recover), or add a comment explaining why it is intentionally empty."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/lib/ai-guard-ci/ci-high-confidence.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 5,
+                  "endLine": 7,
+                  "endColumn": 4
+                }
+              },
+              "message": {
+                "text": "Catch block is empty. AI tools frequently generate empty catch blocks that silently swallow errors. Handle the error (log, rethrow, or recover), or add a comment explaining why it is intentionally empty."
+              }
+            }
+          ],
+          "properties": {
+            "confidence": "high",
+            "category": "Reliability"
+          }
+        },
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "level": "note",
+          "kind": "informational",
+          "rank": 10,
+          "message": {
+            "text": "Async function does not contain `await`. AI tools frequently add `async` unnecessarily, which can mislead callers and mask intent. Remove `async` or add proper await logic."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/lib/ai-guard-ci/ci-signals.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 8,
+                  "endLine": 14,
+                  "endColumn": 2
+                }
+              },
+              "message": {
+                "text": "Async function does not contain `await`. AI tools frequently add `async` unnecessarily, which can mislead callers and mask intent. Remove `async` or add proper await logic."
+              }
+            }
+          ],
+          "properties": {
+            "confidence": "informational",
+            "asyncRiskType": "unnecessary-async",
+            "category": "Async Reliability"
+          }
+        },
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "level": "note",
+          "kind": "informational",
+          "rank": 10,
+          "message": {
+            "text": "Async pass-through wrapper — this may be intentional for Promise propagation. Consider whether `async` is needed here."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/lib/ai-guard-ci/ci-signals.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 19,
+                  "startColumn": 31,
+                  "endLine": 19,
+                  "endColumn": 64
+                }
+              },
+              "message": {
+                "text": "Async pass-through wrapper — this may be intentional for Promise propagation. Consider whether `async` is needed here."
+              }
+            }
+          ],
+          "properties": {
+            "confidence": "informational",
+            "asyncRiskType": "unnecessary-async",
+            "category": "Async Reliability"
+          }
+        },
+        {
+          "ruleId": "ai-guard/no-async-without-await",
+          "level": "note",
+          "kind": "informational",
+          "rank": 10,
+          "message": {
+            "text": "Async pass-through wrapper — this may be intentional for Promise propagation. Consider whether `async` is needed here."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/lib/ai-guard-ci/ci-signals.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 26,
+                  "startColumn": 1,
+                  "endLine": 28,
+                  "endColumn": 2
+                }
+              },
+              "message": {
+                "text": "Async pass-through wrapper — this may be intentional for Promise propagation. Consider whether `async` is needed here."
+              }
+            }
+          ],
+          "properties": {
+            "confidence": "informational",
+            "asyncRiskType": "unnecessary-async",
+            "category": "Async Reliability"
+          }
+        }
+      ],
+      "properties": {
+        "preset": "recommended",
+        "filesScanned": 2,
+        "durationMs": 3456,
+        "ecosystemIssuesCount": 0,
+        "parserErrorsCount": 0
+      }
+    }
+  ]
+}
