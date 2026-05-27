@@ -41,7 +41,15 @@ jobs:
             --github-summary
         continue-on-error: true
 
-      - name: Upload SARIF
+      # THIS sends findings to GitHub Security
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ai-guard-results.sarif
+
+      # THIS is only for manual debugging/download
+      - name: Upload SARIF Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
